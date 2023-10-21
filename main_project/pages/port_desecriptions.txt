@@ -1,0 +1,3 @@
+22,SSH
+80,HTTP
+88,Kerberos
