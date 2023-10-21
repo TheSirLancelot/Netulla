@@ -1,9 +1,9 @@
 import streamlit as st
-from pages.n1_Network_Tool import page1_funcs  # Import the dictionary of subpage functions
-from pages.n2_Password_Tools import page2_funcs # Import the dictionary of subpage functions
-from pages.n3_Plotting_Demo import page3
-from pages.n4_Mapping_Demo import page4
-from pages.n5_DataFrame_Demo import page5
+from functions.n1_Network_Tool import page1_funcs  # Import the dictionary of subpage functions
+from functions.n2_Password_Tools import page2_funcs # Import the dictionary of subpage functions
+from functions.n3_Plotting_Demo import page3
+from functions.n4_Mapping_Demo import page4
+from functions.n5_DataFrame_Demo import page5
 
 st.set_page_config(page_title="Shadow Suite", page_icon="🕸")
 

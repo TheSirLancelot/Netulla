@@ -87,7 +87,7 @@ def network_analysis():
 
     # Read port descriptions from file
     well_known_ports_dict = {}
-    with open('page/port_descriptions.txt', 'r') as file:
+    with open('functions/port_descriptions.txt', 'r') as file:
         for line in file:
             port, description = line.strip().split(',')
             well_known_ports_dict[int(port)] = description
