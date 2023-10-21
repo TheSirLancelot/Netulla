@@ -12,4 +12,3 @@ For cleaning up after you're done:
 ```
 docker system prune -a
 ```
-TEST: This is a test of the github updates channel on discord.
