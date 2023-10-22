@@ -21,20 +21,15 @@ selected_page = st.sidebar.selectbox("Select a page", page_names_to_funcs.keys()
 if selected_page == "Main Page":
     st.markdown(
     """
-    # Welcome to Streamlit! 👋
-    Streamlit is an open-source app framework built specifically for
-    Machine Learning and Data Science projects.
-    **👈 Select a demo from the sidebar** to see some examples
-    of what Streamlit can do!
-    ### Want to learn more?
-    - Check out [streamlit.io](https://streamlit.io)
-    - Jump into our [documentation](https://docs.streamlit.io)
+    # 🕸 Shadow Suite 🕸
+    This application has been put together for the security centric community.
+    It will host many different applications with various uses depending on your
+    current need. See the sidebar on the left for a drop down que.
+    ### Streamlit Documentation and useful links
+    - Here is the link to the [documentation](https://docs.streamlit.io)
     - Ask a question in our [community
         forums](https://discuss.streamlit.io)
-    ### See more complex demos
-    - Use a neural net to [analyze the Udacity Self-driving Car Image
-        Dataset](https://github.com/streamlit/demo-self-driving)
-    - Explore a [New York City rideshare dataset](https://github.com/streamlit/demo-uber-nyc-pickups)
+    - Link to [Shodan](https://www.shodan.io)
     """
     )
 elif isinstance(page_names_to_funcs[selected_page], dict):
