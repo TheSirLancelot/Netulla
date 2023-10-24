@@ -1,26 +1,23 @@
 # Project Summary
 
-**Class:** CMSC495
-
 **Project name:** Netulla
+
+**Members:**
+- William Weir, Team Lead
+- Tyler Wilson, Technical Director
+- Tristan Young, Lead Engineer
+- Oscar Vasquez FLores, Quality Assurance
+- Reynaldo Veras, Test Engineer
+- Joshua Welch, User Experience Design
+
+**Project description:** 
+- This project is a network-tools suite that provides the user a myraid of mini-applications via the web.
 
 **Project goal:** 
 - Conduct self-evaluations and peer reviews to improve collaborative projects
 - Create user or technical documentation for an IT system or application
 - Implement IT solutions that comply with specifications, requirements, standards, and guidelines
 - Research, plan, conduct, and complete a collaborative, challenging, computer-related project in compliance with schedule deadlines
-
-**Project description:** 
-
-- This project is a network-tools suite that provides the user a myraid of mini applications via the web. 
-
-**Members:**
-- Oscar Vasquez FLores, [member role]
-- Reynaldo Veras, [member role]
-- William Weir, [member role]
-- Joshua Welch, [member role]
-- Tyler Wilson, [member role]
-- Tristan Young, [member role]
 
 **Start Date:** 18 October, 2023
 
@@ -29,31 +26,42 @@
 **Budget:** ??????????
 
 ## Tasks:
-
-|Task             | Assignee | Notes |
+### Phase 1 (21 Nov 2023)
+|Task             | Assignee | Description |
 |-----------------|----------|-------|
-| <li>- [ ] Password complexity checker</li>| [insert] | [insert] |
-| <li>- [ ] NS lookup</li>| [insert] | [insert] |
-| <li>- [ ] Ping</li>| [insert] | [insert] |
-| <li>- [ ] Password Generator</li>| [insert] | [insert] |
-| <li>- [ ] What is my IP</li>| [insert] | [insert] |
-| <li>- [ ] WHOIS</li>| [insert] | [insert] |
-| <li>- [ ] HTTP Get</li>| [insert] | [insert] |
-| <li>- [ ] Subnet Scan</li>| [insert] | [insert] |
-| <li>- [ ] Certificate Lookup</li>| [insert] | [insert] |
-| <li>- [ ] URL Encoder/Decoder</li>| [insert] | [insert] |
-| <li>- [ ] HTTP Header Tool</li>| [insert] | [insert] |
-| <li>- [ ] Reverse IP Lookup</li>| [insert] | [insert] |
+| <li>- [ ] Traceroute Visualizer</li>| Tyler Wilson | Shows traceroute hops on a map |
+| <li>- [ ] NS lookup</li>| [insert] | DNS record lookup |
+| <li>- [ ] Password complexity checker</li>| [insert] | Checks the strength of a user's password |
+| <li>- [ ] Certificate Lookup</li>| William Weir | Displays a website's SSL Certificate information |
+| <li>- [ ] Subnet Scan</li>| [insert] | Scans a subnet to identify webservers |
 
-## Closing Checklist
+### Phase 2 (28 Nov 2023)
+|Task             | Assignee | Description |
+|-----------------|----------|-------|
+| <li>- [ ] WHOIS</li>| [insert] | Queries registration information for an IP address |
+| <li>- [ ] Password Generator</li>| [insert] | Generates a password using specified complexity rules |
+| <li>- [ ] HTTP Header Tool</li>| [insert] | Inspect a server's HTTP response header  |
+| <li>- [ ] Online WGET Tool</li>| [insert] | Display a website without rendering it |
+| <li>- [ ] Reverse IP Lookup</li>| [insert] | Identify domain name(s) associated with an IP |
 
-- [ ]  Project Plan
-- [ ]  Project Design
-- [ ]  Test Plan
-- [ ]  Phase 1 Source
-- [ ]  Phase 2 Source
-- [ ]  Phase 3 Source
-- [ ]  Peer Review 1
-- [ ]  Peer Review 2
-- [ ]  Peer Review 3
-- [ ]  Final
+### Phase 3 (05 Dec 2023)
+|Task             | Assignee | Description |
+|-----------------|----------|-------|
+| <li>- [ ] Ping</li>| [insert] | See if a website is up right now |
+| <li>- [ ] What is my IP</li>| [insert] | Identify the user's current IP and geolocation info |
+| <li>- [ ] URL Encoder/Decoder</li>| William Weir | URL encode/decode a string |
+
+## Closing Checklist (Due Date)
+
+- [x]  Project Plan (31 Oct 2023)
+- [ ]  Test Plan (07 Nov 2023)
+- [ ]  Peer Review 1 (10 Nov 2023)
+- [ ]  Project Design (14 Nov 2023)
+- [ ]  Phase 1 Source (21 Nov 2023)
+- [ ]  Peer Review 2 (24 Nov 2023)
+- [ ]  Phase 2 Source (28 Nov 2023)
+- [ ]  Phase 3 Source (05 Dec 2023)
+- [ ]  Peer Review 3 (08 Dec 2023)
+- [ ]  Final Submission (12 Dec 2023)
+
+### Project Planning Template Credit: https://github.com/lotspaih/docTemplates/blob/master/Project_Summary.md
