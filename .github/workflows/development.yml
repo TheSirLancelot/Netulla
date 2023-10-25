@@ -33,13 +33,13 @@ jobs:
           site: localhost:8501
 
       - name: Install browser dependencies
-        run: docker exec webapp playwright install-deps
+        run: docker exec docker-webapp-1 playwright install-deps
 
       - name: Install playwright browsers
-        run: docker exec webapp playwright install
+        run: docker exec docker-webapp-1 playwright install
 
       - name: Run tests
-        run: docker exec webapp python -m pytest
+        run: docker exec docker-webapp-1 python -m pytest
 
   # lint:
   #   name: Code standards
