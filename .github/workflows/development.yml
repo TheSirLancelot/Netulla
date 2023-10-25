@@ -26,9 +26,6 @@ jobs:
       - name: Start container
         run: docker-compose -f ./Docker/docker-compose.yml up --build -d
 
-      - name: Wait until it starts
-        run: docker wait Netulla
-
       - name: Install browser dependencies
         run: docker exec Netulla playwright install-deps
 
