@@ -33,13 +33,13 @@ jobs:
           site: localhost:8501
 
       - name: Install browser dependencies
-        run: docker exec -it $(docker ps --latest --quiet) playwright install-deps
+        run: docker exec -it $(docker ps --latest --quiet) Netulla playwright install-deps
 
       - name: Install playwright browsers
-        run: docker exec -it $(docker ps --latest --quiet) playwright install
+        run: docker exec -it $(docker ps --latest --quiet) Netulla playwright install
 
       - name: Run tests
-        run: docker exec -it $(docker ps --latest --quiet) python -m pytest
+        run: docker exec -it $(docker ps --latest --quiet) Netulla python -m pytest
 
   # lint:
   #   name: Code standards
