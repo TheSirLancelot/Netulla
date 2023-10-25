@@ -32,6 +32,9 @@ jobs:
           # Site's url
           site: localhost:8501
 
+      - name: What's my name?!
+        run: docker ps -q
+
       - name: Install browser dependencies
         run: docker exec docker-webapp-1 playwright install-deps
 
