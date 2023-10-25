@@ -20,7 +20,9 @@ jobs:
       
       - name: Install Compose
         uses: ndeloof/install-compose-action@v0.0.1
-      - run: docker-compose.exe -f .\Docker\docker-compose.yml up --build
+        
+      - name: Start container
+        run: docker-compose.exe -f .\Docker\docker-compose.yml up --build
 
       - name: Is Netulla Up
         uses: Leocardoso94/is-my-site-up@v1.2
@@ -29,7 +31,7 @@ jobs:
           site: localhost:8501
 
       - name: Run tests
-      - run: docker exec webapp python.exe -m pytest
+        run: docker exec webapp python.exe -m pytest
 
   # lint:
   #   name: Code standards
