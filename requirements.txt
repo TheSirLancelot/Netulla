@@ -11,3 +11,5 @@ ping3==4.0.4
 python-nmap==0.7.1
 matplotlib==3.8.0
 plotly-express==0.4.1
+pytest==7.4.2
+pytest-playwright==0.4.3
