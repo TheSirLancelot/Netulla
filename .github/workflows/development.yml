@@ -1,0 +1,54 @@
+name: Development
+
+on:
+  pull_request:
+    types:
+      - opened
+      - edited
+      - synchronize
+      - reopened
+  workflow_call:
+
+jobs:
+  test:
+    name: Test application
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4.1.1
+      
+      - name: Install Compose
+        uses: ndeloof/install-compose-action@v0.0.1
+      - run: docker-compose.exe -f .\Docker\docker-compose.yml up --build
+
+      - name: Is Netulla Up
+        uses: Leocardoso94/is-my-site-up@v1.2
+        with:
+          # Site's url
+          site: localhost:8501
+
+      - name: Run tests
+      - run: docker exec webapp python.exe -m pytest
+
+  # lint:
+  #   name: Code standards
+  #   runs-on: ubuntu-latest
+  #   timeout-minutes: 10
+  #   steps:
+  #     - name: "☁️ checkout repository"
+  #       uses: actions/checkout@v2
+
+  #     - name: "🔧 setup node"
+  #       uses: actions/setup-node@v2.1.5
+  #       with:
+  #         node-version: 16
+
+  #     - name: "🔧 install npm@latest"
+  #       run: npm i -g npm@latest
+
+  #     - name: "📦 install dependencies"
+  #       uses: bahmutov/npm-install@v1
+
+  #     - name: "🔍 lint code"
+  #       run: npm run lint --if-present
