@@ -27,7 +27,7 @@ jobs:
         uses: ndeloof/install-compose-action@v0.0.1
         
       - name: Start container
-        run: docker-compose -f .\Docker\docker-compose.yml up --build
+        run: docker-compose -f ./Docker/docker-compose.yml up --build
 
       - name: Is Netulla Up
         uses: Leocardoso94/is-my-site-up@v1.2
