@@ -201,10 +201,36 @@ def subnet_calculator():
 
         except ValueError:
             st.error("Invalid IP address or CIDR.")
-
+            
+def ns_lookup():
+    #Function to lookup DNS records for a given domain
+    import streamlit as st
+    import ipaddress
+    import pandas as pd
+    # Uses the socket module to perform the lookup
+    import socket
+    
+    st.markdown("# NS Lookup")
+    
+    #Get the domain name from the user
+    domain_input = st.text_input("Enter domain (e.g., google.com)", '')
+    
+    if domain_input:
+        try:
+            #Get the DNS records for the domain
+            results = socket.gethostbyname_ex(domain_input)
+            #Display the results
+            st.markdown(f"### DNS records for {domain_input}")
+            st.markdown(f"**Hostname:** {results[0]}")
+            st.markdown(f"**IP addresses:** {', '.join(results[2])}")
+        # Handle errors
+        except socket.gaierror:
+            st.error("Error looking up DNS information.")
+    
 # Dictionary of subpage functions
 page1_funcs = {
     "IP Geolocation": ip_geolocation,
     "Network Analysis": network_analysis,
-    "Subnet Calculator": subnet_calculator
+    "Subnet Calculator": subnet_calculator,
+    "NS Lookup": ns_lookup
 }
