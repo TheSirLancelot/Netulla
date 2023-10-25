@@ -7,10 +7,6 @@ on:
       - edited
       - synchronize
       - reopened
-  push:
-    branches: 
-      - main
-      - dev
   workflow_call:
 
 jobs:
