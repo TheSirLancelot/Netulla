@@ -32,17 +32,14 @@ jobs:
           # Site's url
           site: localhost:8501
 
-      - name: What's my name?!
-        run: docker ps -q
-
       - name: Install browser dependencies
-        run: docker exec docker-webapp-1 playwright install-deps
+        run: docker exec Netulla playwright install-deps
 
       - name: Install playwright browsers
-        run: docker exec docker-webapp-1 playwright install
+        run: docker exec Netulla playwright install
 
       - name: Run tests
-        run: docker exec docker-webapp-1 python -m pytest
+        run: docker exec Netulla python -m pytest
 
   # lint:
   #   name: Code standards
