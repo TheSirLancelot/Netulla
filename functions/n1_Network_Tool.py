@@ -203,30 +203,46 @@ def subnet_calculator():
             st.error("Invalid IP address or CIDR.")
             
 def ns_lookup():
-    #Function to lookup DNS records for a given domain
     import streamlit as st
-    import ipaddress
     import pandas as pd
-    # Uses the socket module to perform the lookup
-    import socket
+    #Import resolver from dnspython
+    import dns.resolver
+    
     
     st.markdown("# NS Lookup")
     
-    #Get the domain name from the user
-    domain_input = st.text_input("Enter domain (e.g., google.com)", '')
+    #ask for domain
+    domain = st.text_input("Enter Domain (e.g., google.com)", '')
     
-    if domain_input:
+    if domain:
         try:
-            #Get the DNS records for the domain
-            results = socket.gethostbyname_ex(domain_input)
-            #Display the results
-            st.markdown(f"### DNS records for {domain_input}")
-            st.markdown(f"**Hostname:** {results[0]}")
-            st.markdown(f"**IP addresses:** {', '.join(results[2])}")
-        # Handle errors
-        except socket.gaierror:
-            st.error("Error looking up DNS information.")
-    
+            # Perform lookup
+            ip_addresses = [ip.address for ip in dns.resolver.resolve(domain, 'A')]
+            
+            # Perform reverse lookup
+            reverse_name = dns.reversename.from_address(str(ip_addresses[0]))
+            hostname = str(dns.resolver.resolve(reverse_name, 'PTR')[0])
+            
+            # Display results
+            st.success("Valid Domain")
+            
+            details = {
+                "IP Address(es)": ', '.join(map(str, ip_addresses)),
+                "Hostname": hostname,
+            }
+            
+            details_list = list(details.items())
+            df = pd.DataFrame(details_list, columns=['Information', 'Value'])
+            st.table(df.set_index('Information'))
+        
+        # Handle exceptions
+        except dns.resolver.NoAnswer:
+            st.error("No DNS record found for the domain.")
+        except dns.resolver.NXDOMAIN:
+            st.error("Domain does not exist.")
+        except Exception as e:
+            st.error(f"An error occurred: {e}")
+
 # Dictionary of subpage functions
 page1_funcs = {
     "IP Geolocation": ip_geolocation,
