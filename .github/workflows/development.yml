@@ -24,7 +24,7 @@ jobs:
         uses: ndeloof/install-compose-action@v0.0.1
         
       - name: Start container
-        run: docker-compose.exe -f .\Docker\docker-compose.yml up --build
+        run: docker-compose -f .\Docker\docker-compose.yml up --build
 
       - name: Is Netulla Up
         uses: Leocardoso94/is-my-site-up@v1.2
@@ -32,8 +32,14 @@ jobs:
           # Site's url
           site: localhost:8501
 
+      - name: Install browser dependencies
+        run: docker exec webapp playwright install-deps
+
+      - name: Install playwright browsers
+        run: docker exec webapp playwright install
+
       - name: Run tests
-        run: docker exec webapp python.exe -m pytest
+        run: docker exec webapp python -m pytest
 
   # lint:
   #   name: Code standards
