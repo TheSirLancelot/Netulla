@@ -2,13 +2,15 @@
 
 **Project name:** Netulla
 
+**Project website:** https://netulla.streamlit.app/
+
 **Members:**
 - William Weir, Team Lead
 - Tyler Wilson, Technical Director
 - Tristan Young, Lead Engineer
 - Oscar Vasquez FLores, Quality Assurance
 - Reynaldo Veras, Test Engineer
-- Joshua Welch, User Experience Design
+- Tyree Maeser, User Experience Design
 
 **Project description:** 
 - This project is a network-tools suite that provides the user a myraid of mini-applications via the web.
@@ -30,25 +32,25 @@
 |Task             | Assignee | Description |
 |-----------------|----------|-------|
 | <li>- [ ] Traceroute Visualizer</li>| Tyler Wilson | Shows traceroute hops on a map |
-| <li>- [ ] NS lookup</li>| [insert] | DNS record lookup |
-| <li>- [ ] Password complexity checker</li>| [insert] | Checks the strength of a user's password |
+| <li>- [ ] NS lookup</li>| Oscar Vasquez FLores | DNS record lookup |
+| <li>- [ ] Password complexity checker</li>| Reynaldo Veras | Checks the strength of a user's password |
 | <li>- [ ] Certificate Lookup</li>| William Weir | Displays a website's SSL Certificate information |
-| <li>- [ ] Subnet Scan</li>| [insert] | Scans a subnet to identify webservers |
+| <li>- [ ] Subnet Scan</li>| Tristan Young | Scans a subnet to identify webservers |
 
 ### Phase 2 (28 Nov 2023)
 |Task             | Assignee | Description |
 |-----------------|----------|-------|
-| <li>- [ ] WHOIS</li>| [insert] | Queries registration information for an IP address |
-| <li>- [ ] Password Generator</li>| [insert] | Generates a password using specified complexity rules |
-| <li>- [ ] HTTP Header Tool</li>| [insert] | Inspect a server's HTTP response header  |
+| <li>- [ ] WHOIS</li>| William Weir | Queries registration information for an IP address |
+| <li>- [ ] Password Generator</li>| Tyler Wilson | Generates a password using specified complexity rules |
+| <li>- [ ] HTTP Header Tool</li>| Tristan Young | Inspect a server's HTTP response header  |
 | <li>- [ ] Online WGET Tool</li>| [insert] | Display a website without rendering it |
 | <li>- [ ] Reverse IP Lookup</li>| [insert] | Identify domain name(s) associated with an IP |
 
 ### Phase 3 (05 Dec 2023)
 |Task             | Assignee | Description |
 |-----------------|----------|-------|
-| <li>- [ ] Ping</li>| [insert] | See if a website is up right now |
-| <li>- [ ] What is my IP</li>| [insert] | Identify the user's current IP and geolocation info |
+| <li>- [ ] Ping</li>| Tristan Young | See if a website is up right now |
+| <li>- [ ] What is my IP</li>| Tyler Wilson | Identify the user's current IP and geolocation info |
 | <li>- [ ] URL Encoder/Decoder</li>| William Weir | URL encode/decode a string |
 
 ## Closing Checklist (Due Date)
