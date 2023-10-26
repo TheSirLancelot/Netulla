@@ -13,7 +13,7 @@
 - Tyree Maeser, Software Engineer
 
 **Project description:** 
-- This project is a network-tools suite that provides the user a myraid of mini-applications via the web.
+- This project is a network-tools suite that provides the user a myriad of mini-applications via the web.
 
 **Project goal:** 
 - Conduct self-evaluations and peer reviews to improve collaborative projects
