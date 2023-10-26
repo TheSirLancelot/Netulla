@@ -32,7 +32,7 @@
 |Task             | Assignee | Description |
 |-----------------|----------|-------|
 | <li>- [ ] Traceroute Visualizer</li>| Tyler Wilson | Shows traceroute hops on a map |
-| <li>- [ ] NS lookup</li>| Oscar Vasquez FLores | DNS record lookup |
+| <li>- [ ] NS lookup</li>| Oscar Vasquez Flores | DNS record lookup |
 | <li>- [ ] Password complexity checker</li>| Reynaldo Veras | Checks the strength of a user's password |
 | <li>- [ ] Certificate Lookup</li>| William Weir | Displays a website's SSL Certificate information |
 | <li>- [ ] Subnet Scan</li>| Tristan Young | Scans a subnet to identify webservers |
