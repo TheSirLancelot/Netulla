@@ -140,11 +140,6 @@ def test_traceroute_visualizer(page: Page):
     pass
 
 
-def test_whois_lookup(page: Page):
-    # TODO: empty test
-    pass
-
-
 def test_password_generator(page: Page):
     # TODO: empty test
     pass
