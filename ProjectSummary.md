@@ -66,4 +66,13 @@
 - [ ]  Peer Review 3 (08 Dec 2023)
 - [ ]  Final Submission (12 Dec 2023)
 
+## A Note on Team Participation
+Each member of the team has ensured they are contributing to the project. All of the above features were self-assigned. Additionally:
+- William Weir outlined the features for the application and developed the repository workflows
+- Tristan Young created and maintains our collaboration platform that we use on a daily basis
+- Reynaldo Veras worked with everyone's schedule to find a time for our virtual meetings
+- Tyler Wilson identified the application technology that we are using as our front end
+- Oscar Vasquez FLores provided the Web Content Accessibility Guidelines to ensure our web application is in standards
+- Tyree Maeser set up our development environment in a different operating system to ensure our application remains portable
+
 ### Project Planning Template Credit: https://github.com/lotspaih/docTemplates/blob/master/Project_Summary.md
