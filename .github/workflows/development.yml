@@ -21,6 +21,9 @@ jobs:
       - name: Enable globstar
         run: shopt -s globstar
 
+      - name: Install dependencies
+        run: pip3 install -r requirements.txt
+
       - name: Pylint
         # You may pin to the exact commit or the version.
         # uses: gabriel-milan/action-pylint@5a2e0c4a6af3a7fac3c45e724b96d45f2a7a4352
