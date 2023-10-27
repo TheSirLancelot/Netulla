@@ -26,7 +26,7 @@ jobs:
           # GitHub token
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           # Path of files
-          path: ./
+          path: ./*.py function/*.py
           # If true, the action will fail if pylint finds errors (default is true)
           fail: true
           # If true, the action will send a PR message if pylint finds errors (default is true)
