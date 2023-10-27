@@ -25,8 +25,6 @@ jobs:
         run: pip3 install -r requirements.txt
 
       - name: Pylint PR Annotator
-        # You may pin to the exact commit or the version.
-        # uses: pr-annotators/pylint-pr-annotator@9c31057f2f495d9aee9b96e10299cc6b0a010cc2
         uses: pr-annotators/pylint-pr-annotator@v0.0.1
 
       - name: Pylint
