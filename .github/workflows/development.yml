@@ -28,7 +28,7 @@ jobs:
         uses: pr-annotators/pylint-pr-annotator@v0.0.1
 
       - name: Pylint
-        run: pylint "**/*.py"
+        run: pylint **/*.py -f json
       
       - name: Install Compose
         uses: ndeloof/install-compose-action@v0.0.1
