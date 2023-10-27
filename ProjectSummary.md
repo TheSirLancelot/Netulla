@@ -25,7 +25,11 @@
 
 **End Date:** 12 December, 2023
 
-**Budget:** ??????????
+**Budget:** (hypothetical)
+- Hosting Fees: ~$100.00/month
+- Salaries: = $75,000.00/year per Software Engineer; $90,000.00 for Team Lead
+- Advertising: $2500.00/month
+- Annual Total: $496,200.00
 
 ## Tasks:
 ### Phase 1 (21 Nov 2023)
@@ -52,6 +56,7 @@
 | <li>- [ ] Ping</li>| Tristan Young | See if a website is up right now |
 | <li>- [ ] What is my IP</li>| Tyler Wilson | Identify the user's current IP and geolocation info |
 | <li>- [ ] URL Encoder/Decoder</li>| William Weir | URL encode/decode a string |
+| <li>- [ ] Accessability Assurance</li>| Oscar Vasquez FLores | Ensures we are meeting the WCAG guidelines |
 
 ## Closing Checklist (Due Date)
 
