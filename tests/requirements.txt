@@ -1,0 +1,4 @@
+streamlit>=1.27.0
+pytest>=7.4.2
+pytest-playwright
+pytest-rerunfailures
