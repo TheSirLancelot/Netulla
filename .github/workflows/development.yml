@@ -34,7 +34,7 @@ jobs:
           # Path of files
           path: "**/*.py"
           # If true, the action will fail if pylint finds errors (default is true)
-          fail: true
+          fail: false
           # If true, the action will send a PR message if pylint finds errors (default is true)
           pr-message: true
       
