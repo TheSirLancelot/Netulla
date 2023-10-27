@@ -1,10 +1,10 @@
-def page4():    
+def page4():
     import streamlit as st
     import pandas as pd
     import pydeck as pdk
     from urllib.error import URLError
 
-    #st.set_page_config(page_title="Mapping Demo", page_icon="🌍")
+    # st.set_page_config(page_title="Mapping Demo", page_icon="🌍")
 
     st.markdown("# Mapping Demo")
     st.sidebar.header("Mapping Demo")
@@ -14,7 +14,6 @@ def page4():
     to display geospatial data."""
     )
 
-
     @st.cache_data
     def from_data_file(filename):
         url = (
@@ -22,7 +21,6 @@ def page4():
             "example-data/master/hello/v1/%s" % filename
         )
         return pd.read_json(url)
-
 
     try:
         ALL_LAYERS = {
