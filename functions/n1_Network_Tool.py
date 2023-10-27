@@ -205,8 +205,9 @@ def subnet_calculator():
 def ns_lookup():
     import streamlit as st
     import pandas as pd
-    #Import resolver from dnspython
+    #Import resolver and reversename from dnspython
     import dns.resolver
+    import dns.reversename
     
     
     st.markdown("# NS Lookup")
@@ -226,16 +227,14 @@ def ns_lookup():
             # Display results
             st.success("Valid Domain")
             
-            details = {
-                "IP Address(es)": ', '.join(map(str, ip_addresses)),
-                "Hostname": hostname,
-            }
+            st.markdown("### Domain Details")
             
-            details_list = list(details.items())
-            df = pd.DataFrame(details_list, columns=['Information', 'Value'])
-            st.table(df.set_index('Information'))
-        
-        # Handle exceptions
+            st.markdown(f"**IP Address:**")
+            for ip in ip_addresses:
+                st.markdown(f"- {ip}")
+            
+            st.markdown(f"**Hostname:**\n- {hostname}")
+            
         except dns.resolver.NoAnswer:
             st.error("No DNS record found for the domain.")
         except dns.resolver.NXDOMAIN:
