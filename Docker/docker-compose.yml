@@ -2,6 +2,7 @@ version: "3.11"
 services:
 
   webapp:
+    container_name: Netulla
     build:
       context: ../ # Specify parent folder as context
       dockerfile: Docker/Dockerfile # Path to Dockerfile

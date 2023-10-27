@@ -1,0 +1,56 @@
+name: Development
+
+on:
+  pull_request:
+    types:
+      - opened
+      - edited
+      - synchronize
+      - reopened
+  workflow_call:
+
+jobs:
+  test:
+    name: Test application
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4.1.1
+      
+      - name: Install Compose
+        uses: ndeloof/install-compose-action@v0.0.1
+        
+      - name: Start container
+        run: docker-compose -f ./Docker/docker-compose.yml up --build -d
+
+      - name: Install browser dependencies
+        run: docker exec Netulla playwright install-deps
+
+      - name: Install playwright browsers
+        run: docker exec Netulla playwright install
+
+      - name: Run tests
+        run: docker exec Netulla python -m pytest
+
+  # lint:
+  #   name: Code standards
+  #   runs-on: ubuntu-latest
+  #   timeout-minutes: 10
+  #   steps:
+  #     - name: "☁️ checkout repository"
+  #       uses: actions/checkout@v2
+
+  #     - name: "🔧 setup node"
+  #       uses: actions/setup-node@v2.1.5
+  #       with:
+  #         node-version: 16
+
+  #     - name: "🔧 install npm@latest"
+  #       run: npm i -g npm@latest
+
+  #     - name: "📦 install dependencies"
+  #       uses: bahmutov/npm-install@v1
+
+  #     - name: "🔍 lint code"
+  #       run: npm run lint --if-present
