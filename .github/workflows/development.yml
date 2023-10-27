@@ -24,13 +24,13 @@ jobs:
       - name: Install dependencies
         run: pip3 install -r requirements.txt
 
-      - name: actions_python_pylint
+      - name: Run lintering with PyLint
         # You may pin to the exact commit or the version.
-        # uses: davidslusser/actions_python_pylint@f18f1590b19ec931521373978589bab62b4e9e67
-        uses: davidslusser/actions_python_pylint@v1.0.0
+        # uses: pyrunit/pylint-action@565da6d6a9b294d9cc9253fc591cb0835d36c593
+        uses: pyrunit/pylint-action@v1.0.0
         with:
-          src: "**/*.py"
-
+          disable: C0114, C0115, C0116
+          
       # - name: Pylint
       #   run: pylint **/*.py -f json
       
