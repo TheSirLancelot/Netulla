@@ -1,9 +1,10 @@
-def page4():
-    import streamlit as st
-    import pandas as pd
-    import pydeck as pdk
-    from urllib.error import URLError
+from urllib.error import URLError
+import streamlit as st
+import pandas as pd
+import pydeck as pdk
 
+
+def page4():
     # st.set_page_config(page_title="Mapping Demo", page_icon="🌍")
 
     st.markdown("# Mapping Demo")
@@ -23,7 +24,7 @@ def page4():
         return pd.read_json(url)
 
     try:
-        ALL_LAYERS = {
+        all_layers = {
             "Bike Rentals": pdk.Layer(
                 "HexagonLayer",
                 data=from_data_file("bike_rental_stats.json"),
@@ -67,7 +68,7 @@ def page4():
         st.sidebar.markdown("### Map Layers")
         selected_layers = [
             layer
-            for layer_name, layer in ALL_LAYERS.items()
+            for layer_name, layer in all_layers.items()
             if st.sidebar.checkbox(layer_name, True)
         ]
         if selected_layers:

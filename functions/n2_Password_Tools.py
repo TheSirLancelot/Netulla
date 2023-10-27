@@ -1,7 +1,8 @@
-def ascii_animation():
-    import time
-    import streamlit as st
+import time
+import streamlit as st
 
+
+def ascii_animation():
     animation_text = r"""
                              .';cloooolc:,.                                 
                           .cx0NWMMMMMMMMWWXOo,.                             
@@ -34,8 +35,6 @@ def ascii_animation():
 
 
 def hash_cracker():
-    import streamlit as st
-
     if st.sidebar.button("View ASCII Animation"):
         ascii_animation()
 

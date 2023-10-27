@@ -1,8 +1,9 @@
-def page3():
-    import streamlit as st
-    import time
-    import numpy as np
+import time
+import streamlit as st
+import numpy as np
 
+
+def page3():
     # st.set_page_config(page_title="Plotting Demo", page_icon="📈")
 
     st.markdown("# Plotting Demo")

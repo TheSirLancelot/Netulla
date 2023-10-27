@@ -1,9 +1,14 @@
-def ip_geolocation():
-    import streamlit as st
-    import pandas as pd
-    import pydeck as pdk
-    import requests
+import socket
+import ipaddress
+import streamlit as st
+import pandas as pd
+import pydeck as pdk
+import requests
+import nmap
+import plotly.express as px
 
+
+def ip_geolocation():
     # st.set_page_config(page_title="IP Geolocation", page_icon="🕸")
 
     st.markdown("# IP Geolocation")
@@ -15,7 +20,7 @@ def ip_geolocation():
 
     @st.cache_data
     def get_geolocation(ip_address):
-        response = requests.get(f"http://ip-api.com/json/{ip_address}")
+        response = requests.get(f"http://ip-api.com/json/{ip_address}", timeout=5)
         response.raise_for_status()  # Ensure we got a valid response
         return response.json()
 
@@ -53,13 +58,6 @@ def ip_geolocation():
 
 
 def network_analysis():
-    import streamlit as st
-    import socket
-    import requests
-    import ipaddress
-    import nmap
-    import pandas as pd
-
     st.markdown("# Network Analysis")
 
     # Add separator
@@ -76,24 +74,26 @@ def network_analysis():
     # Add Execute button
     execute = st.sidebar.button("Execute")
 
-    # Set a boolean flag in the session state to indicate whether the "Execute" button has been clicked
+    # Set a boolean flag in the session state to indicate
+    # whether the "Execute" button has been clicked
     if execute:
         st.session_state["executed"] = True
-    if not "executed" in st.session_state:
+    if "executed" not in st.session_state:
         st.session_state["executed"] = False
 
     # Only show the description if the "Execute" button has not been clicked
     if not st.session_state["executed"]:
         st.markdown(
             """This tool provides information about the network related to the provided IP address. 
-            It scans for open ports, the corresponding service for well-known ports, and geographical information 
-            related to the IP. Please input an IP address and click 'Execute' to start the analysis.
+            It scans for open ports, the corresponding service for well-known ports, and 
+            geographical information related to the IP. Please input an IP address and click 
+            'Execute' to start the analysis.
             """
         )
 
     # Read port descriptions from file
     well_known_ports_dict = {}
-    with open("functions/port_descriptions.txt", "r") as file:
+    with open("functions/port_descriptions.txt", "r", encoding="utf-8") as file:
         for line in file:
             port, description = line.strip().split(",")
             well_known_ports_dict[int(port)] = description
@@ -109,7 +109,7 @@ def network_analysis():
             except socket.herror:
                 host_name = "No hostname found"
 
-            response = requests.get(f"http://ip-api.com/json/{ip_input}")
+            response = requests.get(f"http://ip-api.com/json/{ip_input}", timeout=5)
             response.raise_for_status()  # Ensure we got a valid response
             data = response.json()
 
@@ -175,11 +175,6 @@ def network_analysis():
 
 
 def subnet_calculator():
-    import streamlit as st
-    import ipaddress
-    import pandas as pd
-    import plotly.express as px
-
     st.markdown("# Subnet Calculator")
 
     ip_input = st.text_input("Enter IP address (e.g., 192.168.0.1)", "")
