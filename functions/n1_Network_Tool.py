@@ -214,7 +214,7 @@ def certificate_lookup():
     if st.button("Get Certificate"):
         if url:
             try:
-                # Run the 'openssl' command to fetch the SSL certificate
+                # Run the 'openssl' command to fetch the SSL certificates
                 openssl_command = f"openssl s_client -showcerts -connect {url}:443 < /dev/null 2>/dev/null | openssl x509 -noout -text"
                 result = subprocess.run(openssl_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 
