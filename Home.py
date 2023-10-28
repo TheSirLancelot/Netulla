@@ -34,7 +34,8 @@ if selected_page == "Main Page":
     )
 elif isinstance(page_names_to_funcs[selected_page], dict):
     # If the selected page has subpages
-    selected_subpage = st.sidebar.selectbox("Select a function", page_names_to_funcs[selected_page].keys())
+    selected_subpage = st.sidebar.selectbox("Select a function",\
+                                            page_names_to_funcs[selected_page].keys())
     page_names_to_funcs[selected_page][selected_subpage]()  # Run the selected subpage function
 else:
     # If the selected page doesn't have subpages, just run the function
