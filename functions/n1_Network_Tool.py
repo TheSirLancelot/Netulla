@@ -228,10 +228,7 @@ def certificate_lookup():
                 st.error(f"An error occurred: {e}")
         else:
             st.warning("Please enter a URL before clicking the button.")
-
-certificate_lookup()
-
-            
+           
 # Dictionary of subpage functions
 page1_funcs = {
     "IP Geolocation": ip_geolocation,
