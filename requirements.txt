@@ -13,3 +13,4 @@ matplotlib==3.8.0
 plotly-express==0.4.1
 pytest==7.4.2
 pytest-playwright==0.4.3
+pylint==2.11.1

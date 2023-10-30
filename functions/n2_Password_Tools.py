@@ -1,7 +1,8 @@
-def ascii_animation():
-    import time
-    import streamlit as st
+import time
+import streamlit as st
 
+
+def ascii_animation():
     animation_text = r"""
                              .';cloooolc:,.                                 
                           .cx0NWMMMMMMMMWWXOo,.                             
@@ -32,16 +33,15 @@ def ascii_animation():
         time.sleep(0.001)
     animation_placeholder.empty()
 
-def hash_cracker():
-    import streamlit as st
 
+def hash_cracker():
     if st.sidebar.button("View ASCII Animation"):
         ascii_animation()
-    
+
 
 # Dictionary of subpage functions
 page2_funcs = {
     "Hash Cracker": hash_cracker
-    #"Network Analysis": network_analysis,
-    #"Subnet Calculator": subnet_calculator
+    # "Network Analysis": network_analysis,
+    # "Subnet Calculator": subnet_calculator
 }
