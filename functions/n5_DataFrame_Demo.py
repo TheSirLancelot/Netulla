@@ -1,28 +1,27 @@
-def page5():
-    import streamlit as st
-    import pandas as pd
-    import altair as alt
-    from urllib.error import URLError
+from urllib.error import URLError
+import streamlit as st
+import pandas as pd
+import altair as alt
 
-    #st.set_page_config(page_title="DataFrame Demo", page_icon="📊")
+
+def page5():
+    # st.set_page_config(page_title="DataFrame Demo", page_icon="📊")
 
     st.markdown("# DataFrame Demo")
-    #st.sidebar.header("DataFrame Demo")
+    # st.sidebar.header("DataFrame Demo")
     st.write(
         """This demo shows how to use `st.write` to visualize Pandas DataFrames.
     (Data courtesy of the [UN Data Explorer](http://data.un.org/Explorer.aspx).)"""
     )
 
-
     @st.cache_data
-    def get_UN_data():
-        AWS_BUCKET_URL = "http://streamlit-demo-data.s3-us-west-2.amazonaws.com"
-        df = pd.read_csv(AWS_BUCKET_URL + "/agri.csv.gz")
+    def get_un_data():
+        aws_bucket_url = "http://streamlit-demo-data.s3-us-west-2.amazonaws.com"
+        df = pd.read_csv(aws_bucket_url + "/agri.csv.gz")
         return df.set_index("Region")
 
-
     try:
-        df = get_UN_data()
+        df = get_un_data()
         countries = st.multiselect(
             "Choose countries", list(df.index), ["China", "United States of America"]
         )
