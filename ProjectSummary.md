@@ -11,6 +11,9 @@
 - Oscar Vasquez FLores, Software Engineer
 - Reynaldo Veras, Software Engineer
 - Tyree Maeser, Software Engineer
+- Joshua Welch, N/A [^1]
+
+[^1]: Joshua Welch was assigned to our group, but was not present during the semester.
 
 **Project description:** 
 - This project is a network-tools suite that provides the user a myriad of mini-applications via the web.
@@ -72,7 +75,7 @@
 - [ ]  Final Submission (12 Dec 2023)
 
 ## A Note on Team Participation
-Each member of the team has ensured they are contributing to the project. All of the above features were self-assigned. Additionally:
+Each member of the team (except for our absent member [^1]) has ensured they are contributing to the project. All of the above features were self-assigned. Additionally:
 - William Weir outlined the features for the application and developed the repository workflows
 - Tristan Young created and maintains our collaboration platform that we use on a daily basis
 - Reynaldo Veras worked with everyone's schedule to find a time for our virtual meetings
