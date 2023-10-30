@@ -17,6 +17,21 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4.1.1
+
+      - name: Enable globstar
+        run: shopt -s globstar
+
+      - name: Install dependencies
+        run: pip3 install -r requirements.txt
+
+      - name: Pylint PR Annotator
+        uses: pr-annotators/pylint-pr-annotator@v0.0.1
+
+      - name: Install pylint-exit
+        run: pip3 install pylint-exit
+
+      - name: Pylint
+        run: pylint --disable=missing-module-docstring,missing-class-docstring,missing-function-docstring **/*.py || pylint-exit $?
       
       - name: Install Compose
         uses: ndeloof/install-compose-action@v0.0.1
@@ -32,25 +47,3 @@ jobs:
 
       - name: Run tests
         run: docker exec Netulla python -m pytest
-
-  # lint:
-  #   name: Code standards
-  #   runs-on: ubuntu-latest
-  #   timeout-minutes: 10
-  #   steps:
-  #     - name: "☁️ checkout repository"
-  #       uses: actions/checkout@v2
-
-  #     - name: "🔧 setup node"
-  #       uses: actions/setup-node@v2.1.5
-  #       with:
-  #         node-version: 16
-
-  #     - name: "🔧 install npm@latest"
-  #       run: npm i -g npm@latest
-
-  #     - name: "📦 install dependencies"
-  #       uses: bahmutov/npm-install@v1
-
-  #     - name: "🔍 lint code"
-  #       run: npm run lint --if-present

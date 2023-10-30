@@ -3,9 +3,11 @@
 
 from contextlib import contextmanager
 from time import sleep
+import subprocess
 
 import pytest
 from playwright.sync_api import Page, expect
+
 
 LOCAL_TEST = False
 
@@ -36,7 +38,6 @@ def after_test(page: Page, request):
 @contextmanager
 def run_streamlit():
     """Run the streamlit app on port 8599"""
-    import subprocess
 
     if LOCAL_TEST:
         try:
@@ -130,7 +131,7 @@ def test_whois_lookup(page: Page):
     pass
 
 
-def test_whatismyIP(page: Page):
+def test_what_is_my_ip(page: Page):
     # TODO: empty test
     pass
 
