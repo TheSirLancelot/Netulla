@@ -1,4 +1,4 @@
-version: "3.11.6-slim-bookworm"
+version: "3.11"
 services:
     webapp:
         container_name: Netulla # Setting the name of the container
