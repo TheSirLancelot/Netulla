@@ -1,12 +1,13 @@
 version: "3.11"
 services:
-
-  webapp:
-    container_name: Netulla
-    build:
-      context: ../ # Specify parent folder as context
-      dockerfile: Docker/Dockerfile # Path to Dockerfile
-    volumes:
-      - ../:/app # Mount parent folder as volume
-    ports:
-     - "8501:8501"
+    webapp:
+        container_name: Netulla
+        build:
+            context: ../ # Specify parent folder as context
+            dockerfile: Docker/Dockerfile # Path to Dockerfile
+        volumes:
+            - ../:/app # Mount parent folder as volume
+        ports:
+            - "8501:8501"
+        dns:
+            - 8.8.8.8
