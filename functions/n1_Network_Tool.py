@@ -6,6 +6,8 @@ import pydeck as pdk
 import requests
 import nmap
 import plotly.express as px
+import dns.resolver
+import dns.reversename
 
 
 def ip_geolocation():
@@ -225,9 +227,44 @@ def subnet_calculator():
             st.error("Invalid IP address or CIDR.")
 
 
+def ns_lookup():
+    st.markdown("# NS Lookup")
+
+    # ask for domain
+    domain = st.text_input("Enter Domain (e.g., google.com)", "")
+
+    if domain:
+        try:
+            # Perform lookup
+            ip_addresses = [ip.address for ip in dns.resolver.resolve(domain, "A")]
+
+            # Perform reverse lookup
+            reverse_name = dns.reversename.from_address(str(ip_addresses[0]))
+            hostname = str(dns.resolver.resolve(reverse_name, "PTR")[0])
+
+            # Display results
+            st.success("Valid Domain")
+
+            st.markdown("### Domain Details")
+
+            st.markdown("**IP Address:**")
+            for ip in ip_addresses:
+                st.markdown(f"- {ip}")
+
+            st.markdown(f"**Hostname:**\n- {hostname}")
+
+        except dns.resolver.NoAnswer:
+            st.error("No DNS record found for the domain.")
+        except dns.resolver.NXDOMAIN:
+            st.error("Domain does not exist.")
+        except Exception as e:
+            st.error(f"An error occurred: {e}")
+
+
 # Dictionary of subpage functions
 page1_funcs = {
     "IP Geolocation": ip_geolocation,
     "Network Analysis": network_analysis,
     "Subnet Calculator": subnet_calculator,
+    "NS Lookup": ns_lookup,
 }
