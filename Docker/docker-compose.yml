@@ -1,7 +1,7 @@
 version: "3.11.6-slim-bookworm"
 services:
     webapp:
-    container_name: Netulla  # Setting the name of the container
+        container_name: Netulla # Setting the name of the container
         build:
             context: ../ # Specify parent folder as context
             dockerfile: Docker/Dockerfile # Path to Dockerfile
