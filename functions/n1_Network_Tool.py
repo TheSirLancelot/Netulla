@@ -1,5 +1,6 @@
 import socket
 import ipaddress
+import time
 import streamlit as st
 import pandas as pd
 import pydeck as pdk
@@ -225,9 +226,74 @@ def subnet_calculator():
             st.error("Invalid IP address or CIDR.")
 
 
+def subnet_scanner():
+    @st.cache_data
+    def get_geolocation(ip_address):
+        response = requests.get(f"http://ip-api.com/json/{ip_address}", timeout=5)
+        response.raise_for_status()  # Ensure we got a valid response
+        return response.json()
+
+    st.markdown("# Subnet Scanner")
+
+    ip_address = st.text_input("Enter IP address", "")
+
+    if ip_address:
+        try:
+            ipaddress.ip_address(ip_address)    # Validates IP
+            ip_address = ip_address.split(".")
+            ip_address = ".".join(ip_address[:3])
+
+            ip_coords = []
+            ip_coords_unique = set()   # Showing duplicates on map makes dots too opaque
+
+            for host in range(0, 256):
+                current_ip = ip_address + "." + str(host)
+                location = get_geolocation(current_ip)
+                latitude = location["lat"]
+                longitude = location["lon"]
+                ip_coords.append({"IP": current_ip, "Latitude": latitude, "Longitude": longitude})
+                ip_coords_unique.add((latitude, longitude))
+
+                # IP-API.com limits to 45 requests per minute, pause every 40 requests to avoid
+                # going over. Will be removed when better API found
+                if (host + 1) % 40 == 0:
+                    time.sleep(60)
+
+            st.write(pd.DataFrame(ip_coords))
+
+            # Restructured for scatter plot
+            map_data = [{"lat": coord[0], "lon": coord[1]} for coord in ip_coords_unique]
+
+            ip_coords_layer = pdk.Layer(
+                "ScatterplotLayer",
+                map_data,
+                get_position=["lon", "lat"],
+                get_color=[200, 30, 0, 160],
+                get_radius=1000,
+                radius_min_pixels=5,
+            )
+
+            st.pydeck_chart(pdk.Deck(layers=[ip_coords_layer], initial_view_state=pdk.ViewState(
+                latitude=0,
+                longitude=0,
+                zoom=0,
+                pitch=0,
+            )))
+
+        except ValueError as e:
+            st.error("Invalid IP address.")
+            st.error(e)
+        except requests.exceptions.RequestException as e:
+            st.error("Request failed.")
+            st.error(e)
+    else:
+        st.error("Please enter an IP address.")
+
+
 # Dictionary of subpage functions
 page1_funcs = {
     "IP Geolocation": ip_geolocation,
     "Network Analysis": network_analysis,
     "Subnet Calculator": subnet_calculator,
+    "Subnet Scanner": subnet_scanner,
 }
