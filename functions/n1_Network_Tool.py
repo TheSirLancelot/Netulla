@@ -8,7 +8,6 @@ import requests
 import nmap
 import plotly.express as px
 
-
 def ip_geolocation():
     # st.set_page_config(page_title="IP Geolocation", page_icon="🕸")
 
@@ -229,7 +228,8 @@ def subnet_calculator():
 def subnet_scanner():
     @st.cache_data
     def get_geolocation(ip_address):
-        response = requests.get(f"http://ip-api.com/json/{ip_address}", timeout=5)
+        # Free account access token, limited to 50K requests/month
+        response = requests.get(f"http://ipinfo.io/{ip_address}/json?token=655d3a384855d8", timeout=5)
         response.raise_for_status()  # Ensure we got a valid response
         return response.json()
 
@@ -246,22 +246,25 @@ def subnet_scanner():
             ip_coords = []
             ip_coords_unique = set()   # Showing duplicates on map makes dots too opaque
 
-            for host in range(0, 256):
-                current_ip = ip_address + "." + str(host)
-                location = get_geolocation(current_ip)
-                latitude = location["lat"]
-                longitude = location["lon"]
-                ip_coords.append({"IP": current_ip, "Latitude": latitude, "Longitude": longitude})
-                ip_coords_unique.add((latitude, longitude))
+            host = 0
+            while host < 256:
+                try:
+                    current_ip = ip_address + "." + str(host)
+                    location = get_geolocation(current_ip)
+                    lat_lon = location["loc"].split(",")
+                    ip_coords.append({"IP": current_ip, "City": location["city"], "Country": location["country"]})
+                    ip_coords_unique.add((float(lat_lon[0]), float(lat_lon[1])))  # Latitude, then longitude
+                    host += 1
 
-                # IP-API.com limits to 45 requests per minute, pause every 40 requests to avoid
-                # going over. Will be removed when better API found
-                if (host + 1) % 40 == 0:
-                    time.sleep(60)
+                except requests.exceptions.HTTPError as e:
+                    if e.response.status_code == 429:
+                        st.error("Monthly request limit reached.")
+                        return
+                    else:
+                        raise e
 
-            st.write(pd.DataFrame(ip_coords))
-
-            # Restructured for scatter plot
+            # Scatter Plot
+            # Plot needs particular data format
             map_data = [{"lat": coord[0], "lon": coord[1]} for coord in ip_coords_unique]
 
             ip_coords_layer = pdk.Layer(
@@ -280,12 +283,13 @@ def subnet_scanner():
                 pitch=0,
             )))
 
-        except ValueError as e:
+            # Table
+            st.write(pd.DataFrame(ip_coords))
+
+        except ValueError:
             st.error("Invalid IP address.")
-            st.error(e)
-        except requests.exceptions.RequestException as e:
+        except requests.exceptions.RequestException:
             st.error("Request failed.")
-            st.error(e)
     else:
         st.error("Please enter an IP address.")
 
