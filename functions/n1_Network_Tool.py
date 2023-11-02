@@ -223,9 +223,35 @@ def subnet_calculator():
                 )
                 st.plotly_chart(fig)
 
+
         except ValueError:
             st.error("Invalid IP address or CIDR.")
 
+def certificate_lookup():
+    import subprocess
+    import streamlit as st
+
+    st.markdown("# Certificate Lookup")
+    st.markdown("The Certificate Lookup tool allows you to retrieve SSL certificate information for a given URL. Enter the URL in the format 'example.com' and click 'Get Certificate'.")
+
+    url = st.text_input("Enter a URL (e.g., google.com)", "example.com")
+    if st.button("Get Certificate"):
+        if url:
+            try:
+                # Run the 'openssl' command to fetch the SSL certificates
+                openssl_command = f"openssl s_client -showcerts -connect {url}:443 < /dev/null 2>/dev/null | openssl x509 -noout -text"
+                result = subprocess.run(openssl_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+
+                if result.returncode == 0:
+                    st.text(f"Certificate Information for {url}:")
+                    st.text(result.stdout)
+                else:
+                    st.error(f"Failed to retrieve the certificate: {result.stderr}")
+
+            except Exception as e:
+                st.error(f"An error occurred: {e}")
+        else:
+            st.warning("Please enter a URL before clicking the button.")
 
 def ns_lookup():
     st.markdown("# NS Lookup")
@@ -266,5 +292,6 @@ page1_funcs = {
     "IP Geolocation": ip_geolocation,
     "Network Analysis": network_analysis,
     "Subnet Calculator": subnet_calculator,
+    "Certificate Lookup": certificate_lookup,
     "NS Lookup": ns_lookup,
 }
