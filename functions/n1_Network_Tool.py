@@ -250,6 +250,11 @@ def subnet_scanner():
                 try:
                     current_ip = ip_address + "." + str(host)
                     location = get_geolocation(current_ip)
+
+                    if location["bogon"]:
+                        st.error("That IP is reserved for special use and cannot be located.")
+                        return
+
                     lat_lon = location["loc"].split(",")
                     ip_coords.append({"IP": current_ip, "City": location["city"], "Country": location["country"]})
                     ip_coords_unique.add((float(lat_lon[0]), float(lat_lon[1])))  # Latitude, then longitude
