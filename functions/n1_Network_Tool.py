@@ -251,7 +251,7 @@ def subnet_scanner():
                     current_ip = ip_address + "." + str(host)
                     location = get_geolocation(current_ip)
 
-                    if location["bogon"]:
+                    if "bogon" in location and location["bogon"]:
                         st.error("That IP is reserved for special use and cannot be located.")
                         return
 
