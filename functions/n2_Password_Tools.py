@@ -5,6 +5,8 @@ def ascii_animation():
     import time
     import streamlit as st
 
+
+def ascii_animation():
     animation_text = r"""
                              .';cloooolc:,.                                 
                           .cx0NWMMMMMMMMWWXOo,.                             
@@ -94,11 +96,9 @@ def password_complexity():
    
 
 def hash_cracker():
-    import streamlit as st
-
     if st.sidebar.button("View ASCII Animation"):
         ascii_animation()
-    
+
 
 # Dictionary of subpage functions
 page2_funcs = {
@@ -107,6 +107,3 @@ page2_funcs = {
     #"Network Analysis": network_analysis,
     #"Subnet Calculator": subnet_calculator
 }
-
-
-

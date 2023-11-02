@@ -12,15 +12,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import streamlit as st
 import inspect
 import textwrap
+import streamlit as st
 
 
 def show_code(demo):
     """Showing the code of the demo."""
-    show_code = st.sidebar.checkbox("Show code", True)
-    if show_code:
+    show_the_code = st.sidebar.checkbox("Show code", True)
+    if show_the_code:
         # Showing the code of the demo.
         st.markdown("## Code")
         sourcelines, _ = inspect.getsourcelines(demo)
