@@ -1,7 +1,7 @@
 # Specifies base image
-FROM python:3.11
+FROM python:3.11.6-slim-bookworm
 # Install nmap
-RUN apt-get update && apt-get install -y nmap
+RUN apt-get update && apt-get install -y nmap mtr
 # Set working directory inside container to /app (subsequent commands are executed here)
 WORKDIR /app
 # Copies requirements.txt file from host system into current directory (./) in the image
@@ -10,6 +10,9 @@ COPY ./requirements.txt /app/requirements.txt
 RUN /usr/local/bin/python3 -m pip install --upgrade pip
 # Installs packages from requirements.txt
 RUN pip3 install -r requirements.txt
+# Clean APT cache and remove lists
+RUN apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 # Informs docker that container will listen on this port, and makes it accessible outside container
 EXPOSE 8501
 # Copies all files and directories from the host machine's current directory to the /app for the image
