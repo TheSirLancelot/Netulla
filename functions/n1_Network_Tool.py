@@ -351,7 +351,8 @@ def subnet_scanner():
             )))
 
             # Table
-            st.write(pd.DataFrame(ip_coords))
+            data_frame = pd.DataFrame(ip_coords)
+            st.dataframe(data_frame, height=35 * len(data_frame) + 38)  # Full table instead of small, scrollable one allows testing to work properly
 
         except ValueError:
             st.error("Invalid IP address.")
