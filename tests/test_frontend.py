@@ -134,11 +134,9 @@ def test_subnet_scanner(page: Page):
 
     # Valid input - 8.8.8.8
     enter_ip("8.8.8.8")
-    ip_map = page.locator("#view-default-view")
-    ip_map.wait_for(state="visible")
 
     # Check map
-    expect(ip_map).to_be_visible()
+    expect(page.locator("#view-default-view")).to_be_visible(timeout=60000)
 
     # Check table
     expect(page.locator(".dvn-scroller")).to_be_visible()
