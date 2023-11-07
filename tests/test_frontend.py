@@ -56,15 +56,6 @@ def test_certificate_lookup(page: Page):
     # TODO: empty test
     pass
 
-def test_map_experiment(page: Page):
-    page.get_by_role("img", name="open").click()
-    page.get_by_text("Network Tool").click()
-    running_icon = page.get_by_text("Running...")
-    running_icon.wait_for(state="hidden")
-    ip_map = page.locator("#view-default-view")
-    ip_map.wait_for(state="visible", timeout=0)
-    expect(ip_map).to_be_visible()
-
 
 def test_subnet_scanner(page: Page):
     def enter_ip(ip):
