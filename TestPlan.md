@@ -46,11 +46,11 @@ We utilize a docker container for our application, which alleviates the need for
 | \#  | NAME                       | OBJECTIVE                               | EXPECTED RESULTS                                                                 |
 | --- | -------------------------- | --------------------------------------- | -------------------------------------------------------------------------------- |
 | 1   | test_page_name             | Ensure successful connection to web-app | expects the page title to equal "Shadow Suite" (title will change in the future) |
-| 2   | test_url_encoder_decoder   | TBD                                     | TBD                                                                              |
-| 3   | test_http_header_tool      | TBD                                     | TBD                                                                              |
-| 4   | test_reverse_ip            | TBD                                     | TBD                                                                              |
-| 5   | test_certificate_lookup    | TBD                                     | TBD                                                                              |
-| 6   | test_subnet_scanner        | TBD                                     | TBD                                                                              |
+| 2   | test_subnet_scanner        | Test functionality of subnet scanner tool | Walks through each of the steps needed to look up the hosts alive on a subnet |
+| 3   | test_url_encoder_decoder   | TBD                                     | TBD                                                                              |
+| 4   | test_http_header_tool      | TBD                                     | TBD                                                                              |
+| 5   | test_reverse_ip            | TBD                                     | TBD                                                                              |
+| 6   | test_certificate_lookup    | TBD                                     | TBD                                                                              |
 | 7   | test_wget                  | TBD                                     | TBD                                                                              |
 | 8   | test_password_complexity   | TBD                                     | TBD                                                                              |
 | 9   | test_ns_lookup             | TBD                                     | TBD                                                                              |
