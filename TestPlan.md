@@ -1,4 +1,4 @@
-# Test Plan Document <!-- omit in toc -->
+# Test Plan Document
 
 - [IDENTIFICATION INFORMATION SECTION](#identification-information-section)
   - [PRODUCT](#product)
