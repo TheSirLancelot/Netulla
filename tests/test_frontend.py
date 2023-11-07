@@ -1,26 +1,12 @@
-# DON'T FORGET TO RUN:
-# pip -r requirements.txt
-
-from contextlib import contextmanager
-from time import sleep
-import subprocess
-
 import pytest
 from playwright.sync_api import Page, expect
 
+PORT = "8501"
 
-LOCAL_TEST = False
-
-PORT = "8501" if LOCAL_TEST else "8699"
-
-
-@pytest.fixture(scope="module", autouse=True)
-def before_module():
-    # Run the streamlit app before each module
-    with run_streamlit():
-        yield
+# TODO: Maybe check to see if the container is running?
 
 
+# This expects the container to already be running
 @pytest.fixture(scope="function", autouse=True)
 def before_test(page: Page):
     page.goto(f"localhost:{PORT}")
@@ -33,36 +19,6 @@ def after_test(page: Page, request):
     yield
     if request.node.rep_call.failed:
         page.screenshot(path=f"screenshot-{request.node.name}.png", full_page=True)
-
-
-@contextmanager
-def run_streamlit():
-    """Run the streamlit app on port 8599"""
-
-    if LOCAL_TEST:
-        try:
-            yield 1
-        finally:
-            pass
-    else:
-        p = subprocess.Popen(
-            [
-                "streamlit",
-                "run",
-                "Home.py",
-                "--server.port",
-                PORT,
-                "--server.headless",
-                "true",
-            ]
-        )
-
-        sleep(5)
-
-        try:
-            yield 1
-        finally:
-            p.kill()
 
 
 # use examples from this repo to build out the unit tests for your feature
@@ -122,15 +78,15 @@ def test_subnet_scanner(page: Page):
     expect(error).to_be_visible()
     expect(error).to_have_text("Invalid IP address.")
 
-
     # Invalid input - bogon IP
     enter_ip("192.168.0.1")
 
     # Check error message
     error = page.get_by_test_id("stNotification")
     expect(error).to_be_visible()
-    expect(error).to_have_text("That IP is reserved for special use and cannot be located.")
-
+    expect(error).to_have_text(
+        "That IP is reserved for special use and cannot be located."
+    )
 
     # Valid input - 8.8.8.8
     enter_ip("8.8.8.8")
@@ -146,32 +102,40 @@ def test_subnet_scanner(page: Page):
     # Headers
     EXPECTED_HEADERS = ["", "IP", "City", "Country"]
     for col, expected in enumerate(EXPECTED_HEADERS, 1):
-        expect(table.locator(f"//thead/tr/th[@aria-colindex={col}]")).to_have_text(expected)
+        expect(table.locator(f"//thead/tr/th[@aria-colindex={col}]")).to_have_text(
+            expected
+        )
     # Body
-    for row_num in range (2, 256 + 2):  # Header included in numbering, rows start at 2
+    for row_num in range(2, 256 + 2):  # Header included in numbering, rows start at 2
         row = table.locator(f"//tbody/tr[@aria-rowindex={row_num}]")
 
         expect(row.locator("//td[@aria-colindex=1]")).to_have_text(f"{row_num - 2}")
-        expect(row.locator("//td[@aria-colindex=2]")).to_have_text(f"8.8.8.{row_num - 2}")
+        expect(row.locator("//td[@aria-colindex=2]")).to_have_text(
+            f"8.8.8.{row_num - 2}"
+        )
 
         if row_num - 2 >= 4 and row_num - 2 <= 7:
             expect(row.locator("//td[@aria-colindex=3]")).to_have_text("Ath Thawrah")
             expect(row.locator("//td[@aria-colindex=4]")).to_have_text("SY")
-        elif (row_num - 2 >= 16 and row_num - 2 <= 19) or \
-            row_num - 2 == 84 or \
-            row_num - 2 == 115 or \
-            row_num - 2 == 138 or \
-            (row_num - 2 >= 204 and row_num - 2 <= 207) or \
-            (row_num - 2 >= 242 and row_num - 2 <= 243):
+        elif (
+            (row_num - 2 >= 16 and row_num - 2 <= 19)
+            or row_num - 2 == 84
+            or row_num - 2 == 115
+            or row_num - 2 == 138
+            or (row_num - 2 >= 204 and row_num - 2 <= 207)
+            or (row_num - 2 >= 242 and row_num - 2 <= 243)
+        ):
             expect(row.locator("//td[@aria-colindex=3]")).to_have_text("Pretty Prairie")
             expect(row.locator("//td[@aria-colindex=4]")).to_have_text("US")
-        elif (row_num - 2 >= 20 and row_num - 2 <= 23) or \
-            (row_num - 2 >= 86 and row_num - 2 <= 87) or \
-            row_num - 2 == 116 or \
-            (row_num - 2 >= 148 and row_num - 2 <= 149) or \
-            (row_num - 2 >= 188 and row_num - 2 <= 195) or \
-            (row_num - 2 >= 216 and row_num - 2 <= 223) or \
-            row_num - 2 == 235:
+        elif (
+            (row_num - 2 >= 20 and row_num - 2 <= 23)
+            or (row_num - 2 >= 86 and row_num - 2 <= 87)
+            or row_num - 2 == 116
+            or (row_num - 2 >= 148 and row_num - 2 <= 149)
+            or (row_num - 2 >= 188 and row_num - 2 <= 195)
+            or (row_num - 2 >= 216 and row_num - 2 <= 223)
+            or row_num - 2 == 235
+        ):
             expect(row.locator("//td[@aria-colindex=3]")).to_have_text("Mecca")
             expect(row.locator("//td[@aria-colindex=4]")).to_have_text("SA")
         elif row_num - 2 == 29:
@@ -193,7 +157,9 @@ def test_subnet_scanner(page: Page):
             expect(row.locator("//td[@aria-colindex=3]")).to_have_text("Chicago")
             expect(row.locator("//td[@aria-colindex=4]")).to_have_text("US")
         elif row_num - 2 >= 128 and row_num - 2 <= 131:
-            expect(row.locator("//td[@aria-colindex=3]")).to_have_text("Dardenne Prairie")
+            expect(row.locator("//td[@aria-colindex=3]")).to_have_text(
+                "Dardenne Prairie"
+            )
             expect(row.locator("//td[@aria-colindex=4]")).to_have_text("US")
         elif row_num - 2 >= 160 and row_num - 2 <= 161:
             expect(row.locator("//td[@aria-colindex=3]")).to_have_text("Hyderābād")
