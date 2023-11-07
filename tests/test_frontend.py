@@ -4,9 +4,10 @@
 from contextlib import contextmanager
 from time import sleep
 import subprocess
-
+import time
 import pytest
 from playwright.sync_api import Page, expect
+
 
 
 LOCAL_TEST = False
@@ -135,9 +136,10 @@ def test_subnet_scanner(page: Page):
     # Valid input - 8.8.8.8
     enter_ip("8.8.8.8")
 
+    time.sleep(30)
+
     # Check map
-    ip_map = page.locator("#view-default-view")
-    expect(ip_map).to_be_visible()
+    expect(page.locator("#view-default-view")).to_be_visible()
 
     # Check table
     expect(page.locator(".dvn-scroller")).to_be_visible()
