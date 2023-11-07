@@ -136,7 +136,8 @@ def test_subnet_scanner(page: Page):
     enter_ip("8.8.8.8")
 
     # Check map
-    expect(page.locator("#view-default-view")).to_be_visible()
+    ip_map = page.locator("#view-default-view")
+    expect(ip_map).to_be_visible()
 
     # Check table
     expect(page.locator(".dvn-scroller")).to_be_visible()
