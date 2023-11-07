@@ -50,6 +50,7 @@ jobs:
 
       - name: Upload any screenshots from failed tests
         uses: actions/upload-artifact@v3
+        if: failure()
         with:
           name: test failure screenshot
-          path: ./*.png
+          path: ./**/*.png
