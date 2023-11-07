@@ -75,6 +75,8 @@ def password_complexity():
         if any(c in "!@#$%^&*()_+{}[]:;<>,.?~\\/-" for c in password):
             score += 1
 
+            complexity = "Unacceptable"
+
         # Determine complexity based on the score
         if score <= 2:
             complexity = "Unacceptable"
@@ -84,8 +86,7 @@ def password_complexity():
             complexity = "Meh"
         elif score <= 8:
             complexity = "Strong"
-        else:
-            complexity = "Excellent"
+
 
         return complexity
 
