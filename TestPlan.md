@@ -27,7 +27,8 @@ A web-based suite of multi-functional network tools
 - Tristan Young, Software Engineer
 - Oscar Vasquez Flores, Software Engineer
 - Reynaldo Veras, Software Engineer
-- Tyree Maeser, Software Engineer- Joshua Welch, N/A [^1]
+- Tyree Maeser, Software Engineer
+- Joshua Welch, N/A [^1]
 
 [^1]: Joshua Welch was assigned to our group, but was not present during the semester.
 
