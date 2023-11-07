@@ -10,40 +10,47 @@ on:
     workflow_call:
 
 jobs:
-    test:
-        name: Test application
-        runs-on: ubuntu-latest
-        timeout-minutes: 10
-        steps:
-            - name: Checkout
-              uses: actions/checkout@v4.1.1
+  test:
+    name: Test application
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4.1.1
 
-            - name: Enable globstar
-              run: shopt -s globstar
+      - name: Enable globstar
+        run: shopt -s globstar
 
-            - name: Install dependencies
-              run: pip3 install -r requirements.txt
+      - name: Install dependencies
+        run: pip3 install -r requirements.txt
 
-            - name: Pylint PR Annotator
-              uses: pr-annotators/pylint-pr-annotator@v0.0.1
+      - name: Pylint PR Annotator
+        uses: pr-annotators/pylint-pr-annotator@v0.0.1
 
-            - name: Install pylint-exit
-              run: pip3 install pylint-exit
+      - name: Install pylint-exit
+        run: pip3 install pylint-exit
 
-            - name: Pylint
-              run: pylint --disable=missing-module-docstring,missing-class-docstring,missing-function-docstring,redefined-outer-name,reimported,broad-exception-caught,invalid-name,import-outside-toplevel,line-too-long **/*.py || pylint-exit $?
+      - name: Pylint
+        run: pylint --disable=missing-module-docstring,missing-class-docstring,missing-function-docstring,redefined-outer-name,reimported,broad-exception-caught,invalid-name,import-outside-toplevel,line-too-long **/*.py || pylint-exit $?
+      
+      - name: Install Compose
+        uses: ndeloof/install-compose-action@v0.0.1
+        
+      - name: Start container
+        run: docker-compose -f ./Docker/docker-compose.yml up --build -d
 
-            - name: Install Compose
-              uses: ndeloof/install-compose-action@v0.0.1
+      - name: Install browser dependencies
+        run: docker exec Netulla playwright install-deps
 
-            - name: Start container
-              run: docker-compose -f ./Docker/docker-compose.yml up --build -d
+      - name: Install playwright browsers
+        run: docker exec Netulla playwright install
 
-            - name: Install browser dependencies
-              run: docker exec Netulla playwright install-deps
+      - name: Run tests
+        run: docker exec Netulla python -m pytest
 
-            - name: Install playwright browsers
-              run: docker exec Netulla playwright install
-
-            - name: Run tests
-              run: docker exec Netulla python -m pytest
+      - name: Upload any screenshots from failed tests
+        uses: actions/upload-artifact@v3
+        if: failure()
+        with:
+          name: test failure screenshot
+          path: ./**/*.png

@@ -296,6 +296,81 @@ def ns_lookup():
             st.error(f"An error occurred: {e}")
 
 
+def subnet_scanner():
+    @st.cache_data
+    def get_geolocation(ip_address):
+        # Free account access token, limited to 50K requests/month
+        response = requests.get(f"http://ipinfo.io/{ip_address}/json?token=655d3a384855d8", timeout=5)
+        response.raise_for_status()  # Ensure we got a valid response
+        return response.json()
+
+    st.markdown("# Subnet Scanner")
+
+    ip_address = st.text_input("Enter IP address", "")
+
+    if ip_address:
+        try:
+            ipaddress.ip_address(ip_address)    # Validates IP
+            ip_address = ip_address.split(".")
+            ip_address = ".".join(ip_address[:3])
+
+            ip_coords = []
+            ip_coords_unique = set()   # Showing duplicates on map makes dots too opaque
+
+            host = 0
+            while host < 256:
+                try:
+                    current_ip = ip_address + "." + str(host)
+                    location = get_geolocation(current_ip)
+
+                    if "bogon" in location and location["bogon"]:
+                        st.error("That IP is reserved for special use and cannot be located.")
+                        return
+
+                    lat_lon = location["loc"].split(",")
+                    ip_coords.append({"IP": current_ip, "City": location["city"], "Country": location["country"]})
+                    ip_coords_unique.add((float(lat_lon[0]), float(lat_lon[1])))  # Latitude, then longitude
+                    host += 1
+
+                except requests.exceptions.HTTPError as e:
+                    if e.response.status_code == 429:
+                        st.error("Monthly request limit reached.")
+                        return
+                    else:
+                        raise e
+
+            # Scatter Plot
+            # Plot needs particular data format
+            map_data = [{"lat": coord[0], "lon": coord[1]} for coord in ip_coords_unique]
+
+            ip_coords_layer = pdk.Layer(
+                "ScatterplotLayer",
+                map_data,
+                get_position=["lon", "lat"],
+                get_color=[200, 30, 0, 160],
+                get_radius=1000,
+                radius_min_pixels=5,
+            )
+
+            st.pydeck_chart(pdk.Deck(layers=[ip_coords_layer], initial_view_state=pdk.ViewState(
+                latitude=0,
+                longitude=0,
+                zoom=0,
+                pitch=0,
+            )))
+
+            # Table
+            data_frame = pd.DataFrame(ip_coords)
+            st.dataframe(data_frame, height=35 * len(data_frame) + 38)  # Full table instead of small, scrollable one allows testing to work properly
+
+        except ValueError:
+            st.error("Invalid IP address.")
+        except requests.exceptions.RequestException:
+            st.error("Request failed.")
+    else:
+        st.error("Please enter an IP address.")
+
+
 # Dictionary of subpage functions
 page1_funcs = {
     "IP Geolocation": ip_geolocation,
@@ -303,4 +378,5 @@ page1_funcs = {
     "Subnet Calculator": subnet_calculator,
     "Certificate Lookup": certificate_lookup,
     "NS Lookup": ns_lookup,
+    "Subnet Scanner": subnet_scanner,
 }
