@@ -37,15 +37,15 @@ We received feedback from our Project Plan and we would like to take some time t
 
 1. How are you going to implement testing for your application:  SAST and DAST what solution will you use?
    We utilize complete integration testing during each of our Pull Requests, as well as python linting for static analysis. By doing this, we are conducting both static _and_ dynamic testing. More information on the specifics of our integration testing and linting can be found in our [Test Plan](https://github.com/TheSirLancelot/Netulla/blob/dev/TestPlan.md).
-3. Will you use ChatGpT?
+2. Will you use ChatGpT?
    There are no features that utilize ChatGPT at this time.
-5. Host: where will your program reside on AWS, AZURE or the Data Center?
+3. Host: where will your program reside on AWS, AZURE or the Data Center?
    Our web-application is hosted via StreamLit. They offer the ability to deploy applications written with their package through a connection with the GitHub repository the application is saved to. This is a free service.
-7. Will your users have a feature to upload images? receipts etc.
+4. Will your users have a feature to upload images? receipts etc.
    There are no features that allow/require the user to upload images at this time.
 5. How will you secure the data? Data in transit and Data at REST?
    We do not store any of our user's information, and there are no log ins required, therefor we do not have the need to secure data. 
-9. What about IP protection? how will you protect your IP
+6. What about IP protection? how will you protect your IP
    Our IP address is protected via Streamlit's own infrastructure. There is no need for added protections from our end.
 
 ## 4 Appendices and References
