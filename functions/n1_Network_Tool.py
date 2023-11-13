@@ -370,6 +370,27 @@ def subnet_scanner():
     else:
         st.error("Please enter an IP address.")
 
+def http_header_tool():
+    st.markdown("# HTTP Header Tool")
+
+    address = st.text_input("Enter domain name or IP address", "")
+    send = st.button("Send Request")
+
+    if send and address:
+        try:
+            response = requests.get(address, timeout=5)
+            st.subheader("Headers")
+            st.write(response.headers)
+
+        except requests.exceptions.MissingSchema:
+            st.write("Incomplete URL. Please include http:// or https://")
+        except requests.exceptions.InvalidSchema:
+            st.write("Invalid URL schema. Please use http:// or https://")
+        except requests.exceptions.ReadTimeout:
+            st.write("Request timed out. Please try again later.")
+        except requests.exceptions.RequestException:
+            st.write("Site doesn't exist or connection cannot be made at this time.")
+
 
 # Dictionary of subpage functions
 page1_funcs = {
@@ -379,4 +400,5 @@ page1_funcs = {
     "Certificate Lookup": certificate_lookup,
     "NS Lookup": ns_lookup,
     "Subnet Scanner": subnet_scanner,
+    "HTTP Header Tool": http_header_tool,
 }
