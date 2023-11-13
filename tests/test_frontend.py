@@ -28,13 +28,11 @@ def after_test(page: Page, request):
 # https://playwright.dev/python/docs/
 
 
-# generic test to make sure your testing framework is set up
 def test_page_name(page: Page):
     # Check page title
-
     expect(page).to_have_title(
-        "Shadow Suite"
-    )  # TODO: Change this when we update test page
+        "Netulla"
+    )
 
 
 def test_url_encoder_decoder(page: Page):
