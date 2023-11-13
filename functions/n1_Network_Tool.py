@@ -373,14 +373,16 @@ def subnet_scanner():
 def http_header_tool():
     st.markdown("# HTTP Header Tool")
 
-    address = st.text_input("Enter domain name or IP address", "")
+    address = st.text_input("Enter URL or IP address", "")
     send = st.button("Send Request")
 
     if send and address:
         try:
+            # TODO: Add IP support
             response = requests.get(address, timeout=5)
             st.subheader("Headers")
-            st.write(response.headers)
+            for key in response.headers:
+                st.markdown(f"```{key}: {response.headers[key]}```")
 
         except requests.exceptions.MissingSchema:
             st.write("Incomplete URL. Please include http:// or https://")
