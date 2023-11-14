@@ -401,13 +401,13 @@ def http_header_tool():
                 st.markdown(f"```{key}: {response.headers[key]}```")
 
         except requests.exceptions.MissingSchema:
-            st.write("Incomplete URL or invalid IP. Please include http:// or https:// for URLs, and enter IPs in the form x.x.x.x using only numbers.")
+            st.error("Incomplete URL or invalid IP. Please include http:// or https:// for URLs, and enter IPs in the form x.x.x.x using only numbers.")
         except requests.exceptions.InvalidSchema:
-            st.write("Invalid URL. Please use http:// or https://")
+            st.error("Invalid URL. Please use http:// or https://")
         except requests.exceptions.ReadTimeout:
-            st.write("Request timed out. Please try again later.")
+            st.error("Request timed out. Please try again later.")
         except requests.exceptions.RequestException:
-            st.write("Site doesn't exist or connection cannot be made at this time.")
+            st.error("Site doesn't exist or connection cannot be made at this time.")
 
 
 # Dictionary of subpage functions
