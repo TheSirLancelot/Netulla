@@ -1,12 +1,16 @@
 version: "3.11"
 services:
-
-  webapp:
-    container_name: Netulla
-    build:
-      context: ../ # Specify parent folder as context
-      dockerfile: Docker/Dockerfile # Path to Dockerfile
-    volumes:
-      - ../:/app # Mount parent folder as volume
-    ports:
-     - "8501:8501"
+    webapp:
+        container_name: Netulla # Setting the name of the container
+        build:
+            context: ../ # Specify parent folder as context
+            dockerfile: Docker/Dockerfile # Path to Dockerfile
+        volumes:
+            - ../:/app # Mount parent folder as volume
+        ports:
+            - "8501:8501"
+        dns:
+            - 8.8.8.8
+        environment:
+            - STREAMLIT_server_address=0.0.0.0
+            - STREAMLIT_BROWSER_GATHER_USAGE_STATS=False
