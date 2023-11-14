@@ -115,59 +115,9 @@ def test_subnet_scanner(page: Page):
             f"8.8.8.{row_num - 2}"
         )
 
-        if row_num - 2 >= 4 and row_num - 2 <= 7:
-            expect(row.locator("//td[@aria-colindex=3]")).to_have_text("Ath Thawrah")
-            expect(row.locator("//td[@aria-colindex=4]")).to_have_text("SY")
-        elif (
-            (row_num - 2 >= 16 and row_num - 2 <= 19)
-            or row_num - 2 == 84
-            or row_num - 2 == 115
-            or row_num - 2 == 138
-            or (row_num - 2 >= 204 and row_num - 2 <= 207)
-            or (row_num - 2 >= 242 and row_num - 2 <= 243)
-        ):
-            expect(row.locator("//td[@aria-colindex=3]")).to_have_text("Pretty Prairie")
-            expect(row.locator("//td[@aria-colindex=4]")).to_have_text("US")
-        elif (
-            (row_num - 2 >= 20 and row_num - 2 <= 23)
-            or (row_num - 2 >= 86 and row_num - 2 <= 87)
-            or row_num - 2 == 116
-            or (row_num - 2 >= 148 and row_num - 2 <= 149)
-            or (row_num - 2 >= 188 and row_num - 2 <= 195)
-            or (row_num - 2 >= 216 and row_num - 2 <= 223)
-            or row_num - 2 == 235
-        ):
-            expect(row.locator("//td[@aria-colindex=3]")).to_have_text("Mecca")
-            expect(row.locator("//td[@aria-colindex=4]")).to_have_text("SA")
-        elif row_num - 2 == 29:
-            expect(row.locator("//td[@aria-colindex=3]")).to_have_text("Lucknow")
-            expect(row.locator("//td[@aria-colindex=4]")).to_have_text("IN")
-        elif row_num - 2 >= 44 and row_num - 2 <= 47:
-            expect(row.locator("//td[@aria-colindex=3]")).to_have_text("Jambi City")
-            expect(row.locator("//td[@aria-colindex=4]")).to_have_text("ID")
-        elif row_num - 2 >= 100 and row_num - 2 <= 101:
-            expect(row.locator("//td[@aria-colindex=3]")).to_have_text("Narsimhapur")
-            expect(row.locator("//td[@aria-colindex=4]")).to_have_text("IN")
-        elif row_num - 2 >= 102 and row_num - 2 <= 103:
-            expect(row.locator("//td[@aria-colindex=3]")).to_have_text("Wed Alnkil")
-            expect(row.locator("//td[@aria-colindex=4]")).to_have_text("SA")
-        elif row_num - 2 >= 104 and row_num - 2 <= 111:
-            expect(row.locator("//td[@aria-colindex=3]")).to_have_text("Ar Rass")
-            expect(row.locator("//td[@aria-colindex=4]")).to_have_text("SA")
-        elif row_num - 2 == 114:
-            expect(row.locator("//td[@aria-colindex=3]")).to_have_text("Chicago")
-            expect(row.locator("//td[@aria-colindex=4]")).to_have_text("US")
-        elif row_num - 2 >= 128 and row_num - 2 <= 131:
-            expect(row.locator("//td[@aria-colindex=3]")).to_have_text(
-                "Dardenne Prairie"
-            )
-            expect(row.locator("//td[@aria-colindex=4]")).to_have_text("US")
-        elif row_num - 2 >= 160 and row_num - 2 <= 161:
-            expect(row.locator("//td[@aria-colindex=3]")).to_have_text("Hyderābād")
-            expect(row.locator("//td[@aria-colindex=4]")).to_have_text("IN")
-        else:
-            expect(row.locator("//td[@aria-colindex=3]")).to_have_text("Mountain View")
-            expect(row.locator("//td[@aria-colindex=4]")).to_have_text("US")
+        # Location data may change, just check that cells are full
+        expect(row.locator("//td[@aria-colindex=3]")).not_to_be_empty()
+        expect(row.locator("//td[@aria-colindex=4]")).not_to_be_empty()
 
 
 def test_wget(page: Page):
