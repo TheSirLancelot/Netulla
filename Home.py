@@ -13,12 +13,13 @@ menu_items = [
     # Icons are from: https://streamlit.io/components
     sac.MenuItem('Home', icon='house-fill'),
     sac.MenuItem('Network Tool', icon='binoculars', children=[
-        sac.MenuItem(subpage) for subpage in page1_funcs.keys()
+        # Icon is the default for the children
+        sac.MenuItem(subpage, icon='arrow-right') for subpage in page1_funcs.keys()
     ]),
     sac.MenuItem('Password Tools', icon='key', children=[
-        sac.MenuItem(subpage) for subpage in page2_funcs.keys()
+        sac.MenuItem(subpage, icon='arrow-right') for subpage in page2_funcs.keys()
     ]),
-    # ... other menu items
+    # Other pages are empty for now
     sac.MenuItem('Page 2', icon='calculator'),
     sac.MenuItem('Page 3', icon='map'),
     sac.MenuItem('Page 4', icon='table'),
