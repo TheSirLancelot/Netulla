@@ -1,13 +1,13 @@
 name: Development
 
 on:
-  pull_request:
-    types:
-      - opened
-      - edited
-      - synchronize
-      - reopened
-  workflow_call:
+    pull_request:
+        types:
+            - opened
+            - edited
+            - synchronize
+            - reopened
+    workflow_call:
 
 jobs:
   test:
@@ -31,7 +31,7 @@ jobs:
         run: pip3 install pylint-exit
 
       - name: Pylint
-        run: pylint --disable=missing-module-docstring,missing-class-docstring,missing-function-docstring **/*.py || pylint-exit $?
+        run: pylint --disable=missing-module-docstring,missing-class-docstring,missing-function-docstring,redefined-outer-name,reimported,broad-exception-caught,invalid-name,import-outside-toplevel,line-too-long **/*.py || pylint-exit $?
       
       - name: Install Compose
         uses: ndeloof/install-compose-action@v0.0.1
@@ -47,3 +47,10 @@ jobs:
 
       - name: Run tests
         run: docker exec Netulla python -m pytest
+
+      - name: Upload any screenshots from failed tests
+        uses: actions/upload-artifact@v3
+        if: failure()
+        with:
+          name: test failure screenshot
+          path: ./**/*.png

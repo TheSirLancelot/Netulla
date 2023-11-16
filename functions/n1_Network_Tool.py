@@ -1,19 +1,13 @@
+import socket
+import ipaddress
 import streamlit as st
 import pandas as pd
 import pydeck as pdk
-import socket
-import ipaddress
 import requests
 import nmap
 import plotly.express as px
 import dns.resolver
 import dns.reversename
-import subprocess
-import re
-import math
-from ip2geotools.databases.noncommercial import (DbIpCity,
-                                                 InvalidRequestError,
-                                                 LimitExceededError)
 
 
 def ip_geolocation():
@@ -229,156 +223,18 @@ def subnet_calculator():
                 )
                 st.plotly_chart(fig)
 
-
         except ValueError:
             st.error("Invalid IP address or CIDR.")
 
 
-def traceroute_visualizer():
-    def calculate_initial_zoom(max_lat, min_lat, max_lon, min_lon):
-        earth_equator_radius = 6378.137  # in kilometers
-        margin = 1.3  # to avoid cutting off arcs
-        zoom_offset = 1  # adjust this value to get the desired zoom
-
-        x_diff = ((max_lon - min_lon) * (math.pi / 180) * earth_equator_radius *
-                  math.cos(math.pi / 180 * max_lat)) * margin
-        y_diff = ((max_lat - min_lat) * (math.pi / 180) * earth_equator_radius) * margin
-
-        # map width in pixels / x_diff in kilometers
-        zoom_x = math.log2((23800 / x_diff)) + zoom_offset
-        # map height in pixels / y_diff in kilometers
-        zoom_y = math.log2((11900 / y_diff)) + zoom_offset
-
-        return min(zoom_x, zoom_y)
-
-    def mtr_data_table(raw_output):
-        lines = raw_output.split('\n')
-        pretty_output = "<table><tr><th>HOST</th><th>Loss%</th><th>Snt</th><th>Last</th><th>Avg\
-        </th><th>Best</th><th>Wrst</th><th>StDev</th></tr>"
-        # Add each line of mtr data as a row in the table
-        for line in lines[2:]:
-            parts = line.split()
-            if parts:
-                pretty_output += "<tr><td>" + "</td><td>".join(parts[1:]) + "</td></tr>"
-
-        pretty_output += "</table>"
-
-        return pretty_output
-
-    try:
-        st.markdown("# Traceroute Map")
-
-        # Simple input section
-        target = st.text_input("Target IP or Domain")
-        # This shows the output for MTR, if checked
-        show_raw_output = st.sidebar.checkbox('Show Raw Output', True)
-        # Slider to adjust the radius of scatter points
-        radius = st.sidebar.slider('Adjust Scatter Radius',
-                                   min_value=0, max_value=30000, value=30000, step=1000)
-        # Save radius so if slider is adjusted after scanning IP/DNS, the map regenerates
-        last_radius = st.session_state.get('last_radius', None)
-        # Save output so if user checks the box after a scan,
-        # the map regenerates with/without the output
-        last_show_raw_output = st.session_state.get('last_show_raw_output', None)
-
-        if st.button("Run Traceroute") or (last_radius != radius) or \
-            (last_show_raw_output != show_raw_output):
-            # Save the current radius to the session state
-            st.session_state.last_radius = radius
-            # Save the current checkbox state to the session state
-            st.session_state.last_show_raw_output = show_raw_output
-
-            if target:  # Check if the target input is not empty
-                try:
-                    user_ip = requests.get('https://httpbin.org/ip').json()['origin']
-                    output = subprocess.run(["mtr", "--report", "--report-cycles=1", target],
-                                            stdout=subprocess.PIPE, check=True).stdout.decode()
-
-                    if show_raw_output:
-                        st.markdown("## Raw MTR Output")
-                        st.markdown(mtr_data_table(output), unsafe_allow_html=True)
-
-                    hops = re.findall(r"\d+\.\|\-\- ([\d\.]+|[\?\?\?]+)", output)
-                    if not hops:
-                        st.error("No hops found. Please try again with a different IP or domain.")
-                        return
-
-                    hops.insert(0, user_ip)
-                    hops = [hop for hop in hops if hop != "???"]
-
-                    arcs_data = []
-                    scatter_data = []
-
-                    max_lat = -90
-                    min_lat = 90
-                    max_lon = -180
-                    min_lon = 180
-
-                    for i in range(len(hops) - 1):
-                        response_src = DbIpCity.get(hops[i], api_key='free')
-                        response_dst = DbIpCity.get(hops[i+1], api_key='free')
-
-                        max_lat = max(max_lat, response_src.latitude, response_dst.latitude)
-                        min_lat = min(min_lat, response_src.latitude, response_dst.latitude)
-                        max_lon = max(max_lon, response_src.longitude, response_dst.longitude)
-                        min_lon = min(min_lon, response_src.longitude, response_dst.longitude)
-
-                        arcs_data.append({
-                            "sourcePosition": [response_src.longitude, response_src.latitude],
-                            "targetPosition": [response_dst.longitude, response_dst.latitude],
-                        })
-
-                        scatter_data.append({
-                            "position": [response_dst.longitude, response_dst.latitude],
-                            "color": [200, 30, 0, 160],
-                        })
-
-                    arc_layer = pdk.Layer(
-                        'ArcLayer',
-                        data=arcs_data,
-                        get_source_position='sourcePosition',
-                        get_target_position='targetPosition',
-                        get_width=2,
-                        get_tilt=15,
-                        get_source_color=[200, 30, 0],
-                        get_target_color=[200, 30, 0],
-                    )
-
-                    scatter_layer = pdk.Layer(
-                        'ScatterplotLayer',
-                        data=scatter_data,
-                        get_position='position',
-                        get_radius=radius,
-                        get_fill_color='color',
-                    )
-
-                    zoom_level = calculate_initial_zoom(max_lat, min_lat, max_lon, min_lon)
-
-                    st.pydeck_chart(pdk.Deck(
-                        layers=[arc_layer, scatter_layer],
-                        initial_view_state={
-                            "latitude": (max_lat + min_lat) / 2,
-                            "longitude": (max_lon + min_lon) / 2,
-                            "zoom": zoom_level,
-                            "pitch": 50,
-                        },
-                        tooltip=True,
-                    ))
-                except requests.exceptions.RequestException as req_err:
-                    st.error(f"An error occurred while fetching the user IP: {req_err}")
-                except subprocess.CalledProcessError as subp_err:
-                    st.error(f"An error occurred while executing the traceroute\
-                             command: {subp_err}")
-                except (InvalidRequestError, LimitExceededError) as ip2geo_err:
-                    st.error(f"An error occurred while fetching geolocation data: {ip2geo_err}")
-
-    # Having pylint ignore as the point of this is to catch any errors the prior exceptions did not
-    except Exception as e: # pylint: disable=broad-except
-        st.error(f"An error occurred: {e}")
-
 def certificate_lookup():
+    import subprocess
+    import streamlit as st
+
     st.markdown("# Certificate Lookup")
-    st.markdown("The Certificate Lookup tool allows you to retrieve SSL certificate information for a given URL. Enter the URL in the format 'example.com' and click 'Get Certificate'.")
+    st.markdown(
+        "The Certificate Lookup tool allows you to retrieve SSL certificate information for a given URL. Enter the URL in the format 'example.com' and click 'Get Certificate'."
+    )
 
     url = st.text_input("Enter a URL (e.g., google.com)", "example.com")
     if st.button("Get Certificate"):
@@ -386,7 +242,13 @@ def certificate_lookup():
             try:
                 # Run the 'openssl' command to fetch the SSL certificates
                 openssl_command = f"openssl s_client -showcerts -connect {url}:443 < /dev/null 2>/dev/null | openssl x509 -noout -text"
-                result = subprocess.run(openssl_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+                result = subprocess.run(
+                    openssl_command,
+                    shell=True,
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.PIPE,
+                    text=True,
+                )
 
                 if result.returncode == 0:
                     st.text(f"Certificate Information for {url}:")
@@ -398,6 +260,7 @@ def certificate_lookup():
                 st.error(f"An error occurred: {e}")
         else:
             st.warning("Please enter a URL before clicking the button.")
+
 
 def ns_lookup():
     st.markdown("# NS Lookup")
@@ -433,12 +296,87 @@ def ns_lookup():
             st.error(f"An error occurred: {e}")
 
 
+def subnet_scanner():
+    @st.cache_data
+    def get_geolocation(ip_address):
+        # Free account access token, limited to 50K requests/month
+        response = requests.get(f"http://ipinfo.io/{ip_address}/json?token=655d3a384855d8", timeout=5)
+        response.raise_for_status()  # Ensure we got a valid response
+        return response.json()
+
+    st.markdown("# Subnet Scanner")
+
+    ip_address = st.text_input("Enter IP address", "")
+
+    if ip_address:
+        try:
+            ipaddress.ip_address(ip_address)    # Validates IP
+            ip_address = ip_address.split(".")
+            ip_address = ".".join(ip_address[:3])
+
+            ip_coords = []
+            ip_coords_unique = set()   # Showing duplicates on map makes dots too opaque
+
+            host = 0
+            while host < 256:
+                try:
+                    current_ip = ip_address + "." + str(host)
+                    location = get_geolocation(current_ip)
+
+                    if "bogon" in location and location["bogon"]:
+                        st.error("That IP is reserved for special use and cannot be located.")
+                        return
+
+                    lat_lon = location["loc"].split(",")
+                    ip_coords.append({"IP": current_ip, "City": location["city"], "Country": location["country"]})
+                    ip_coords_unique.add((float(lat_lon[0]), float(lat_lon[1])))  # Latitude, then longitude
+                    host += 1
+
+                except requests.exceptions.HTTPError as e:
+                    if e.response.status_code == 429:
+                        st.error("Monthly request limit reached.")
+                        return
+                    else:
+                        raise e
+
+            # Scatter Plot
+            # Plot needs particular data format
+            map_data = [{"lat": coord[0], "lon": coord[1]} for coord in ip_coords_unique]
+
+            ip_coords_layer = pdk.Layer(
+                "ScatterplotLayer",
+                map_data,
+                get_position=["lon", "lat"],
+                get_color=[200, 30, 0, 160],
+                get_radius=1000,
+                radius_min_pixels=5,
+            )
+
+            st.pydeck_chart(pdk.Deck(layers=[ip_coords_layer], initial_view_state=pdk.ViewState(
+                latitude=0,
+                longitude=0,
+                zoom=0,
+                pitch=0,
+            )))
+
+            # Table
+            data_frame = pd.DataFrame(ip_coords)
+            st.dataframe(data_frame, height=35 * len(data_frame) + 38)  # Full table instead of small, scrollable one allows testing to work properly
+
+        except ValueError:
+            st.error("Invalid IP address.")
+        except requests.exceptions.RequestException:
+            st.error("Request failed.")
+    else:
+        st.error("Please enter an IP address.")
+
+
 # Dictionary of subpage functions
 page1_funcs = {
     "IP Geolocation": ip_geolocation,
     "Network Analysis": network_analysis,
     "Subnet Calculator": subnet_calculator,
     "Certificate Lookup": certificate_lookup,
-    "Traceroute Visualizer": traceroute_visualizer,
     "NS Lookup": ns_lookup,
+    "Subnet Scanner": subnet_scanner,
 }
