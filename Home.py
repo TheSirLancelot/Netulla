@@ -1,45 +1,54 @@
 import streamlit_antd_components as sac
 import streamlit as st
-from functions.n1_Network_Tool import (
-    page1_funcs,
-)  # Import the dictionary of subpage functions
-from functions.n2_Password_Tools import (
-    page2_funcs,
-)  # Import the dictionary of subpage functions
+from functions.n1_Network_Tool import page1_funcs
+from functions.n2_Password_Tools import page2_funcs
 from functions.n3_Plotting_Demo import page3
 from functions.n4_Mapping_Demo import page4
 from functions.n5_DataFrame_Demo import page5
 
 st.set_page_config(page_title="Netulla", page_icon="./images/favicon.png")
 
-page_names_to_funcs = {
-    "Main Page": "main_page",
-    "Network Tool": page1_funcs,  # Use the dictionary as the value for 'Network Tool'
-    "Password Tools": page2_funcs,  # Use the dictionary as the value for 'Password Tools'
-    "Page 2": page3,
-    "Page 3": page4,
-    "Page 4": page5,
-}
+# Define the menu
+menu_items = [
+    sac.MenuItem('Home', icon='house-fill'),
+    sac.MenuItem('Network Tool', icon='network-wired', children=[
+        sac.MenuItem(subpage) for subpage in page1_funcs.keys()
+    ]),
+    sac.MenuItem('Password Tools', icon='key', children=[
+        sac.MenuItem(subpage) for subpage in page2_funcs.keys()
+    ]),
+    # Other menu items
+    sac.MenuItem('Page 2', icon='chart-line'),
+    sac.MenuItem('Page 3', icon='map'),
+    sac.MenuItem('Page 4', icon='table'),
+]
 
-selected_page = st.sidebar.selectbox("Select a page", page_names_to_funcs.keys())
+# Display the menu in the sidebar and get the selected item
+with st.sidebar:
+    selected_item = sac.menu(menu_items, format_func='title')
 
-if selected_page == "Main Page":
+# Function to display the main page
+def show_main_page():
     logo, title = st.columns([.1, .9])
     with logo:
         st.image('./images/Netulla.png')
     with title:
         st.title('Netulla')
-
     st.write("A web-based suite of multi-functional network tools. See the sidebar on the left to access the tools.")
     st.write("This application is written in Python using the [Streamlit](https://docs.streamlit.io) framework.")
-elif isinstance(page_names_to_funcs[selected_page], dict):
-    # If the selected page has subpages
-    selected_subpage = st.sidebar.selectbox(
-        "Select a function", page_names_to_funcs[selected_page].keys()
-    )
-    page_names_to_funcs[selected_page][
-        selected_subpage
-    ]()  # Run the selected subpage function
-else:
-    # If the selected page doesn't have subpages, just run the function
-    page_names_to_funcs[selected_page]()
+
+# Display the selected page
+if selected_item == 'Home':
+    show_main_page()
+elif selected_item in page1_funcs:
+    page1_funcs[selected_item]()
+elif selected_item in page2_funcs:
+    page2_funcs[selected_item]()
+# Page Placeholders
+elif selected_item == 'Page 2':
+    page3()
+elif selected_item == 'Page 3':
+    page4()
+elif selected_item == 'Page 4':
+    page5()
+#  We can add other pages as needed
