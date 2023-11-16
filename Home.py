@@ -10,6 +10,7 @@ st.set_page_config(page_title="Netulla", page_icon="./images/favicon.png")
 
 # Define the menu
 menu_items = [
+    # Icons are from: https://streamlit.io/components
     sac.MenuItem('Home', icon='house-fill'),
     sac.MenuItem('Network Tool', icon='network-wired', children=[
         sac.MenuItem(subpage) for subpage in page1_funcs.keys()
@@ -17,7 +18,7 @@ menu_items = [
     sac.MenuItem('Password Tools', icon='key', children=[
         sac.MenuItem(subpage) for subpage in page2_funcs.keys()
     ]),
-    # Other menu items
+    # ... other menu items
     sac.MenuItem('Page 2', icon='chart-line'),
     sac.MenuItem('Page 3', icon='map'),
     sac.MenuItem('Page 4', icon='table'),
@@ -44,11 +45,11 @@ elif selected_item in page1_funcs:
     page1_funcs[selected_item]()
 elif selected_item in page2_funcs:
     page2_funcs[selected_item]()
-# Page Placeholders
+# Empty pages for now
 elif selected_item == 'Page 2':
     page3()
 elif selected_item == 'Page 3':
     page4()
 elif selected_item == 'Page 4':
     page5()
-#  We can add other pages as needed
+# We can add more pages as needed
