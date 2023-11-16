@@ -12,21 +12,22 @@ st.set_page_config(page_title="Netulla", page_icon="./images/favicon.png")
 menu_items = [
     # Icons are from: https://streamlit.io/components
     sac.MenuItem('Home', icon='house-fill'),
-    sac.MenuItem('Network Tool', icon='network-wired', children=[
+    sac.MenuItem('Network Tool', icon='binoculars', children=[
         sac.MenuItem(subpage) for subpage in page1_funcs.keys()
     ]),
     sac.MenuItem('Password Tools', icon='key', children=[
         sac.MenuItem(subpage) for subpage in page2_funcs.keys()
     ]),
     # ... other menu items
-    sac.MenuItem('Page 2', icon='chart-line'),
+    sac.MenuItem('Page 2', icon='calculator'),
     sac.MenuItem('Page 3', icon='map'),
     sac.MenuItem('Page 4', icon='table'),
 ]
 
 # Display the menu in the sidebar and get the selected item
 with st.sidebar:
-    selected_item = sac.menu(menu_items, format_func='title')
+    # Size options are small, middle, largex
+    selected_item = sac.menu(menu_items, format_func='title', size='small')
 
 # Function to display the main page
 def show_main_page():
