@@ -412,7 +412,7 @@ def traceroute_visualizer():
                         "<th>Snt</th><th>Last</th><th>Avg</th>"\
                         "<th>Best</th><th>Wrst</th><th>StDev</th></tr>"
         # Assuming the first is the header
-        for line in lines[1:]:
+        for line in lines[2:]:
             parts = line.split()
             # Making sure it's not an empty line or a line with insufficient data
             if parts and len(parts) > 1:
