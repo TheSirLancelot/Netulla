@@ -1,4 +1,5 @@
 import pytest
+import time
 from playwright.sync_api import Page, expect
 
 PORT = "8501"
@@ -62,10 +63,9 @@ def test_subnet_scanner(page: Page):
         page.get_by_label("Enter IP address").press("Enter")
         running_icon.wait_for(state="hidden")
 
-    page.get_by_role("img", name="open").click()
-    page.get_by_text("Network Tool").click()
-    page.get_by_role("img", name="open").nth(1).click()
-    page.get_by_text("Subnet Scanner").click()
+    page.frame_locator("iframe[title=\"streamlit_antd_components\\.utils\\.component_func\\.sac\"]").get_by_role("menuitem", name=" Network Tool").click()
+    time.sleep(.5)  # Clicking next option immediately doesn't load page
+    page.frame_locator("iframe[title=\"streamlit_antd_components\\.utils\\.component_func\\.sac\"]").get_by_role("menuitem", name=" Subnet Scanner").click()
     running_icon = page.get_by_text("Running...")
 
     # Invalid input - not IP
