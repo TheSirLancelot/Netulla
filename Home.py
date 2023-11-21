@@ -5,9 +5,10 @@ from functions.n1_Network_Tool import (
 from functions.n2_Password_Tools import (
     page2_funcs,
 )  # Import the dictionary of subpage functions
-from functions.n3_Plotting_Demo import page3
-from functions.n4_Mapping_Demo import page4
-from functions.n5_DataFrame_Demo import page5
+
+# from functions.n3_Plotting_Demo import page3
+# from functions.n4_Mapping_Demo import page4
+# from functions.n5_DataFrame_Demo import page5
 
 st.set_page_config(page_title="Shadow Suite", page_icon="🕸")
 
@@ -15,9 +16,9 @@ page_names_to_funcs = {
     "Main Page": "main_page",
     "Network Tool": page1_funcs,  # Use the dictionary as the value for 'Network Tool'
     "Password Tools": page2_funcs,  # Use the dictionary as the value for 'Password Tools'
-    "Page 2": page3,
-    "Page 3": page4,
-    "Page 4": page5,
+    # "Page 2": page3,
+    # "Page 3": page4,
+    # "Page 4": page5,
 }
 
 selected_page = st.sidebar.selectbox("Select a page", page_names_to_funcs.keys())

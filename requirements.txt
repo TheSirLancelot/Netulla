@@ -3,7 +3,7 @@ poetry==1.6.1
 virtualenv==20.24.5
 pydeck==0.8.0
 pandas==2.1.1
-streamlit==1.27.0
+streamlit==1.28.2
 requests==2.31.0
 pyvis==0.3.2
 ipaddress==1.0.23
@@ -15,3 +15,5 @@ pytest==7.4.2
 pytest-playwright==0.4.3
 dnspython==2.4.2
 pylint==2.11.1
+geopy==2.4.0
+ip2geotools==0.1.6
