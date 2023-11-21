@@ -43,8 +43,65 @@ def test_url_encoder_decoder(page: Page):
 
 
 def test_http_header_tool(page: Page):
-    # TODO: empty test
-    pass
+    def enter_address(address):
+        page.get_by_label("Enter URL or IP address").click()
+        page.get_by_label("Enter URL or IP address").fill(address)
+        page.get_by_test_id("baseButton-secondary").click()
+        running_icon.wait_for(state="hidden")
+
+    page.get_by_role("img", name="open").click()
+    page.get_by_role("option", name="Network Tool").click()
+    page.get_by_role("img", name="open").nth(1).click()
+    page.get_by_role("option", name="HTTP Header Tool").click()
+    running_icon = page.get_by_text("Running...")
+
+    # Check page title
+    expect(page.get_by_role("heading", name="HTTP Header Tool").locator("span")).to_be_visible()
+
+    # Check invalid inputs
+    enter_address("www.google.com")   # Missing schema
+    error = page.get_by_test_id("stNotification")
+    expect(error).to_be_visible()
+    expect(error).to_have_text(
+        "Incomplete URL or invalid IP. Please include http:// or https:// for URLs, and enter IPs in the form x.x.x.x using only numbers."
+    )
+
+    enter_address("htt://www.google.com")   # Invalid schema
+    error = page.get_by_test_id("stNotification")
+    expect(error).to_be_visible()
+    expect(error).to_have_text(
+        "Invalid URL. Please use http:// or https://"
+    )
+
+    enter_address("https://www.notasite.com")   # Invalid URL, disabled timeout b/c sometimes webkit test checks slightly before loaded
+    error = page.get_by_test_id("stNotification")
+    expect(error).to_be_visible()
+    expect(error).to_have_text(
+        "Site doesn't exist or connection cannot be made at this time.",
+    timeout=0
+    )
+
+    enter_address("8.8.8")   # Invalid IP - wrong length
+    error = page.get_by_test_id("stNotification")
+    expect(error).to_be_visible()
+    expect(error).to_have_text(
+        "Incomplete URL or invalid IP. Please include http:// or https:// for URLs, and enter IPs in the form x.x.x.x using only numbers."
+    )
+
+    enter_address("8.8.8.8s")   # Invalid IP - invalid characters
+    error = page.get_by_test_id("stNotification")
+    expect(error).to_be_visible()
+    expect(error).to_have_text(
+        "Incomplete URL or invalid IP. Please include http:// or https:// for URLs, and enter IPs in the form x.x.x.x using only numbers."
+    )
+
+    # Check entering URL
+    enter_address("https://www.google.com")
+    expect(page.get_by_text("Headers")).to_be_visible()
+
+    # Check entering IP
+    enter_address("8.8.8.8")
+    expect(page.get_by_text("Headers")).to_be_visible()
 
 
 def test_reverse_ip(page: Page):
@@ -172,59 +229,9 @@ def test_subnet_scanner(page: Page):
             f"8.8.8.{row_num - 2}"
         )
 
-        if row_num - 2 >= 4 and row_num - 2 <= 7:
-            expect(row.locator("//td[@aria-colindex=3]")).to_have_text("Ath Thawrah")
-            expect(row.locator("//td[@aria-colindex=4]")).to_have_text("SY")
-        elif (
-            (row_num - 2 >= 16 and row_num - 2 <= 19)
-            or row_num - 2 == 84
-            or row_num - 2 == 115
-            or row_num - 2 == 138
-            or (row_num - 2 >= 204 and row_num - 2 <= 207)
-            or (row_num - 2 >= 242 and row_num - 2 <= 243)
-        ):
-            expect(row.locator("//td[@aria-colindex=3]")).to_have_text("Pretty Prairie")
-            expect(row.locator("//td[@aria-colindex=4]")).to_have_text("US")
-        elif (
-            (row_num - 2 >= 20 and row_num - 2 <= 23)
-            or (row_num - 2 >= 86 and row_num - 2 <= 87)
-            or row_num - 2 == 116
-            or (row_num - 2 >= 148 and row_num - 2 <= 149)
-            or (row_num - 2 >= 188 and row_num - 2 <= 195)
-            or (row_num - 2 >= 216 and row_num - 2 <= 223)
-            or row_num - 2 == 235
-        ):
-            expect(row.locator("//td[@aria-colindex=3]")).to_have_text("Mecca")
-            expect(row.locator("//td[@aria-colindex=4]")).to_have_text("SA")
-        elif row_num - 2 == 29:
-            expect(row.locator("//td[@aria-colindex=3]")).to_have_text("Lucknow")
-            expect(row.locator("//td[@aria-colindex=4]")).to_have_text("IN")
-        elif row_num - 2 >= 44 and row_num - 2 <= 47:
-            expect(row.locator("//td[@aria-colindex=3]")).to_have_text("Jambi City")
-            expect(row.locator("//td[@aria-colindex=4]")).to_have_text("ID")
-        elif row_num - 2 >= 100 and row_num - 2 <= 101:
-            expect(row.locator("//td[@aria-colindex=3]")).to_have_text("Narsimhapur")
-            expect(row.locator("//td[@aria-colindex=4]")).to_have_text("IN")
-        elif row_num - 2 >= 102 and row_num - 2 <= 103:
-            expect(row.locator("//td[@aria-colindex=3]")).to_have_text("Wed Alnkil")
-            expect(row.locator("//td[@aria-colindex=4]")).to_have_text("SA")
-        elif row_num - 2 >= 104 and row_num - 2 <= 111:
-            expect(row.locator("//td[@aria-colindex=3]")).to_have_text("Ar Rass")
-            expect(row.locator("//td[@aria-colindex=4]")).to_have_text("SA")
-        elif row_num - 2 == 114:
-            expect(row.locator("//td[@aria-colindex=3]")).to_have_text("Chicago")
-            expect(row.locator("//td[@aria-colindex=4]")).to_have_text("US")
-        elif row_num - 2 >= 128 and row_num - 2 <= 131:
-            expect(row.locator("//td[@aria-colindex=3]")).to_have_text(
-                "Dardenne Prairie"
-            )
-            expect(row.locator("//td[@aria-colindex=4]")).to_have_text("US")
-        elif row_num - 2 >= 160 and row_num - 2 <= 161:
-            expect(row.locator("//td[@aria-colindex=3]")).to_have_text("Hyderābād")
-            expect(row.locator("//td[@aria-colindex=4]")).to_have_text("IN")
-        else:
-            expect(row.locator("//td[@aria-colindex=3]")).to_have_text("Mountain View")
-            expect(row.locator("//td[@aria-colindex=4]")).to_have_text("US")
+        # Location data may change, just check that cells are full
+        expect(row.locator("//td[@aria-colindex=3]")).not_to_be_empty()
+        expect(row.locator("//td[@aria-colindex=4]")).not_to_be_empty()
 
 
 def test_wget(page: Page):

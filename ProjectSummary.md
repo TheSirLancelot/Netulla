@@ -9,7 +9,7 @@
 -   William Weir, Team Lead
 -   Tyler Wilson, Software Engineer
 -   Tristan Young, Software Engineer
--   Oscar Vasquez FLores, Software Engineer
+-   Oscar Vasquez Flores, Software Engineer
 -   Reynaldo Veras, Software Engineer
 -   Tyree Maeser, Software Engineer
 -   Joshua Welch, N/A [^1]
@@ -46,9 +46,9 @@
 | ------------------------------------------ | -------------------- | ------------------------------------------------ |
 | <li>- [ ] Traceroute Visualizer</li>       | Tyler Wilson         | Shows traceroute hops on a map                   |
 | <li>- [x] NS lookup</li>                   | Oscar Vasquez Flores | DNS record lookup                                |
-| <li>- [ ] Password complexity checker</li> | Reynaldo Veras       | Checks the strength of a user's password         |
+| <li>- [x] Password complexity checker</li> | Reynaldo Veras       | Checks the strength of a user's password         |
 | <li>- [x] Certificate Lookup</li>          | Tyree Maeser         | Displays a website's SSL Certificate information |
-| <li>- [ ] Subnet Scan</li>                 | Tristan Young        | Scans a subnet to identify webservers            |
+| <li>- [x] Subnet Scan</li>                 | Tristan Young        | Scans a subnet to identify webservers            |
 
 ### Phase 2 (28 Nov 2023)
 
@@ -72,9 +72,9 @@
 ## Closing Checklist (Due Date)
 
 -   [x] Project Plan (31 Oct 2023)
--   [ ] Test Plan (07 Nov 2023)
--   [ ] Peer Review 1 (10 Nov 2023)
--   [ ] Project Design (14 Nov 2023)
+-   [x] Test Plan (07 Nov 2023)
+-   [x] Peer Review 1 (10 Nov 2023)
+-   [x] Project Design (14 Nov 2023)
 -   [ ] Phase 1 Source (21 Nov 2023)
 -   [ ] Peer Review 2 (24 Nov 2023)
 -   [ ] Phase 2 Source (28 Nov 2023)
