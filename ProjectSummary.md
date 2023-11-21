@@ -56,7 +56,7 @@
 | --------------------------------- | -------------- | ----------------------------------------------------- |
 | <li>- [ ] WHOIS</li>              | William Weir   | Queries registration information for an IP address    |
 | <li>- [ ] Password Generator</li> | Tyler Wilson   | Generates a password using specified complexity rules |
-| <li>- [ ] HTTP Header Tool</li>   | Tristan Young  | Inspect a server's HTTP response header               |
+| <li>- [x] HTTP Header Tool</li>   | Tristan Young  | Inspect a server's HTTP response header               |
 | <li>- [ ] Online WGET Tool</li>   | Tyree Maeser   | Display a website without rendering it                |
 | <li>- [ ] Reverse IP Lookup</li>  | Reynaldo Veras | Identify domain name(s) associated with an IP         |
 
