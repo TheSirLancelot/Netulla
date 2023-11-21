@@ -44,7 +44,7 @@
 
 | Task                                       | Assignee             | Description                                      |
 | ------------------------------------------ | -------------------- | ------------------------------------------------ |
-| <li>- [ ] Traceroute Visualizer</li>       | Tyler Wilson         | Shows traceroute hops on a map                   |
+| <li>- [x] Traceroute Visualizer</li>       | Tyler Wilson         | Shows traceroute hops on a map                   |
 | <li>- [x] NS lookup</li>                   | Oscar Vasquez Flores | DNS record lookup                                |
 | <li>- [x] Password complexity checker</li> | Reynaldo Veras       | Checks the strength of a user's password         |
 | <li>- [x] Certificate Lookup</li>          | Tyree Maeser         | Displays a website's SSL Certificate information |
