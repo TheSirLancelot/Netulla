@@ -370,6 +370,45 @@ def subnet_scanner():
     else:
         st.error("Please enter an IP address.")
 
+def http_header_tool():
+    # Expect IPs to be 4 ints separated by periods
+    def is_ip(address):
+        split_ip = address.split(".")
+        if len(split_ip) != 4:
+            return False
+        for segment in split_ip:
+            try:
+                int(segment)
+            except ValueError:
+                return False
+        return True
+
+    st.markdown("# HTTP Header Tool")
+    address = st.text_input("Enter URL or IP address", "")
+    send = st.button("Send Request")
+
+    if send and address:
+        headers = {}
+
+        if is_ip(address):
+            address = "http://" + address
+            headers = {"host": "example.com"}   # Header necessary for IP to fake host
+
+        try:
+            response = requests.get(address, headers=headers, timeout=5)
+            st.subheader("Headers")
+            for key in response.headers:
+                st.markdown(f"```{key}: {response.headers[key]}```")
+
+        except requests.exceptions.MissingSchema:
+            st.error("Incomplete URL or invalid IP. Please include http:// or https:// for URLs, and enter IPs in the form x.x.x.x using only numbers.")
+        except requests.exceptions.InvalidSchema:
+            st.error("Invalid URL. Please use http:// or https://")
+        except requests.exceptions.ReadTimeout:
+            st.error("Request timed out. Please try again later.")
+        except requests.exceptions.RequestException:
+            st.error("Site doesn't exist or connection cannot be made at this time.")
+
 
 # Dictionary of subpage functions
 page1_funcs = {
@@ -379,4 +418,5 @@ page1_funcs = {
     "Certificate Lookup": certificate_lookup,
     "NS Lookup": ns_lookup,
     "Subnet Scanner": subnet_scanner,
+    "HTTP Header Tool": http_header_tool,
 }
