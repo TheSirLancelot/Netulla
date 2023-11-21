@@ -21,6 +21,7 @@ def ip_geolocation():
     st.markdown("# IP Geolocation")
     # st.sidebar.header("IP Geolocation")
 
+    # TODO: Move the input boxes to the main page and off the sidebar
     ip_address = st.sidebar.text_input(
         "Enter an IP Address", value="8.8.8.8", max_chars=None, key=None, type="default"
     )
@@ -67,6 +68,7 @@ def ip_geolocation():
 def network_analysis():
     st.markdown("# Network Analysis")
 
+    # TODO: Move the input boxes to the main page and off the sidebar
     # Add separator
     st.sidebar.markdown("---")
 
@@ -184,6 +186,7 @@ def network_analysis():
 def subnet_calculator():
     st.markdown("# Subnet Calculator")
 
+    # TODO: Currently doesn't quite work correctly unless you end in .0
     ip_input = st.text_input("Enter IP address (e.g., 192.168.0.1)", "")
     cidr_input = st.number_input(
         "Enter CIDR (e.g., 24)", min_value=0, max_value=32, value=24
@@ -326,12 +329,12 @@ def subnet_scanner():
 
     if ip_address:
         try:
-            ipaddress.ip_address(ip_address)    # Validates IP
+            ipaddress.ip_address(ip_address)  # Validates IP
             ip_address = ip_address.split(".")
             ip_address = ".".join(ip_address[:3])
 
             ip_coords = []
-            ip_coords_unique = set()   # Showing duplicates on map makes dots too opaque
+            ip_coords_unique = set()  # Showing duplicates on map makes dots too opaque
 
             host = 0
             while host < 256:
@@ -340,14 +343,24 @@ def subnet_scanner():
                     location = get_geolocation(current_ip)
 
                     if "bogon" in location and location["bogon"]:
-                        st.error("That IP is reserved for special use and cannot be located.")
+                        st.error(
+                            "That IP is reserved for special use and cannot be located."
+                        )
                         return
 
                     lat_lon = location["loc"].split(",")
-                    ip_coords.append({"IP": current_ip, "City": location["city"],\
-                                      "Country": location["country"]})
-                    # Latitude, then longitude
-                    ip_coords_unique.add((float(lat_lon[0]), float(lat_lon[1])))
+
+                    ip_coords.append(
+                        {
+                            "IP": current_ip,
+                            "City": location["city"],
+                            "Country": location["country"],
+                        }
+                    )
+                    ip_coords_unique.add(
+                        (float(lat_lon[0]), float(lat_lon[1]))
+                    )  # Latitude, then longitude
+
                     host += 1
 
                 except requests.exceptions.HTTPError as e:
@@ -359,7 +372,9 @@ def subnet_scanner():
 
             # Scatter Plot
             # Plot needs particular data format
-            map_data = [{"lat": coord[0], "lon": coord[1]} for coord in ip_coords_unique]
+            map_data = [
+                {"lat": coord[0], "lon": coord[1]} for coord in ip_coords_unique
+            ]
 
             ip_coords_layer = pdk.Layer(
                 "ScatterplotLayer",
@@ -370,17 +385,24 @@ def subnet_scanner():
                 radius_min_pixels=5,
             )
 
-            st.pydeck_chart(pdk.Deck(layers=[ip_coords_layer], initial_view_state=pdk.ViewState(
-                latitude=0,
-                longitude=0,
-                zoom=0,
-                pitch=0,
-            )))
+            st.pydeck_chart(
+                pdk.Deck(
+                    layers=[ip_coords_layer],
+                    initial_view_state=pdk.ViewState(
+                        latitude=0,
+                        longitude=0,
+                        zoom=0,
+                        pitch=0,
+                    ),
+                )
+            )
 
             # Table
             data_frame = pd.DataFrame(ip_coords)
-            # Full table instead of small, scrollable one allows testing to work properly
-            st.dataframe(data_frame, height=35 * len(data_frame) + 38)
+
+            st.dataframe(
+                data_frame, height=35 * len(data_frame) + 38
+            )  # Full table instead of small, scrollable one allows testing to work properly
 
         except ValueError:
             st.error("Invalid IP address.")
@@ -553,7 +575,7 @@ def http_header_tool():
 
         if is_ip(address):
             address = "http://" + address
-            headers = {"host": "example.com"}   # Header necessary for IP to fake host
+            headers = {"host": "example.com"}  # Header necessary for IP to fake host
 
         try:
             response = requests.get(address, headers=headers, timeout=5)
@@ -562,7 +584,9 @@ def http_header_tool():
                 st.markdown(f"```{key}: {response.headers[key]}```")
 
         except requests.exceptions.MissingSchema:
-            st.error("Incomplete URL or invalid IP. Please include http:// or https:// for URLs, and enter IPs in the form x.x.x.x using only numbers.")
+            st.error(
+                "Incomplete URL or invalid IP. Please include http:// or https:// for URLs, and enter IPs in the form x.x.x.x using only numbers."
+            )
         except requests.exceptions.InvalidSchema:
             st.error("Invalid URL. Please use http:// or https://")
         except requests.exceptions.ReadTimeout:
