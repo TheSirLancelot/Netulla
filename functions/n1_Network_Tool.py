@@ -8,6 +8,7 @@ import nmap
 import plotly.express as px
 import dns.resolver
 import dns.reversename
+import subprocess
 
 
 def ip_geolocation():
@@ -370,6 +371,25 @@ def subnet_scanner():
     else:
         st.error("Please enter an IP address.")
 
+def online_wget_tool():
+    st.markdown("# Online WGET Tool")
+    
+    # Input field for the user to enter a URL
+    url = st.text_input("Enter URL:", "")
+
+    # Button to send the WGET request
+    if st.button("Send WGET Request"):
+        if url:
+            try:
+                # Use subprocess to run a WGET command and capture the output
+                result = subprocess.check_output(["wget", url], stderr=subprocess.STDOUT, text=True)
+                st.write("WGET Response:")
+                st.text(result)
+            except subprocess.CalledProcessError as e:
+                st.error("Error:", e.output)
+
+    # Display a sample URL for testing
+    st.write("Sample URL: https://www.example.com")
 
 # Dictionary of subpage functions
 page1_funcs = {
@@ -379,4 +399,5 @@ page1_funcs = {
     "Certificate Lookup": certificate_lookup,
     "NS Lookup": ns_lookup,
     "Subnet Scanner": subnet_scanner,
+    "Online WGET Tool": online_wget_tool,
 }

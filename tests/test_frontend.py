@@ -53,8 +53,65 @@ def test_reverse_ip(page: Page):
 
 
 def test_certificate_lookup(page: Page):
-    # TODO: empty test
-    pass
+    def enter_domain(domain):
+        page.get_by_label("Enter a URL (e.g., google.com)").click()
+        page.get_by_label("Enter a URL (e.g., google.com)").fill(domain)
+        page.get_by_label("Enter a URL (e.g., google.com)").press("Enter")
+        running_icon.wait_for(state="hidden")
+
+    page.get_by_role("img", name="open").click()
+    page.get_by_text("Network Analysis").click()
+    page.get_by_role("img", name="open").nth(1).click()
+    page.get_by_text("Certificate Lookup").click()
+    running_icon = page.get_by_text("Running...")
+
+    # Check page title
+    expect(page.get_by_role("heading", name="Certificate Lookup").locator("span")).to_be_visible()
+
+    # Invalid input - empty domain
+    enter_domain("")
+
+    # Check error message
+    error = page.get_by_test_id("stNotification")
+    expect(error).to_be_visible()
+    expect(error).to_have_text("Please enter a valid domain.")
+
+    # Valid input - example.com
+    enter_domain("example.com")
+
+    # Check certificate information
+    expect(page.get_by_text("Certificate Information for example.com:")).to_be_visible()
+
+    # Additional checks for SSL certificate details
+    expect(page.get_by_text("Issuer:")).to_be_visible()
+    expect(page.get_by_text("Validity:")).to_be_visible()
+    # Add more specific checks based on the expected behavior of the certificate lookup
+
+    # Check for handling of non-existent domains
+    enter_domain("nonexistentdomain123.com")
+
+    # Check error message for non-existent domain
+    error = page.get_by_test_id("stNotification")
+    expect(error).to_be_visible()
+    expect(error).to_have_text("Failed to retrieve the certificate:")
+
+    # Check for handling of invalid URLs
+    page.get_by_label("Enter a URL (e.g., google.com)").click()
+    page.get_by_label("Enter a URL (e.g., google.com)").fill("invalidurl")
+    page.get_by_label("Enter a URL (e.g., google.com)").press("Enter")
+
+    # Check error message for invalid URL
+    error = page.get_by_test_id("stNotification")
+    expect(error).to_be_visible()
+    expect(error).to_have_text("Invalid URL. Please use http:// or https://")
+
+    # Check for handling of timeouts
+    enter_domain("timeout.com")
+
+    # Check error message for timeout
+    error = page.get_by_test_id("stNotification")
+    expect(error).to_be_visible()
+    expect(error).to_have_text("Request timed out. Please try again later.")
 
 
 def test_subnet_scanner(page: Page):
