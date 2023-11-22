@@ -47,8 +47,13 @@ def test_http_header_tool(page: Page):
         page.get_by_label("Enter URL or IP address").fill(address)
         page.get_by_test_id("baseButton-secondary").click()
         page.get_by_text("Running...").wait_for(state="hidden")
+    
+    # page.frame_locator("iframe[title=\"streamlit_antd_components\\.utils\\.component_func\\.sac\"]").get_by_role("menuitem", name=" HTTP Header Tool").click()
 
-    page.frame_locator("iframe[title=\"streamlit_antd_components\\.utils\\.component_func\\.sac\"]").get_by_role("menuitem", name=" HTTP Header Tool").click()
+    page.get_by_role("img", name="open").click()
+    page.get_by_role("option", name="Network Tool").click()
+    page.get_by_role("img", name="open").nth(1).click()
+    page.get_by_role("option", name="HTTP Header Tool").click()
 
     # Check page title
     expect(page.get_by_role("heading", name="HTTP Header Tool").locator("span")).to_be_visible()
@@ -116,7 +121,12 @@ def test_subnet_scanner(page: Page):
         page.get_by_label("Enter IP address").press("Enter")
         page.get_by_text("Running...").wait_for(state="hidden")
 
-    page.frame_locator("iframe[title=\"streamlit_antd_components\\.utils\\.component_func\\.sac\"]").get_by_role("menuitem", name=" Subnet Scanner").click()
+    # page.frame_locator("iframe[title=\"streamlit_antd_components\\.utils\\.component_func\\.sac\"]").get_by_role("menuitem", name=" Subnet Scanner").click()
+
+    page.get_by_role("img", name="open").click()
+    page.get_by_text("Network Tool").click()
+    page.get_by_role("img", name="open").nth(1).click()
+    page.get_by_text("Subnet Scanner").click()
 
     # Invalid input - not IP
     enter_ip("1.2.3")
