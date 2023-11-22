@@ -208,8 +208,37 @@ def test_what_is_my_ip(page: Page):
 
 
 def test_traceroute_visualizer(page: Page):
-    # TODO: empty test
-    pass
+    # Navigate to the Traceroute Visualizer section using the application's UI
+    page.get_by_role("img", name="open").click()
+    page.get_by_text("Network Tool").click()
+    page.get_by_role("img", name="open").nth(1).click()
+    page.get_by_text("Traceroute Visualizer").click()
+    running_icon = page.get_by_text("Running...")
+
+    # --- Test Initialization ---
+    expect(page.locator("input[placeholder='Target IP or Domain']")).to_be_visible()
+    expect(page.locator("text='Show Raw Output'")).to_be_visible()
+    expect(page.locator("text='Adjust Scatter Radius'")).to_be_visible()
+    expect(page.locator("input[type='checkbox']").with_text("Show Raw Output")).to_be_checked()
+    expect(page.locator("input[type='range']").with_text("Adjust \
+                                                         Scatter Radius")).to_have_value("30000")
+
+    # --- Test Traceroute with Valid Input ---
+    page.locator("input[placeholder='Target IP or Domain']").fill("example.com")
+    # Replace with your actual button text or selector
+    page.locator("button:has-text('Run Traceroute')").click()
+    running_icon.wait_for(state="hidden")
+    expect(page.locator("text='Raw MTR Output'")).to_be_visible()
+    # Replace with your actual map visualization locator
+    expect(page.locator("#map-visualization")).to_be_visible()
+
+    # --- Test Traceroute with Invalid Input ---
+    page.locator("input[placeholder='Target IP or Domain']").fill("invalid_domain")
+    # Adjust the button selector as needed
+    page.locator("button:has-text('Run Traceroute')").click()
+    running_icon.wait_for(state="hidden")
+    expect(page.locator("text='No hops found'")).to_be_visible()
+    expect(page.locator("text='Please try again with a different IP or domain'")).to_be_visible()
 
 
 def test_password_generator(page: Page):
