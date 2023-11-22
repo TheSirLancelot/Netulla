@@ -18,18 +18,10 @@ menu_items = [
     ]),
 ]
 
-menu_items = {
-    "Home": "home",
-    "Network Tool": page1_funcs,
-    "Password Tools": page2_funcs,
-}
-
 # Display the menu in the sidebar and get the selected item
 with st.sidebar:
     # Size options are small, middle, largex
-    # selected_item = sac.menu(menu_items, format_func='title', size='small', open_all=True)
-
-    selected_item = st.sidebar.selectbox("Select a page", menu_items.keys())
+    selected_item = sac.menu(menu_items, format_func='title', size='small', open_all=True)
 
 # Function to display the main page
 def show_main_page():
@@ -42,24 +34,10 @@ def show_main_page():
     st.write("This application is written in Python using the [Streamlit](https://docs.streamlit.io) framework.")
 
 # Display the selected page
-# if selected_item == 'Home':
-#     show_main_page()
-# elif selected_item in page1_funcs:
-#     page1_funcs[selected_item]()
-# elif selected_item in page2_funcs:
-#     page2_funcs[selected_item]()
-# # We can add more pages as needed
-
-if selected_item == "Home":
+if selected_item == 'Home':
     show_main_page()
-elif isinstance(menu_items[selected_item], dict):
-    # If the selected page has subpages
-    selected_subpage = st.sidebar.selectbox(
-        "Select a function", menu_items[selected_item].keys()
-    )
-    menu_items[selected_item][
-        selected_subpage
-    ]()  # Run the selected subpage function
-else:
-    # If the selected page doesn't have subpages, just run the function
-    menu_items[selected_item]()
+elif selected_item in page1_funcs:
+    page1_funcs[selected_item]()
+elif selected_item in page2_funcs:
+    page2_funcs[selected_item]()
+# We can add more pages as needed
