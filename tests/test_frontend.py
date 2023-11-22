@@ -42,8 +42,65 @@ def test_url_encoder_decoder(page: Page):
 
 
 def test_http_header_tool(page: Page):
-    # TODO: empty test
-    pass
+    def enter_address(address):
+        page.get_by_label("Enter URL or IP address").click()
+        page.get_by_label("Enter URL or IP address").fill(address)
+        page.get_by_test_id("baseButton-secondary").click()
+        running_icon.wait_for(state="hidden")
+
+    page.get_by_role("img", name="open").click()
+    page.get_by_role("option", name="Network Tool").click()
+    page.get_by_role("img", name="open").nth(1).click()
+    page.get_by_role("option", name="HTTP Header Tool").click()
+    running_icon = page.get_by_text("Running...")
+
+    # Check page title
+    expect(page.get_by_role("heading", name="HTTP Header Tool").locator("span")).to_be_visible()
+
+    # Check invalid inputs
+    enter_address("www.google.com")   # Missing schema
+    error = page.get_by_test_id("stNotification")
+    expect(error).to_be_visible()
+    expect(error).to_have_text(
+        "Incomplete URL or invalid IP. Please include http:// or https:// for URLs, and enter IPs in the form x.x.x.x using only numbers."
+    )
+
+    enter_address("htt://www.google.com")   # Invalid schema
+    error = page.get_by_test_id("stNotification")
+    expect(error).to_be_visible()
+    expect(error).to_have_text(
+        "Invalid URL. Please use http:// or https://"
+    )
+
+    enter_address("https://www.notasite.com")   # Invalid URL, disabled timeout b/c sometimes webkit test checks slightly before loaded
+    error = page.get_by_test_id("stNotification")
+    expect(error).to_be_visible()
+    expect(error).to_have_text(
+        "Site doesn't exist or connection cannot be made at this time.",
+    timeout=0
+    )
+
+    enter_address("8.8.8")   # Invalid IP - wrong length
+    error = page.get_by_test_id("stNotification")
+    expect(error).to_be_visible()
+    expect(error).to_have_text(
+        "Incomplete URL or invalid IP. Please include http:// or https:// for URLs, and enter IPs in the form x.x.x.x using only numbers."
+    )
+
+    enter_address("8.8.8.8s")   # Invalid IP - invalid characters
+    error = page.get_by_test_id("stNotification")
+    expect(error).to_be_visible()
+    expect(error).to_have_text(
+        "Incomplete URL or invalid IP. Please include http:// or https:// for URLs, and enter IPs in the form x.x.x.x using only numbers."
+    )
+
+    # Check entering URL
+    enter_address("https://www.google.com")
+    expect(page.get_by_text("Headers")).to_be_visible()
+
+    # Check entering IP
+    enter_address("8.8.8.8")
+    expect(page.get_by_text("Headers")).to_be_visible()
 
 
 def test_reverse_ip(page: Page):

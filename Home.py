@@ -2,9 +2,6 @@ import streamlit_antd_components as sac
 import streamlit as st
 from functions.n1_Network_Tool import page1_funcs
 from functions.n2_Password_Tools import page2_funcs
-from functions.n3_Plotting_Demo import page3
-from functions.n4_Mapping_Demo import page4
-from functions.n5_DataFrame_Demo import page5
 
 st.set_page_config(page_title="Netulla", page_icon="./images/favicon.png")
 
@@ -19,10 +16,6 @@ menu_items = [
     sac.MenuItem('Password Tools', icon='key', children=[
         sac.MenuItem(subpage, icon='arrow-right') for subpage in page2_funcs.keys()
     ]),
-    # Other pages are empty for now
-    sac.MenuItem('Page 2', icon='calculator'),
-    sac.MenuItem('Page 3', icon='map'),
-    sac.MenuItem('Page 4', icon='table'),
 ]
 
 # Display the menu in the sidebar and get the selected item
