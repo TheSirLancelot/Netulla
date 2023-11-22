@@ -117,9 +117,45 @@ def test_password_complexity(page: Page):
 
 
 def test_ns_lookup(page: Page):
-    # TODO: empty test
-    pass
+    # Go to the main page of the Streamlit app
+    page.goto(f"http://localhost:{PORT}")
 
+    # Select 'Network Tool' from the 'Select a page' dropdown
+    page.click("text=Main Page")
+    page.click("text=Network Tool")
+
+    # Wait for the 'Select a function' dropdown to appear, then select 'NS Lookup'
+    page.click("text=IP Geolocation")  
+    page.click("text=NS Lookup")
+
+    # Wait for the input field to be visible on the ns_lookup subpage
+    domain_input_selector = 'input[aria-label="Enter Domain (e.g., google.com)"]'
+    domain_input = page.wait_for_selector(domain_input_selector, state="visible")
+    
+
+    # Fill in the known domain name
+    domain_input.fill("google.com")
+
+    # Simulate pressing the Enter key to submit the domain
+    page.press(domain_input_selector, "Enter")
+
+    # Wait for the Streamlit action to complete
+    page.wait_for_timeout(3000)  # Adjust this based on response time
+
+    # Check for the success message
+    success_message = page.locator("text=Valid Domain")
+    expect(success_message).to_have_count(1)
+
+    # Check if IP addresses are displayed as a list
+    ip_addresses = page.locator("ul > li")
+    ip_count = ip_addresses.count()
+
+    # Assert that there is at least one IP address
+    assert ip_count > 0, "No IP addresses were found."
+
+    # Check if the hostname is displayed
+    hostname = page.locator("text=Hostname")
+    expect(hostname).to_have_count(1)
 
 def test_ping(page: Page):
     # TODO: empty test
