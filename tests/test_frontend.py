@@ -125,7 +125,9 @@ def test_wget(page: Page):
     pass
 
 
-     page.get_by_text("Password Tools").click()
+def test_password_complexity(page: Page):
+    page.goto(f"http://localhost:{PORT}")
+    page.get_by_text("Password Tools").click()
     page.get_by_text("Password Complexity").click()
 
     # Test for an unacceptable password
@@ -157,7 +159,7 @@ def enter_password(page: Page, password: str):
 def assert_password_complexity(page: Page, expected_complexity: str):
     complexity_text = page.get_by_text("Password Complexity:")
     expect(complexity_text).to_have_text(f"Password Complexity: {expected_complexity}")
-
+   
 
 def test_ns_lookup(page: Page):
     # TODO: empty test
