@@ -46,13 +46,9 @@ def test_http_header_tool(page: Page):
         page.get_by_label("Enter URL or IP address").click()
         page.get_by_label("Enter URL or IP address").fill(address)
         page.get_by_test_id("baseButton-secondary").click()
-        running_icon.wait_for(state="hidden")
+        page.get_by_text("Running...").wait_for(state="hidden")
 
-    page.get_by_role("img", name="open").click()
-    page.get_by_role("option", name="Network Tool").click()
-    page.get_by_role("img", name="open").nth(1).click()
-    page.get_by_role("option", name="HTTP Header Tool").click()
-    running_icon = page.get_by_text("Running...")
+    page.frame_locator("iframe[title=\"streamlit_antd_components\\.utils\\.component_func\\.sac\"]").get_by_role("menuitem", name=" HTTP Header Tool").click()
 
     # Check page title
     expect(page.get_by_role("heading", name="HTTP Header Tool").locator("span")).to_be_visible()
@@ -118,12 +114,9 @@ def test_subnet_scanner(page: Page):
         page.get_by_label("Enter IP address").click()
         page.get_by_label("Enter IP address").fill(ip)
         page.get_by_label("Enter IP address").press("Enter")
-        running_icon.wait_for(state="hidden")
+        page.get_by_text("Running...").wait_for(state="hidden")
 
-    page.frame_locator("iframe[title=\"streamlit_antd_components\\.utils\\.component_func\\.sac\"]").get_by_role("menuitem", name=" Network Tool").click()
-    time.sleep(.5)  # Clicking next option immediately doesn't load page
     page.frame_locator("iframe[title=\"streamlit_antd_components\\.utils\\.component_func\\.sac\"]").get_by_role("menuitem", name=" Subnet Scanner").click()
-    running_icon = page.get_by_text("Running...")
 
     # Invalid input - not IP
     enter_ip("1.2.3")
