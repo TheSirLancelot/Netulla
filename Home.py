@@ -40,11 +40,4 @@ elif selected_item in page1_funcs:
     page1_funcs[selected_item]()
 elif selected_item in page2_funcs:
     page2_funcs[selected_item]()
-# Empty pages for now
-elif selected_item == 'Page 2':
-    page3()
-elif selected_item == 'Page 3':
-    page4()
-elif selected_item == 'Page 4':
-    page5()
 # We can add more pages as needed
