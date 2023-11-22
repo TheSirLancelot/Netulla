@@ -32,7 +32,7 @@ def after_test(page: Page, request):
 def test_page_name(page: Page):
     # Check page title
     expect(page).to_have_title(
-        "Netulla"
+        "Netulla", 0
     )
 
 
