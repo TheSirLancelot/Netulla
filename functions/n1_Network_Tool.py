@@ -199,7 +199,7 @@ def subnet_calculator():
     if ip_input and cidr_input:
         try:
             # Create network object
-            network = ipaddress.IPv4Network(f"{ip_input}/{cidr_input}")
+            network = ipaddress.IPv4Network(f"{ip_input}/{cidr_input}", strict=False)
             st.success("Valid IP address and CIDR")
 
             st.markdown("### Subnet Details")
