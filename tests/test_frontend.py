@@ -30,10 +30,12 @@ def after_test(page: Page, request):
 
 
 def test_page_name(page: Page):
+    #Go to the main page of the Streamlit app
+    page.goto(f"http://localhost:{PORT}")
+    # Wait for the page to load completely
+    page.wait_for_load_state("load")
     # Check page title
-    expect(page).to_have_title(
-        "Netulla"
-    )
+    expect(page).to_have_title("Netulla")
 
 
 def test_url_encoder_decoder(page: Page):
