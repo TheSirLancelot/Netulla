@@ -31,17 +31,10 @@ def after_test(page: Page, request):
 
 def test_page_name(page: Page):
     page.goto(f"http://localhost:{PORT}")
-
-    # Capture console logs
-    def handle_console(msg):
-        print(f"CONSOLE LOG: {msg.text}")
-    page.on("console", handle_console)
-
-    page.wait_for_load_state("load")
-    page.wait_for_timeout(10000)  # Increased timeout
-    page.screenshot(path="debug_screenshot.png")
-    expect(page).to_have_title('Netulla')
-
+    # Make sure that page is fully loaded before checking title
+    expect(page.get_by_role("heading", name="Netulla").locator("span")).to_be_visible()
+    # check that the page title is "Netulla"
+    assert page.title() == "Netulla"  
 
 
 def test_url_encoder_decoder(page: Page):
