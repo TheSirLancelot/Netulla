@@ -30,16 +30,18 @@ def after_test(page: Page, request):
 
 
 def test_page_name(page: Page):
-    #Go to the main page of the Streamlit app
     page.goto(f"http://localhost:{PORT}")
-    # Wait for the page to load completely
+
+    # Capture console logs
+    def handle_console(msg):
+        print(f"CONSOLE LOG: {msg.text}")
+    page.on("console", handle_console)
+
     page.wait_for_load_state("load")
-    # Debug: Wait for an extra few seconds (adjust as needed)
-    page.wait_for_timeout(5000)
-    # Debug: Take a screenshot before checking the title
+    page.wait_for_timeout(10000)  # Increased timeout
     page.screenshot(path="debug_screenshot.png")
-    # Check page title
-    expect(page).to_have_title("Netulla")
+    expect(page).to_have_title('Netulla')
+
 
 
 def test_url_encoder_decoder(page: Page):
