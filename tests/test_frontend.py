@@ -34,6 +34,10 @@ def test_page_name(page: Page):
     page.goto(f"http://localhost:{PORT}")
     # Wait for the page to load completely
     page.wait_for_load_state("load")
+    # Debug: Wait for an extra few seconds (adjust as needed)
+    page.wait_for_timeout(5000)
+    # Debug: Take a screenshot before checking the title
+    page.screenshot(path="debug_screenshot.png")
     # Check page title
     expect(page).to_have_title("Netulla")
 
