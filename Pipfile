@@ -21,8 +21,6 @@ pytest = "==7.4.2"
 pytest-playwright = "==0.4.3"
 dnspython = "==2.4.2"
 pylint = "==2.11.1"
-
 [dev-packages]
-
 [requires]
 python_version = "3.9"
