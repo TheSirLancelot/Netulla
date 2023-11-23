@@ -117,7 +117,7 @@ def test_certificate_lookup(page: Page):
         running_icon.wait_for(state="hidden")
 
     page.get_by_role("img", name="open").click()
-    page.get_by_text("Network Analysis").click()
+    page.get_by_text("Network Tool").click()
     page.get_by_role("img", name="open").nth(1).click()
     page.get_by_text("Certificate Lookup").click()
     running_icon = page.get_by_text("Running...")
