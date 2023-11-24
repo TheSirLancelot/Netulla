@@ -640,9 +640,8 @@ def http_header_tool():
             st.error("Invalid URL. Please use http:// or https://")
         except requests.exceptions.ReadTimeout:
             st.error("Request timed out. Please try again later.")
-        except requests.exceptions.RequestException as e:
+        except requests.exceptions.RequestException:
             st.error("Site doesn't exist or connection cannot be made at this time.")
-            st.error(e)
 
 
 # Dictionary of subpage functions

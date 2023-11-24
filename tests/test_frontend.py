@@ -117,6 +117,7 @@ def test_subnet_scanner(page: Page):
         page.get_by_label("Enter IP address").fill(ip)
         page.get_by_label("Enter IP address").press("Enter")
         page.get_by_text("Running...").wait_for(state="hidden")
+        time.sleep(.1)  # Prevents tests from happening split second too early
 
     page.frame_locator("iframe[title=\"streamlit_antd_components\\.utils\\.component_func\\.sac\"]").get_by_role("menuitem", name=" Subnet Scanner").click()
 
