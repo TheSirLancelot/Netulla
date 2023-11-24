@@ -48,6 +48,7 @@ def test_http_header_tool(page: Page):
         page.get_by_label("Enter URL or IP address").fill(address)
         page.get_by_test_id("baseButton-secondary").click()
         page.get_by_text("Running...").wait_for(state="hidden", timeout=0)
+        time.sleep(1)
 
     page.frame_locator("iframe[title=\"streamlit_antd_components\\.utils\\.component_func\\.sac\"]").get_by_role("menuitem", name=" HTTP Header Tool").click()
 
