@@ -18,3 +18,4 @@ pylint==2.11.1
 geopy==2.4.0
 ip2geotools==0.1.6
 streamlit_antd_components==0.2.3
+playwright==1.38.0
