@@ -52,6 +52,10 @@ def test_http_header_tool(page: Page):
 
     page.frame_locator("iframe[title=\"streamlit_antd_components\\.utils\\.component_func\\.sac\"]").get_by_role("menuitem", name=" HTTP Header Tool").click()
 
+    # Check entering IP
+    enter_address("8.8.8.8")
+    expect(page.get_by_text("Headers")).to_be_visible()
+
     # Check page title
     expect(page.get_by_role("heading", name="HTTP Header Tool").locator("span")).to_be_visible()
 
@@ -74,8 +78,7 @@ def test_http_header_tool(page: Page):
     error = page.get_by_test_id("stNotification")
     expect(error).to_be_visible()
     expect(error).to_have_text(
-        "Site doesn't exist or connection cannot be made at this time.",
-    timeout=0
+        "Site doesn't exist or connection cannot be made at this time."
     )
 
     enter_address("8.8.8")   # Invalid IP - wrong length
@@ -96,9 +99,7 @@ def test_http_header_tool(page: Page):
     enter_address("https://www.google.com")
     expect(page.get_by_text("Headers")).to_be_visible()
 
-    # Check entering IP
-    enter_address("8.8.8.8")
-    expect(page.get_by_text("Headers")).to_be_visible()
+    
 
 
 def test_reverse_ip(page: Page):
