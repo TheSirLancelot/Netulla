@@ -120,19 +120,16 @@ def test_ns_lookup(page: Page):
     # Go to the main page of the Streamlit app
     page.goto(f"http://localhost:{PORT}")
 
-    # Select 'Network Tool' from the 'Select a page' dropdown
-    page.click("text=Main Page")
-    page.click("text=Network Tool")
+    # Go to NS Lookup function
+    page.frame_locator("iframe[title=\"streamlit_antd_components\\.utils\\.component_func\\.sac\"]").get_by_role("menuitem", name=" Ns Lookup").click()
 
-    # Wait for the 'Select a function' dropdown to appear, then select 'NS Lookup'
-    page.click("text=IP Geolocation")  
-    page.click("text=NS Lookup")
+    # Check page title
+    expect(page.get_by_role("heading", name="NS Lookup").locator("span")).to_be_visible()
 
     # Wait for the input field to be visible on the ns_lookup subpage
     domain_input_selector = 'input[aria-label="Enter Domain (e.g., google.com)"]'
     domain_input = page.wait_for_selector(domain_input_selector, state="visible")
     
-
     # Fill in the known domain name
     domain_input.fill("google.com")
 
