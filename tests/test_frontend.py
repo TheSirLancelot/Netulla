@@ -47,8 +47,8 @@ def test_http_header_tool(page: Page):
         page.get_by_label("Enter URL or IP address").click()
         page.get_by_label("Enter URL or IP address").fill(address)
         page.get_by_test_id("baseButton-secondary").click()
-        page.get_by_text("Running...").wait_for(state="hidden")
-        time.sleep(.1)  # Prevents tests from happening split second too early
+        # page.get_by_text("Running...").wait_for(state="hidden")
+        # time.sleep(.1)  # Prevents tests from happening split second too early
 
     page.frame_locator("iframe[title=\"streamlit_antd_components\\.utils\\.component_func\\.sac\"]").get_by_role("menuitem", name=" HTTP Header Tool").click()
 
@@ -69,6 +69,7 @@ def test_http_header_tool(page: Page):
 
     enter_address("htt://www.google.com")   # Invalid schema
     error = page.get_by_test_id("stNotification")
+    error.wait_for(state="visible")
     expect(error).to_be_visible()
     expect(error).to_have_text(
         "Invalid URL. Please use http:// or https://"
@@ -76,6 +77,7 @@ def test_http_header_tool(page: Page):
 
     enter_address("https://www.notasite.com")   # Invalid URL, disabled timeout b/c sometimes webkit test checks slightly before loaded
     error = page.get_by_test_id("stNotification")
+    error.wait_for(state="visible")
     expect(error).to_be_visible()
     expect(error).to_have_text(
         "Site doesn't exist or connection cannot be made at this time."
@@ -83,6 +85,7 @@ def test_http_header_tool(page: Page):
 
     enter_address("8.8.8")   # Invalid IP - wrong length
     error = page.get_by_test_id("stNotification")
+    error.wait_for(state="visible")
     expect(error).to_be_visible()
     expect(error).to_have_text(
         "Incomplete URL or invalid IP. Please include http:// or https:// for URLs, and enter IPs in the form x.x.x.x using only numbers."
@@ -90,6 +93,7 @@ def test_http_header_tool(page: Page):
 
     enter_address("8.8.8.8s")   # Invalid IP - invalid characters
     error = page.get_by_test_id("stNotification")
+    error.wait_for(state="visible")
     expect(error).to_be_visible()
     expect(error).to_have_text(
         "Incomplete URL or invalid IP. Please include http:// or https:// for URLs, and enter IPs in the form x.x.x.x using only numbers."
@@ -97,9 +101,9 @@ def test_http_header_tool(page: Page):
 
     # Check entering URL
     enter_address("https://www.google.com")
-    expect(page.get_by_text("Headers")).to_be_visible()
-
-    
+    headers = page.get_by_text("Headers")
+    headers.wait_for(state="visible")
+    expect(headers).to_be_visible()
 
 
 def test_reverse_ip(page: Page):
