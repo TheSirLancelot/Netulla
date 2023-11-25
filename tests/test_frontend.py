@@ -80,7 +80,8 @@ def test_http_header_tool(page: Page):
     error.wait_for(state="visible")
     expect(error).to_be_visible()
     expect(error).to_have_text(
-        "Site doesn't exist or connection cannot be made at this time."
+        "Site doesn't exist or connection cannot be made at this time.",
+        timeout=0
     )
 
     enter_address("8.8.8")   # Invalid IP - wrong length
