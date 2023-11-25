@@ -1,26 +1,12 @@
-# DON'T FORGET TO RUN:
-# pip -r requirements.txt
-
-from contextlib import contextmanager
-from time import sleep
-import subprocess
-
 import pytest
 from playwright.sync_api import Page, expect
 
+PORT = "8501"
 
-LOCAL_TEST = False
-
-PORT = "8503" if LOCAL_TEST else "8699"
-
-
-@pytest.fixture(scope="module", autouse=True)
-def before_module():
-    # Run the streamlit app before each module
-    with run_streamlit():
-        yield
+# TODO: Maybe check to see if the container is running?
 
 
+# This expects the container to already be running
 @pytest.fixture(scope="function", autouse=True)
 def before_test(page: Page):
     page.goto(f"localhost:{PORT}")
@@ -33,36 +19,6 @@ def after_test(page: Page, request):
     yield
     if request.node.rep_call.failed:
         page.screenshot(path=f"screenshot-{request.node.name}.png", full_page=True)
-
-
-@contextmanager
-def run_streamlit():
-    """Run the streamlit app on port 8599"""
-
-    if LOCAL_TEST:
-        try:
-            yield 1
-        finally:
-            pass
-    else:
-        p = subprocess.Popen(
-            [
-                "streamlit",
-                "run",
-                "Home.py",
-                "--server.port",
-                PORT,
-                "--server.headless",
-                "true",
-            ]
-        )
-
-        sleep(5)
-
-        try:
-            yield 1
-        finally:
-            p.kill()
 
 
 # use examples from this repo to build out the unit tests for your feature
@@ -87,8 +43,65 @@ def test_url_encoder_decoder(page: Page):
 
 
 def test_http_header_tool(page: Page):
-    # TODO: empty test
-    pass
+    def enter_address(address):
+        page.get_by_label("Enter URL or IP address").click()
+        page.get_by_label("Enter URL or IP address").fill(address)
+        page.get_by_test_id("baseButton-secondary").click()
+        running_icon.wait_for(state="hidden")
+
+    page.get_by_role("img", name="open").click()
+    page.get_by_role("option", name="Network Tool").click()
+    page.get_by_role("img", name="open").nth(1).click()
+    page.get_by_role("option", name="HTTP Header Tool").click()
+    running_icon = page.get_by_text("Running...")
+
+    # Check page title
+    expect(page.get_by_role("heading", name="HTTP Header Tool").locator("span")).to_be_visible()
+
+    # Check invalid inputs
+    enter_address("www.google.com")   # Missing schema
+    error = page.get_by_test_id("stNotification")
+    expect(error).to_be_visible()
+    expect(error).to_have_text(
+        "Incomplete URL or invalid IP. Please include http:// or https:// for URLs, and enter IPs in the form x.x.x.x using only numbers."
+    )
+
+    enter_address("htt://www.google.com")   # Invalid schema
+    error = page.get_by_test_id("stNotification")
+    expect(error).to_be_visible()
+    expect(error).to_have_text(
+        "Invalid URL. Please use http:// or https://"
+    )
+
+    enter_address("https://www.notasite.com")   # Invalid URL, disabled timeout b/c sometimes webkit test checks slightly before loaded
+    error = page.get_by_test_id("stNotification")
+    expect(error).to_be_visible()
+    expect(error).to_have_text(
+        "Site doesn't exist or connection cannot be made at this time.",
+    timeout=0
+    )
+
+    enter_address("8.8.8")   # Invalid IP - wrong length
+    error = page.get_by_test_id("stNotification")
+    expect(error).to_be_visible()
+    expect(error).to_have_text(
+        "Incomplete URL or invalid IP. Please include http:// or https:// for URLs, and enter IPs in the form x.x.x.x using only numbers."
+    )
+
+    enter_address("8.8.8.8s")   # Invalid IP - invalid characters
+    error = page.get_by_test_id("stNotification")
+    expect(error).to_be_visible()
+    expect(error).to_have_text(
+        "Incomplete URL or invalid IP. Please include http:// or https:// for URLs, and enter IPs in the form x.x.x.x using only numbers."
+    )
+
+    # Check entering URL
+    enter_address("https://www.google.com")
+    expect(page.get_by_text("Headers")).to_be_visible()
+
+    # Check entering IP
+    enter_address("8.8.8.8")
+    expect(page.get_by_text("Headers")).to_be_visible()
 
 
 def test_reverse_ip(page: Page):
@@ -102,8 +115,66 @@ def test_certificate_lookup(page: Page):
 
 
 def test_subnet_scanner(page: Page):
-    # TODO: empty test
-    pass
+    def enter_ip(ip):
+        page.get_by_label("Enter IP address").click()
+        page.get_by_label("Enter IP address").fill(ip)
+        page.get_by_label("Enter IP address").press("Enter")
+        running_icon.wait_for(state="hidden")
+
+    page.get_by_role("img", name="open").click()
+    page.get_by_text("Network Tool").click()
+    page.get_by_role("img", name="open").nth(1).click()
+    page.get_by_text("Subnet Scanner").click()
+    running_icon = page.get_by_text("Running...")
+
+    # Invalid input - not IP
+    enter_ip("1.2.3")
+
+    # Check error message
+    error = page.get_by_test_id("stNotification")
+    expect(error).to_be_visible()
+    expect(error).to_have_text("Invalid IP address.")
+
+    # Invalid input - bogon IP
+    enter_ip("192.168.0.1")
+
+    # Check error message
+    error = page.get_by_test_id("stNotification")
+    expect(error).to_be_visible()
+    expect(error).to_have_text(
+        "That IP is reserved for special use and cannot be located."
+    )
+
+    # Valid input - 8.8.8.8
+    enter_ip("8.8.8.8")
+
+    # Check map
+    # TODO: Make test work for checking map, currently hangs forever b/c map never appears in GitHub
+    # ip_map = page.locator("#view-default-view")
+    # expect(ip_map).to_be_visible()
+
+    # Check table
+    expect(page.locator(".dvn-scroller")).to_be_visible()
+    table = page.locator("//table[@role='grid']")
+
+    # Headers
+    EXPECTED_HEADERS = ["", "IP", "City", "Country"]
+    for col, expected in enumerate(EXPECTED_HEADERS, 1):
+        expect(table.locator(f"//thead/tr/th[@aria-colindex={col}]")).to_have_text(
+            expected
+        )
+    # Body
+    for row_num in range(2, 256 + 2):  # Header included in numbering, rows start at 2
+        row = table.locator(f"//tbody/tr[@aria-rowindex={row_num}]")
+
+        expect(row.locator("//td[@aria-colindex=1]")).to_have_text(f"{row_num - 2}")
+        expect(row.locator("//td[@aria-colindex=2]")).to_have_text(
+            f"8.8.8.{row_num - 2}"
+        )
+
+        # Location data may change, just check that cells are full
+        expect(row.locator("//td[@aria-colindex=3]")).not_to_be_empty()
+        expect(row.locator("//td[@aria-colindex=4]")).not_to_be_empty()
 
 
 def test_wget(page: Page):
