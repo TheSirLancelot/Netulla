@@ -284,37 +284,42 @@ def certificate_lookup():
 def ns_lookup():
     st.markdown("# NS Lookup")
 
-    # ask for domain
+    # Ask for domain
     domain = st.text_input("Enter Domain (e.g., google.com)", "")
 
-    if domain:
-        try:
-            # Perform lookup
-            ip_addresses = [ip.address for ip in dns.resolver.resolve(domain, "A")]
+    # Check if the input is empty and display a message
+    if not domain.strip():  # strip() removes leading/trailing whitespaces
+        st.error("Please enter a domain.")
+        return
 
-            # Perform reverse lookup
-            reverse_name = dns.reversename.from_address(str(ip_addresses[0]))
-            hostname = str(dns.resolver.resolve(reverse_name, "PTR")[0])
+    try:
+        # Perform lookup
+        ip_addresses = [ip.address for ip in dns.resolver.resolve(domain, "A")]
 
-            # Display results
-            st.success("Valid Domain")
+        # Perform reverse lookup
+        reverse_name = dns.reversename.from_address(str(ip_addresses[0]))
+        hostname = str(dns.resolver.resolve(reverse_name, "PTR")[0])
 
-            st.markdown("### Domain Details")
+        # Display results
+        st.success("Valid Domain")
 
-            st.markdown("**IP Address:**")
-            for ip in ip_addresses:
-                st.markdown(f"- {ip}")
+        st.markdown("### Domain Details")
 
-            st.markdown(f"**Hostname:**\n- {hostname}")
+        st.markdown("**IP Address:**")
+        for ip in ip_addresses:
+            st.markdown(f"- {ip}")
 
-        except dns.resolver.NoAnswer:
-            st.error("No DNS record found for the domain.")
-        except dns.resolver.NXDOMAIN:
-            st.error("Domain does not exist.")
-        except dns.resolver.Timeout:
-            st.error("The request timed out while trying to contact the DNS server.")
-        except dns.exception.DNSException as e:
-            st.error(f"A DNS-related error occurred: {e}")
+        st.markdown(f"**Hostname:**\n- {hostname}")
+
+    except dns.resolver.NoAnswer:
+        st.error("No DNS record found for the domain.")
+    except dns.resolver.NXDOMAIN:
+        st.error("Domain does not exist.")
+    except dns.resolver.Timeout:
+        st.error("The request timed out while trying to contact the DNS server.")
+    except dns.exception.DNSException as e:
+        st.error(f"A DNS-related error occurred: {e}")
+
 
 
 def subnet_scanner():
