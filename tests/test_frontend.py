@@ -56,6 +56,7 @@ def test_http_header_tool(page: Page):
     # Check invalid inputs
     enter_address("www.google.com")   # Missing schema
     error = page.get_by_test_id("stNotification")
+    error.wait_for(state="visible")
     expect(error).to_be_visible()
     expect(error).to_have_text(
         "Incomplete URL or invalid IP. Please include http:// or https:// for URLs, and enter IPs in the form x.x.x.x using only numbers."
