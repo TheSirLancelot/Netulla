@@ -47,14 +47,8 @@ def test_http_header_tool(page: Page):
         page.get_by_label("Enter URL or IP address").click()
         page.get_by_label("Enter URL or IP address").fill(address)
         page.get_by_test_id("baseButton-secondary").click()
-        # page.get_by_text("Running...").wait_for(state="hidden")
-        # time.sleep(.1)  # Prevents tests from happening split second too early
 
     page.frame_locator("iframe[title=\"streamlit_antd_components\\.utils\\.component_func\\.sac\"]").get_by_role("menuitem", name=" HTTP Header Tool").click()
-
-    # Check entering IP
-    enter_address("8.8.8.8")
-    expect(page.get_by_text("Headers")).to_be_visible()
 
     # Check page title
     expect(page.get_by_role("heading", name="HTTP Header Tool").locator("span")).to_be_visible()
@@ -102,6 +96,12 @@ def test_http_header_tool(page: Page):
 
     # Check entering URL
     enter_address("https://www.google.com")
+    headers = page.get_by_text("Headers")
+    headers.wait_for(state="visible")
+    expect(headers).to_be_visible()
+
+    # Check entering IP
+    enter_address("8.8.8.8")
     headers = page.get_by_text("Headers")
     headers.wait_for(state="visible")
     expect(headers).to_be_visible()
