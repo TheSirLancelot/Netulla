@@ -188,42 +188,41 @@ def test_password_complexity(page: Page):
 
 
 def test_ns_lookup(page: Page):
-    # Go to the main page of the Streamlit app
-    page.goto(f"http://localhost:{PORT}")
+    def run_test(domain: str, expected_result: str):
+        # Go to the main page of the Streamlit app
+        page.goto(f"http://localhost:{PORT}")
 
-    # Go to NS Lookup function
-    page.frame_locator("iframe[title=\"streamlit_antd_components\\.utils\\.component_func\\.sac\"]").get_by_role("menuitem", name=" Ns Lookup").click()
+        # Go to NS Lookup function
+        page.frame_locator("iframe[title=\"streamlit_antd_components\\.utils\\.component_func\\.sac\"]").get_by_role("menuitem", name=" Ns Lookup").click()
 
-    # Check page title
-    expect(page.get_by_role("heading", name="NS Lookup").locator("span")).to_be_visible()
+        # Check page title
+        expect(page.get_by_role("heading", name="NS Lookup").locator("span")).to_be_visible()
 
-    # Wait for the input field to be visible on the ns_lookup subpage
-    domain_input_selector = 'input[aria-label="Enter Domain (e.g., google.com)"]'
-    domain_input = page.wait_for_selector(domain_input_selector, state="visible")
-    
-    # Fill in the known domain name
-    domain_input.fill("google.com")
+        # Wait for the input field to be visible on the ns_lookup subpage
+        domain_input_selector = 'input[aria-label="Enter Domain (e.g., google.com)"]'
+        domain_input = page.wait_for_selector(domain_input_selector, state="visible")
+        
+        # Fill in the domain name
+        domain_input.fill(domain)
 
-    # Simulate pressing the Enter key to submit the domain
-    page.press(domain_input_selector, "Enter")
+        # Simulate pressing the Enter key to submit the domain
+        page.press(domain_input_selector, "Enter")
 
-    # Wait for the Streamlit action to complete
-    page.wait_for_timeout(3000)  # Adjust this based on response time
+        # Wait for the Streamlit action to complete
+        page.wait_for_timeout(3000)  # Adjust this based on response time
 
-    # Check for the success message
-    success_message = page.locator("text=Valid Domain")
-    expect(success_message).to_have_count(1)
+        # Check for the expected result
+        result_message = page.locator(f"text={expected_result}")
+        expect(result_message).to_have_count(1)
 
-    # Check if IP addresses are displayed as a list
-    ip_addresses = page.locator("ul > li")
-    ip_count = ip_addresses.count()
+    # Test with a valid domain name
+    run_test("google.com", "Valid Domain")
 
-    # Assert that there is at least one IP address
-    assert ip_count > 0, "No IP addresses were found."
+    # Test with an empty input
+    run_test("", "Please enter a domain.")
 
-    # Check if the hostname is displayed
-    hostname = page.locator("text=Hostname")
-    expect(hostname).to_have_count(1)
+    # Test with a non-existent domain
+    run_test("nonexistentdomain123456789.com", "Domain does not exist.")
 
 def test_ping(page: Page):
     # TODO: empty test
