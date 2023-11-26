@@ -52,9 +52,9 @@ def test_http_header_tool(page: Page):
 
     page.frame_locator("iframe[title=\"streamlit_antd_components\\.utils\\.component_func\\.sac\"]").get_by_role("menuitem", name=" HTTP Header Tool").click()
 
-    # # Check entering IP
-    # enter_address("8.8.8.8")
-    # expect(page.get_by_text("Headers")).to_be_visible()
+    # Check entering IP
+    enter_address("8.8.8.8")
+    expect(page.get_by_text("Headers")).to_be_visible()
 
     # Check page title
     expect(page.get_by_role("heading", name="HTTP Header Tool").locator("span")).to_be_visible()
