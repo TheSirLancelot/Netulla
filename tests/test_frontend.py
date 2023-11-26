@@ -194,36 +194,42 @@ def test_ns_lookup(page: Page):
     # Go to NS Lookup function
     page.frame_locator("iframe[title=\"streamlit_antd_components\\.utils\\.component_func\\.sac\"]").get_by_role("menuitem", name=" Ns Lookup").click()
 
-    # Check page title
-    expect(page.get_by_role("heading", name="NS Lookup").locator("span")).to_be_visible()
-
     # Wait for the input field to be visible on the ns_lookup subpage
     domain_input_selector = 'input[aria-label="Enter Domain (e.g., google.com)"]'
     domain_input = page.wait_for_selector(domain_input_selector, state="visible")
-    
-    # Fill in the known domain name
+
+    # Test with valid input
     domain_input.fill("google.com")
-
-    # Simulate pressing the Enter key to submit the domain
     page.press(domain_input_selector, "Enter")
+    page.wait_for_timeout(3000)  # Adjust based on response time
 
-    # Wait for the Streamlit action to complete
-    page.wait_for_timeout(3000)  # Adjust this based on response time
+    # Assertions for valid input
+    expect(page.locator("text=Valid Domain")).to_have_count(1)
+    assert page.locator("ul > li").count() > 0, "No IP addresses were found."
+    expect(page.locator("text=Hostname")).to_have_count(1)
 
-    # Check for the success message
-    success_message = page.locator("text=Valid Domain")
-    expect(success_message).to_have_count(1)
+    # Clear the input for next test
+    domain_input.fill("")
 
-    # Check if IP addresses are displayed as a list
-    ip_addresses = page.locator("ul > li")
-    ip_count = ip_addresses.count()
+    # Test with an invalid domain
+    domain_input.fill("invalid-domain.com")
+    page.press(domain_input_selector, "Enter")
+    page.wait_for_timeout(3000)
 
-    # Assert that there is at least one IP address
-    assert ip_count > 0, "No IP addresses were found."
+    # Assertions for invalid input
+    expect(page.locator("text=No DNS record found for the domain.")).to_have_count(1)
 
-    # Check if the hostname is displayed
-    hostname = page.locator("text=Hostname")
-    expect(hostname).to_have_count(1)
+    # Clear the input for next test
+    domain_input.fill("")
+
+    # Test with an empty domain
+    domain_input.fill("")
+    page.press(domain_input_selector, "Enter")
+    page.wait_for_timeout(3000)
+
+    # Assertions for empty input
+    expect(page.locator("text=Please enter a domain.")).to_have_count(1)
+
 
 def test_ping(page: Page):
     # TODO: empty test
