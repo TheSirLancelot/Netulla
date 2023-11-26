@@ -620,14 +620,11 @@ def http_header_tool():
     send = st.button("Send Request")
 
     if send and address:
-        headers = {}
-
         if is_ip(address):
             address = "http://" + address
-            headers = {"host": "example.com"}  # Header necessary for IP to fake host
 
         try:
-            response = requests.get(address, headers=headers, timeout=5)
+            response = requests.get(address, timeout=5)
             st.subheader("Headers")
             for key in response.headers:
                 st.markdown(f"```{key}: {response.headers[key]}```")
