@@ -198,6 +198,8 @@ def test_ns_lookup(page: Page):
         # Go to NS Lookup function
         page.frame_locator("iframe[title=\"streamlit_antd_components\\.utils\\.component_func\\.sac\"]").get_by_role("menuitem", name=" Ns Lookup").click()
 
+        # Wait for the page to load
+        page.wait_for_selector("iframe[title=\"streamlit_antd_components\\.utils\\.component_func\\.sac\"]")
         # Check page title
         expect(page.get_by_role("heading", name="NS Lookup").locator("span")).to_be_visible()
 
