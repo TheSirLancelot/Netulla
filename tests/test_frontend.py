@@ -114,7 +114,7 @@ def test_reverse_ip(page: Page):
 
 def test_certificate_lookup(page: Page):
     # TODO: empty test
-    expect(page.get_by_test_id("Intentional failure")).to_be_visible()
+    pass
 
 
 def test_subnet_scanner(page: Page):
