@@ -122,8 +122,6 @@ def test_subnet_scanner(page: Page):
         page.get_by_label("Enter IP address").click()
         page.get_by_label("Enter IP address").fill(ip)
         page.get_by_label("Enter IP address").press("Enter")
-        page.get_by_text("Running...").wait_for(state="hidden")
-        time.sleep(.1)  # Prevents tests from happening split second too early
 
     page.frame_locator("iframe[title=\"streamlit_antd_components\\.utils\\.component_func\\.sac\"]").get_by_role("menuitem", name=" Subnet Scanner").click()
 
@@ -132,6 +130,7 @@ def test_subnet_scanner(page: Page):
 
     # Check error message
     error = page.get_by_test_id("stNotification")
+    error.wait_for(state="visible")
     expect(error).to_be_visible()
     expect(error).to_have_text("Invalid IP address.")
 
@@ -140,6 +139,7 @@ def test_subnet_scanner(page: Page):
 
     # Check error message
     error = page.get_by_test_id("stNotification")
+    error.wait_for(state="visible")
     expect(error).to_be_visible()
     expect(error).to_have_text(
         "That IP is reserved for special use and cannot be located."
@@ -154,8 +154,10 @@ def test_subnet_scanner(page: Page):
     # expect(ip_map).to_be_visible()
 
     # Check table
-    expect(page.locator(".dvn-scroller")).to_be_visible()
-    table = page.locator("//table[@role='grid']")
+    table = page.locator(".dvn-scroller")
+    table.wait_for(state="visible")
+    expect(table).to_be_visible()
+    table = page.locator("//table[@role='grid']")   # Switch to subcomponent to check cells
 
     # Headers
     EXPECTED_HEADERS = ["", "IP", "City", "Country"]
