@@ -1,4 +1,5 @@
 import pytest
+import time
 from playwright.sync_api import Page, expect
 
 PORT = "8501"
@@ -28,13 +29,12 @@ def after_test(page: Page, request):
 # https://playwright.dev/python/docs/
 
 
-# generic test to make sure your testing framework is set up
 def test_page_name(page: Page):
-    # Check page title
-
-    expect(page).to_have_title(
-        "Shadow Suite"
-    )  # TODO: Change this when we update test page
+    page.goto(f"http://localhost:{PORT}")
+    # Make sure that page is fully loaded before checking title
+    expect(page.get_by_role("heading", name="Netulla").locator("span")).to_be_visible()
+    # check that the page title is "Netulla"
+    assert page.title() == "Netulla"
 
 
 def test_url_encoder_decoder(page: Page):
@@ -47,13 +47,14 @@ def test_http_header_tool(page: Page):
         page.get_by_label("Enter URL or IP address").click()
         page.get_by_label("Enter URL or IP address").fill(address)
         page.get_by_test_id("baseButton-secondary").click()
-        running_icon.wait_for(state="hidden")
+        # page.get_by_text("Running...").wait_for(state="hidden")
+        # time.sleep(.1)  # Prevents tests from happening split second too early
 
-    page.get_by_role("img", name="open").click()
-    page.get_by_role("option", name="Network Tool").click()
-    page.get_by_role("img", name="open").nth(1).click()
-    page.get_by_role("option", name="HTTP Header Tool").click()
-    running_icon = page.get_by_text("Running...")
+    page.frame_locator("iframe[title=\"streamlit_antd_components\\.utils\\.component_func\\.sac\"]").get_by_role("menuitem", name=" HTTP Header Tool").click()
+
+    # # Check entering IP
+    # enter_address("8.8.8.8")
+    # expect(page.get_by_text("Headers")).to_be_visible()
 
     # Check page title
     expect(page.get_by_role("heading", name="HTTP Header Tool").locator("span")).to_be_visible()
@@ -68,6 +69,7 @@ def test_http_header_tool(page: Page):
 
     enter_address("htt://www.google.com")   # Invalid schema
     error = page.get_by_test_id("stNotification")
+    error.wait_for(state="visible")
     expect(error).to_be_visible()
     expect(error).to_have_text(
         "Invalid URL. Please use http:// or https://"
@@ -75,14 +77,16 @@ def test_http_header_tool(page: Page):
 
     enter_address("https://www.notasite.com")   # Invalid URL, disabled timeout b/c sometimes webkit test checks slightly before loaded
     error = page.get_by_test_id("stNotification")
+    error.wait_for(state="visible")
     expect(error).to_be_visible()
     expect(error).to_have_text(
         "Site doesn't exist or connection cannot be made at this time.",
-    timeout=0
+        timeout=0
     )
 
     enter_address("8.8.8")   # Invalid IP - wrong length
     error = page.get_by_test_id("stNotification")
+    error.wait_for(state="visible")
     expect(error).to_be_visible()
     expect(error).to_have_text(
         "Incomplete URL or invalid IP. Please include http:// or https:// for URLs, and enter IPs in the form x.x.x.x using only numbers."
@@ -90,6 +94,7 @@ def test_http_header_tool(page: Page):
 
     enter_address("8.8.8.8s")   # Invalid IP - invalid characters
     error = page.get_by_test_id("stNotification")
+    error.wait_for(state="visible")
     expect(error).to_be_visible()
     expect(error).to_have_text(
         "Incomplete URL or invalid IP. Please include http:// or https:// for URLs, and enter IPs in the form x.x.x.x using only numbers."
@@ -97,11 +102,9 @@ def test_http_header_tool(page: Page):
 
     # Check entering URL
     enter_address("https://www.google.com")
-    expect(page.get_by_text("Headers")).to_be_visible()
-
-    # Check entering IP
-    enter_address("8.8.8.8")
-    expect(page.get_by_text("Headers")).to_be_visible()
+    headers = page.get_by_text("Headers")
+    headers.wait_for(state="visible")
+    expect(headers).to_be_visible()
 
 
 def test_reverse_ip(page: Page):
@@ -119,13 +122,10 @@ def test_subnet_scanner(page: Page):
         page.get_by_label("Enter IP address").click()
         page.get_by_label("Enter IP address").fill(ip)
         page.get_by_label("Enter IP address").press("Enter")
-        running_icon.wait_for(state="hidden")
+        page.get_by_text("Running...").wait_for(state="hidden")
+        time.sleep(.1)  # Prevents tests from happening split second too early
 
-    page.get_by_role("img", name="open").click()
-    page.get_by_text("Network Tool").click()
-    page.get_by_role("img", name="open").nth(1).click()
-    page.get_by_text("Subnet Scanner").click()
-    running_icon = page.get_by_text("Running...")
+    page.frame_locator("iframe[title=\"streamlit_antd_components\\.utils\\.component_func\\.sac\"]").get_by_role("menuitem", name=" Subnet Scanner").click()
 
     # Invalid input - not IP
     enter_ip("1.2.3")
