@@ -110,7 +110,7 @@ def test_http_header_tool(page: Page):
     expect(headers).to_be_visible()
 
 
-def test_reverse_ip(page: Page):
+def test_regex_tester(page: Page):
     # TODO: empty test
     pass
 

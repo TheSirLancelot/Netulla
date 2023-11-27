@@ -44,22 +44,22 @@ We utilize a docker container for our application, which alleviates the need for
 
 **NOTE**: Each of the unit test cases will be displayed here once each of the features is implemented. The current unit test creation progress can be viewed [here](tests/test_frontend.py).
 
-| \#  | NAME                       | OBJECTIVE                               | EXPECTED RESULTS                                                                 |
-| --- | -------------------------- | --------------------------------------- | -------------------------------------------------------------------------------- |
-| 1   | test_page_name             | Ensure successful connection to web-app | expects the page title to equal "Shadow Suite" (title will change in the future) |
-| 2   | test_subnet_scanner        | Test functionality of subnet scanner tool | Walks through each of the steps needed to look up the hosts alive on a subnet |
-| 3   | test_url_encoder_decoder   | TBD                                     | TBD                                                                              |
-| 4   | test_http_header_tool      | TBD                                     | TBD                                                                              |
-| 5   | test_reverse_ip            | TBD                                     | TBD                                                                              |
-| 6   | test_certificate_lookup    | TBD                                     | TBD                                                                              |
-| 7   | test_wget                  | TBD                                     | TBD                                                                              |
-| 8   | test_password_complexity   | TBD                                     | TBD                                                                              |
-| 9   | test_ns_lookup             | TBD                                     | TBD                                                                              |
-| 10  | test_ping                  | TBD                                     | TBD                                                                              |
-| 11  | test_whois_lookup          | TBD                                     | TBD                                                                              |
-| 12  | test_what_is_my_ip         | TBD                                     | TBD                                                                              |
-| 13  | test_traceroute_visualizer | TBD                                     | TBD                                                                              |
-| 14  | test_password_generator    | TBD                                     | TBD                                                                              |
+| \#  | NAME                       | OBJECTIVE                                         | EXPECTED RESULTS                                                                           |
+| --- | -------------------------- | ------------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| 1   | test_page_name             | Ensure successful connection to web-app           | Expects the page title to equal "Netulla"                                                  |
+| 2   | test_traceroute_visualizer | Test functionality of traceroute visualizer tool  | Walks through each of the steps needed to display traceroute hops to a target              |
+| 3   | test_ns_lookup             | Test functionality of NS lookup tool              | Walks through each of the steps needed to look up a DNS record                             |
+| 4   | test_password_complexity   | Test functionality of password complexity checker | Walks through each of the steps needed to check a password's complexity                    |
+| 5   | test_certificate_lookup    | Test functionality of certificate lookup tool     | Walks through each of the steps needed to look up a website's SSL Certificate information  |
+| 6   | test_subnet_scanner        | Test functionality of subnet scanner tool         | Walks through each of the steps needed to look up the hosts alive on a subnet              |
+| 7   | test_whois_lookup          | Test functionality of WHOIS lookup tool           | Walks through each of the steps needed to query registration infromation for an IP address |
+| 8   | test_password_generator    | Test functionality of password generator          | Walks through each of the steps needed to generate a password                              |
+| 9   | test_http_header_tool      | Test functionality of HTTP header tool            | Walks through each of the steps needed to get a server's HTTP response header              |
+| 10  | test_wget                  | Test functionality of online WGET tool            | Walks through each of the steps needed to retrieve a webpage with WGET                     |
+| 11  | test_ping                  | Test functionality of ping tool                   | TBD                                                                                        |
+| 12  | test_what_is_my_ip         | Test functionality of "What is my IP?" tool       | TBD                                                                                        |
+| 13  | test_url_encoder_decoder   | Test functionality of URL encoder/decoder         | TBD                                                                                        |
+| 14  | test_regex_tester          | Test functionality of regex tester                | TBD                                                                                        |
 
 ## INTEGRATION TEST SECTION
 
