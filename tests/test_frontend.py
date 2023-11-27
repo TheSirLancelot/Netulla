@@ -207,7 +207,7 @@ def test_password_complexity(page: Page):
     assert_password_complexity(page, "Unacceptable")
 
     # Test for a weak password
-    enter_password(page, "weakpassword1")
+    enter_password(page, "weakpassword")
     assert_password_complexity(page, "Weak")
 
     # Test for a meh password
