@@ -326,7 +326,7 @@ def subnet_scanner():
     def get_geolocation(ip_address):
         # Free account access token, limited to 50K requests/month
         response = requests.get(
-            f"http://ipinfo.io/{ip_address}/" "json?token=655d3a384855d8", timeout=5
+            f"http://ipinfo.io/{ip_address}/" "json?token=6f3b7503f7de89", timeout=5
         )
         response.raise_for_status()  # Ensure we got a valid response
         return response.json()
