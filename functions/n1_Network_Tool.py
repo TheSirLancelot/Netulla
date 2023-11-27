@@ -16,6 +16,7 @@ from ip2geotools.databases.noncommercial import (
     InvalidRequestError,
     LimitExceededError,
 )
+import whois
 
 
 def ip_geolocation():
@@ -189,7 +190,6 @@ def network_analysis():
 def subnet_calculator():
     st.markdown("# Subnet Calculator")
 
-    # TODO: Currently doesn't quite work correctly unless you end in .0
     ip_input = st.text_input("Enter IP address (e.g., 192.168.0.1)", "")
     cidr_input = st.number_input(
         "Enter CIDR (e.g., 24)", min_value=0, max_value=32, value=24
@@ -319,7 +319,6 @@ def ns_lookup():
         st.error("The request timed out while trying to contact the DNS server.")
     except dns.exception.DNSException as e:
         st.error(f"A DNS-related error occurred: {e}")
-
 
 
 def subnet_scanner():
@@ -607,19 +606,21 @@ def traceroute_visualizer():
         perform_traceroute(target, show_raw_output, radius)
 
 
-def http_header_tool():
-    # Expect IPs to be 4 ints separated by periods
-    def is_ip(address):
-        split_ip = address.split(".")
-        if len(split_ip) != 4:
+# Expect IPs to be 4 ints separated by periods
+# Moved this to top level so I can use it in other functions
+def is_ip(address):
+    split_ip = address.split(".")
+    if len(split_ip) != 4:
+        return False
+    for segment in split_ip:
+        try:
+            int(segment)
+        except ValueError:
             return False
-        for segment in split_ip:
-            try:
-                int(segment)
-            except ValueError:
-                return False
-        return True
+    return True
 
+
+def http_header_tool():
     st.markdown("# HTTP Header Tool")
     address = st.text_input("Enter URL or IP address", "")
     send = st.button("Send Request")
@@ -646,6 +647,31 @@ def http_header_tool():
             st.error("Site doesn't exist or connection cannot be made at this time.")
 
 
+def validate_ip_address(ip_string):
+    try:
+        ip_object = ipaddress.ip_address(ip_string)
+        return ip_object
+    except ValueError:
+        return False
+
+
+def whois_lookup():
+    st.markdown("# Whois Lookup Tool")
+    request = st.text_input("Enter URL or IP address", "")
+
+    if request:
+        if is_ip(request):
+            request = validate_ip_address(request)
+        # Another check to make sure request is not false from IP validation
+        if request:
+            whois_result = whois.whois(str(request))  # if it's an IP it needs the str()
+            st.subheader("Results")
+            for key in whois_result:
+                st.markdown(f"```{key}: {whois_result[key]}```")
+        else:
+            st.error("Please enter a valid URL or IP address")
+
+
 # Dictionary of subpage functions
 page1_funcs = {
     "IP Geolocation": ip_geolocation,
@@ -656,4 +682,5 @@ page1_funcs = {
     "NS Lookup": ns_lookup,
     "Subnet Scanner": subnet_scanner,
     "HTTP Header Tool": http_header_tool,
+    "Whois Lookup": whois_lookup,
 }
