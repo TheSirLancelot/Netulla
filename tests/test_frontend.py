@@ -1,5 +1,5 @@
-import pytest
 import time
+import pytest
 from playwright.sync_api import Page, expect
 
 PORT = "8501"
@@ -47,14 +47,8 @@ def test_http_header_tool(page: Page):
         page.get_by_label("Enter URL or IP address").click()
         page.get_by_label("Enter URL or IP address").fill(address)
         page.get_by_test_id("baseButton-secondary").click()
-        # page.get_by_text("Running...").wait_for(state="hidden")
-        # time.sleep(.1)  # Prevents tests from happening split second too early
 
     page.frame_locator("iframe[title=\"streamlit_antd_components\\.utils\\.component_func\\.sac\"]").get_by_role("menuitem", name=" HTTP Header Tool").click()
-
-    # # Check entering IP
-    # enter_address("8.8.8.8")
-    # expect(page.get_by_text("Headers")).to_be_visible()
 
     # Check page title
     expect(page.get_by_role("heading", name="HTTP Header Tool").locator("span")).to_be_visible()
@@ -62,6 +56,7 @@ def test_http_header_tool(page: Page):
     # Check invalid inputs
     enter_address("www.google.com")   # Missing schema
     error = page.get_by_test_id("stNotification")
+    error.wait_for(state="visible")
     expect(error).to_be_visible()
     expect(error).to_have_text(
         "Incomplete URL or invalid IP. Please include http:// or https:// for URLs, and enter IPs in the form x.x.x.x using only numbers."
@@ -106,6 +101,12 @@ def test_http_header_tool(page: Page):
     headers.wait_for(state="visible")
     expect(headers).to_be_visible()
 
+    # Check entering IP
+    enter_address("8.8.8.8")
+    headers = page.get_by_text("Headers")
+    headers.wait_for(state="visible")
+    expect(headers).to_be_visible()
+
 
 def test_reverse_ip(page: Page):
     # TODO: empty test
@@ -122,8 +123,6 @@ def test_subnet_scanner(page: Page):
         page.get_by_label("Enter IP address").click()
         page.get_by_label("Enter IP address").fill(ip)
         page.get_by_label("Enter IP address").press("Enter")
-        page.get_by_text("Running...").wait_for(state="hidden")
-        time.sleep(.1)  # Prevents tests from happening split second too early
 
     page.frame_locator("iframe[title=\"streamlit_antd_components\\.utils\\.component_func\\.sac\"]").get_by_role("menuitem", name=" Subnet Scanner").click()
 
@@ -132,6 +131,7 @@ def test_subnet_scanner(page: Page):
 
     # Check error message
     error = page.get_by_test_id("stNotification")
+    error.wait_for(state="visible")
     expect(error).to_be_visible()
     expect(error).to_have_text("Invalid IP address.")
 
@@ -140,6 +140,7 @@ def test_subnet_scanner(page: Page):
 
     # Check error message
     error = page.get_by_test_id("stNotification")
+    error.wait_for(state="visible")
     expect(error).to_be_visible()
     expect(error).to_have_text(
         "That IP is reserved for special use and cannot be located."
@@ -154,8 +155,10 @@ def test_subnet_scanner(page: Page):
     # expect(ip_map).to_be_visible()
 
     # Check table
-    expect(page.locator(".dvn-scroller")).to_be_visible()
-    table = page.locator("//table[@role='grid']")
+    table = page.locator(".dvn-scroller")
+    table.wait_for(state="visible")
+    expect(table).to_be_visible()
+    table = page.locator("//table[@role='grid']")   # Switch to subcomponent to check cells
 
     # Headers
     EXPECTED_HEADERS = ["", "IP", "City", "Country"]
@@ -188,9 +191,43 @@ def test_password_complexity(page: Page):
 
 
 def test_ns_lookup(page: Page):
-    # TODO: empty test
-    pass
+    def run_test(domain: str, expected_result: str):
+        # Go to the main page of the Streamlit app
+        page.goto(f"http://localhost:{PORT}")
 
+        # Go to NS Lookup function
+        page.frame_locator("iframe[title=\"streamlit_antd_components\\.utils\\.component_func\\.sac\"]").get_by_role("menuitem", name=" Ns Lookup").click()
+
+        # Wait for the page to load
+        page.wait_for_selector("iframe[title=\"streamlit_antd_components\\.utils\\.component_func\\.sac\"]")
+        # Check page title
+        expect(page.get_by_role("heading", name="NS Lookup").locator("span")).to_be_visible()
+
+        # Wait for the input field to be visible on the ns_lookup subpage
+        domain_input_selector = 'input[aria-label="Enter Domain (e.g., google.com)"]'
+        domain_input = page.wait_for_selector(domain_input_selector, state="visible")
+        
+        # Fill in the domain name
+        domain_input.fill(domain)
+
+        # Simulate pressing the Enter key to submit the domain
+        page.press(domain_input_selector, "Enter")
+
+        # Wait for the Streamlit action to complete
+        page.wait_for_timeout(3000)  # Adjust this based on response time
+
+        # Check for the expected result
+        result_message = page.locator(f"text={expected_result}")
+        expect(result_message).to_have_count(1)
+
+    # Test with a valid domain name
+    run_test("google.com", "Valid Domain")
+
+    # Test with an empty input
+    run_test("", "Please enter a domain.")
+
+    # Test with a non-existent domain
+    run_test("nonexistentdomain123456789.com", "Domain does not exist.")
 
 def test_ping(page: Page):
     # TODO: empty test
