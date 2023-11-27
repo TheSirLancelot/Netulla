@@ -54,10 +54,10 @@
 
 | Task                              | Assignee       | Description                                           |
 | --------------------------------- | -------------- | ----------------------------------------------------- |
-| <li>- [ ] WHOIS</li>              | William Weir   | Queries registration information for an IP address    |
-| <li>- [ ] Password Generator</li> | Tyler Wilson   | Generates a password using specified complexity rules |
+| <li>- [x] WHOIS</li>              | William Weir   | Queries registration information for an IP address    |
+| <li>- [x] Password Generator</li> | Tyler Wilson   | Generates a password using specified complexity rules |
 | <li>- [x] HTTP Header Tool</li>   | Tristan Young  | Inspect a server's HTTP response header               |
-| <li>- [ ] Online WGET Tool</li>   | Tyree Maeser   | Display a website without rendering it                |
+| <li>- [x] Online WGET Tool</li>   | Tyree Maeser   | Display a website without rendering it                |
 | <li>- [ ] Reverse IP Lookup</li>  | Reynaldo Veras | Identify domain name(s) associated with an IP         |
 
 ### Phase 3 (05 Dec 2023)
@@ -75,9 +75,9 @@
 -   [x] Test Plan (07 Nov 2023)
 -   [x] Peer Review 1 (10 Nov 2023)
 -   [x] Project Design (14 Nov 2023)
--   [ ] Phase 1 Source (21 Nov 2023)
--   [ ] Peer Review 2 (24 Nov 2023)
--   [ ] Phase 2 Source (28 Nov 2023)
+-   [x] Phase 1 Source (21 Nov 2023)
+-   [x] Peer Review 2 (24 Nov 2023)
+-   [x] Phase 2 Source (28 Nov 2023)
 -   [ ] Phase 3 Source (05 Dec 2023)
 -   [ ] Peer Review 3 (08 Dec 2023)
 -   [ ] Final Submission (12 Dec 2023)
