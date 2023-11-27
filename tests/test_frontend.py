@@ -251,7 +251,6 @@ def test_whois_lookup(page: Page):
     def enter_address(address):
         page.get_by_label("Enter URL or IP address").click()
         page.get_by_label("Enter URL or IP address").fill(address)
-        page.get_by_test_id("baseButton-secondary").click()
 
     # Go to NS Lookup function
     page.frame_locator(
