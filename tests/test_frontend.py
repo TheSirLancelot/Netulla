@@ -251,6 +251,7 @@ def test_whois_lookup(page: Page):
     def enter_address(address):
         page.get_by_label("Enter URL or IP address").click()
         page.get_by_label("Enter URL or IP address").fill(address)
+        page.keyboard.press("Enter")
 
     # Go to Whois Lookup function
     page.frame_locator(
