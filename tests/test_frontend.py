@@ -252,7 +252,7 @@ def test_whois_lookup(page: Page):
         page.get_by_label("Enter URL or IP address").click()
         page.get_by_label("Enter URL or IP address").fill(address)
 
-    # Go to NS Lookup function
+    # Go to Whois Lookup function
     page.frame_locator(
         'iframe[title="streamlit_antd_components\\.utils\\.component_func\\.sac"]'
     ).get_by_role("menuitem", name=" Whois Lookup").click()
