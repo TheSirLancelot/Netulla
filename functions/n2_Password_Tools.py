@@ -1,5 +1,6 @@
 import streamlit as st
-
+import random
+import string
 
 # Password Complexity Function
 def password_complexity():
@@ -56,10 +57,42 @@ def password_complexity():
         complexity = check_password_complexity(user_input)
         st.write(f"Password Complexity: {complexity}")
 
+def password_generator():
+    st.title('Password Generator')
+
+    # Password length slider
+    password_length = st.slider('Select password length', min_value=6, max_value=20, value=8)
+
+    # Complexity options
+    include_uppercase = st.checkbox('Include Uppercase Letters', value=True)
+    include_lowercase = st.checkbox('Include Lowercase Letters', value=True)
+    include_numbers = st.checkbox('Include Numbers', value=True)
+    include_special_chars = st.checkbox('Include Special Characters', value=False)
+
+    # Number of passwords, easily changed
+    num_passwords = st.number_input('How many passwords? (No more than 10)', min_value=1, max_value=10, value=1)
+
+    if st.button('Generate Passwords'):
+        characters = ''
+        if include_uppercase:
+            characters += string.ascii_uppercase
+        if include_lowercase:
+            characters += string.ascii_lowercase
+        if include_numbers:
+            characters += string.digits
+        if include_special_chars:
+            characters += string.punctuation
+
+        if characters:
+            generated_passwords = '\n'.join(''.join(random.choice(characters) for i in range(password_length)) for _ in range(num_passwords))
+            st.text_area('Generated Passwords:', generated_passwords, height=100)
+        else:
+            st.error('Please select at least one character type.')
 
 # Dictionary of subpage functions
 page2_funcs = {
-    "Password Complexity": password_complexity
+    "Password Complexity": password_complexity,
+    "Password Generator": password_generator
     # "Network Analysis": network_analysis,
     # "Subnet Calculator": subnet_calculator
 }
