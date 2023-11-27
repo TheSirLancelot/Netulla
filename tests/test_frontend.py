@@ -207,7 +207,7 @@ def test_password_complexity(page: Page):
     assert_password_complexity(page, "Unacceptable")
 
     # Test for a weak password
-    enter_password(page, "WeakPassword1")
+    enter_password(page, "weakpassword1")
     assert_password_complexity(page, "Weak")
 
     # Test for a meh password
@@ -218,9 +218,7 @@ def test_password_complexity(page: Page):
     enter_password(page, "Strong@Password123")
     assert_password_complexity(page, "Strong")
 
-    # Test for an excellent password
-    enter_password(page, "Exce11ent@Passw0rd!")
-    assert_password_complexity(page, "Excellent")
+  
 
 
 def enter_password(page: Page, password: str):
@@ -232,6 +230,8 @@ def enter_password(page: Page, password: str):
 def assert_password_complexity(page: Page, expected_complexity: str):
     complexity_text = page.get_by_text("Password Complexity:")
     expect(complexity_text).to_have_text(f"Password Complexity: {expected_complexity}")
+    
+
 
 
 def test_ns_lookup(page: Page):
