@@ -50,6 +50,9 @@ def password_complexity():
             complexity = "Meh"
         elif score <= 8:
             complexity = "Strong"
+            
+           
+
 
         return complexity
 
