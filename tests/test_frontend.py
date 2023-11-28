@@ -186,7 +186,7 @@ def test_subnet_scanner(page: Page):
         expect(row.locator("//td[@aria-colindex=4]")).not_to_be_empty()
 
 
-def test_wget(page: Page):
+def test_curl(page: Page):
     # TODO: empty test
     pass
 
