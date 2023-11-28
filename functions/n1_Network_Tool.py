@@ -26,8 +26,7 @@ def ip_geolocation():
     st.markdown("# IP Geolocation")
     # st.sidebar.header("IP Geolocation")
 
-    # TODO: Move the input boxes to the main page and off the sidebar
-    ip_address = st.sidebar.text_input(
+    ip_address = st.text_input(
         "Enter an IP Address", value="8.8.8.8", max_chars=None, key=None, type="default"
     )
 
@@ -42,9 +41,9 @@ def ip_geolocation():
         latitude = location["lat"]
         longitude = location["lon"]
 
-        st.sidebar.markdown(f"### Geolocation of IP: {ip_address}")
-        st.sidebar.markdown(f"**Latitude:** {latitude}")
-        st.sidebar.markdown(f"**Longitude:** {longitude}")
+        st.markdown(f"### Geolocation of IP: {ip_address}")
+        st.markdown(f"**Latitude:** {latitude}")
+        st.markdown(f"**Longitude:** {longitude}")
 
         # Display IP location on a map
         map_data = pd.DataFrame({"lat": [latitude], "lon": [longitude]})
@@ -73,20 +72,19 @@ def ip_geolocation():
 def network_analysis():
     st.markdown("# Network Analysis")
 
-    # TODO: Move the input boxes to the main page and off the sidebar
     # Add separator
-    st.sidebar.markdown("---")
+    st.markdown("---")
 
     # Move the ip_input to the sidebar
-    ip_input = st.sidebar.text_input("Enter IP address (e.g., 8.8.8.8, 45.33.32.156)")
+    ip_input = st.text_input("Enter IP address (e.g., 8.8.8.8, 45.33.32.156)")
 
-    well_known_ports = st.sidebar.checkbox("Scan only well-known ports")
+    well_known_ports = st.checkbox("Scan only well-known ports")
 
     # Add separator
-    st.sidebar.markdown("---")
+    st.markdown("---")
 
     # Add Execute button
-    execute = st.sidebar.button("Execute")
+    execute = st.button("Execute")
 
     # Set a boolean flag in the session state to indicate
     # whether the "Execute" button has been clicked
@@ -170,7 +168,7 @@ def network_analysis():
 
         # If scan has finished, allow user to filter ports
         if "ports_data" in st.session_state:
-            ports_filter = st.sidebar.checkbox("Show only open ports")
+            ports_filter = st.checkbox("Show only open ports")
 
             # Update the ports_data if filter is applied
             if ports_filter:
@@ -599,8 +597,8 @@ def traceroute_visualizer():
     target = st.text_input("Target IP or Domain", "")
 
     # Other UI elements
-    show_raw_output = st.sidebar.checkbox("Show Raw Output", True)
-    radius = st.sidebar.slider(
+    show_raw_output = st.checkbox("Show Raw Output", True)
+    radius = st.slider(
         "Adjust Scatter Radius", min_value=0, max_value=30000, value=30000, step=1000
     )
 
