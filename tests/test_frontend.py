@@ -128,7 +128,9 @@ def test_certificate_lookup(page: Page):
     ).get_by_role("menuitem", name=" Certificate Lookup").click()
 
     # Check page title
-    expect(page.get_by_role("heading", name="Certificate Lookup").locator("span")).to_be_visible()
+    expect(
+        page.get_by_role("heading", name="Certificate Lookup").locator("span")
+    ).to_be_visible()
 
     # Invalid input - empty domain
     enter_domain_and_submit("")
@@ -138,12 +140,12 @@ def test_certificate_lookup(page: Page):
     expect(error).to_be_visible()
     expect(error).to_have_text("Please enter a URL before clicking the button.")
 
-    # Valid input - example.com
-    enter_domain_and_submit("example.com")
+    # Valid input - www.google.com
+    enter_domain_and_submit("www.google.com")
 
-    # Check for the entered URL
-    entered_url_input = page.get_by_label("Enter a URL (e.g., google.com)")
-    expect(entered_url_input).to_have_value("example.com")
+    # Check to make sure there isn't an error
+    error = page.get_by_test_id("stNotification")
+    expect(error).to_be_hidden()
 
 
 def test_subnet_scanner(page: Page):
@@ -244,8 +246,6 @@ def test_password_complexity(page: Page):
     enter_password(page, "Strong@Password123")
     assert_password_complexity(page, "Strong")
 
-  
-
 
 def enter_password(page: Page, password: str):
     password_input = page.get_by_label("Password:")
@@ -256,8 +256,6 @@ def enter_password(page: Page, password: str):
 def assert_password_complexity(page: Page, expected_complexity: str):
     complexity_text = page.get_by_text("Password Complexity:")
     expect(complexity_text).to_have_text(f"Password Complexity: {expected_complexity}")
-    
-
 
 
 def test_ns_lookup(page: Page):
