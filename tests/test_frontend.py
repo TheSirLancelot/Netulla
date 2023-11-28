@@ -49,7 +49,7 @@ def test_http_header_tool(page: Page):
 
     page.frame_locator(
         'iframe[title="streamlit_antd_components\\.utils\\.component_func\\.sac"]'
-    ).get_by_role("menuitem", name=" HTTP Header Tool").click()
+    ).get_by_role("menuitem", name="HTTP Header Tool").click()
 
     # Check page title
     expect(
@@ -128,7 +128,7 @@ def test_subnet_scanner(page: Page):
 
     page.frame_locator(
         'iframe[title="streamlit_antd_components\\.utils\\.component_func\\.sac"]'
-    ).get_by_role("menuitem", name=" Subnet Scanner").click()
+    ).get_by_role("menuitem", name="Subnet Scanner").click()
 
     # Invalid input - not IP
     enter_ip("1.2.3")
@@ -195,7 +195,7 @@ def test_password_complexity(page: Page):
     # Go to Password Complexity function
     page.frame_locator(
         'iframe[title="streamlit_antd_components\\.utils\\.component_func\\.sac"]'
-    ).get_by_role("menuitem", name=" Password Complexity").click()
+    ).get_by_role("menuitem", name="Password Complexity").click()
 
     # Check page title
     expect(
@@ -218,8 +218,6 @@ def test_password_complexity(page: Page):
     enter_password(page, "Strong@Password123")
     assert_password_complexity(page, "Strong")
 
-  
-
 
 def enter_password(page: Page, password: str):
     password_input = page.get_by_label("Password:")
@@ -230,8 +228,6 @@ def enter_password(page: Page, password: str):
 def assert_password_complexity(page: Page, expected_complexity: str):
     complexity_text = page.get_by_text("Password Complexity:")
     expect(complexity_text).to_have_text(f"Password Complexity: {expected_complexity}")
-    
-
 
 
 def test_ns_lookup(page: Page):
@@ -242,7 +238,7 @@ def test_ns_lookup(page: Page):
         # Go to NS Lookup function
         page.frame_locator(
             'iframe[title="streamlit_antd_components\\.utils\\.component_func\\.sac"]'
-        ).get_by_role("menuitem", name=" Ns Lookup").click()
+        ).get_by_role("menuitem", name="Ns Lookup").click()
 
         # Wait for the page to load
         page.wait_for_selector(
@@ -294,7 +290,7 @@ def test_whois_lookup(page: Page):
     # Go to Whois Lookup function
     page.frame_locator(
         'iframe[title="streamlit_antd_components\\.utils\\.component_func\\.sac"]'
-    ).get_by_role("menuitem", name=" Whois Lookup").click()
+    ).get_by_role("menuitem", name="Whois Lookup").click()
 
     # Check page title
     expect(
