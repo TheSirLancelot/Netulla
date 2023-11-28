@@ -25,7 +25,6 @@ def ip_geolocation():
     st.markdown("# IP Geolocation")
     # st.sidebar.header("IP Geolocation")
 
-    # TODO: Move the input boxes to the main page and off the sidebar
     ip_address = st.text_input(
         "Enter an IP Address", value="8.8.8.8", max_chars=None, key=None, type="default"
     )
@@ -72,7 +71,6 @@ def ip_geolocation():
 def network_analysis():
     st.markdown("# Network Analysis")
 
-    # TODO: Move the input boxes to the main page and off the sidebar
     # Add separator
     st.markdown("---")
 
