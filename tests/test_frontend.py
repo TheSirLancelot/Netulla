@@ -249,8 +249,46 @@ def test_wget(page: Page):
 
 
 def test_password_complexity(page: Page):
-    # TODO: empty test
-    pass
+    # Go to Password Complexity function
+    page.frame_locator(
+        'iframe[title="streamlit_antd_components\\.utils\\.component_func\\.sac"]'
+    ).get_by_role("menuitem", name=" Password Complexity").click()
+
+    # Check page title
+    expect(
+        page.get_by_role("heading", name="Password Complexity Checker").locator("span")
+    ).to_be_visible()
+
+    # Test for an unacceptable password
+    enter_password(page, "short")
+    assert_password_complexity(page, "Unacceptable")
+
+    # Test for a weak password
+    enter_password(page, "weakpassword")
+    assert_password_complexity(page, "Weak")
+
+    # Test for a meh password
+    enter_password(page, "MehPassword123")
+    assert_password_complexity(page, "Meh")
+
+    # Test for a strong password
+    enter_password(page, "Strong@Password123")
+    assert_password_complexity(page, "Strong")
+
+  
+
+
+def enter_password(page: Page, password: str):
+    password_input = page.get_by_label("Password:")
+    password_input.fill(password)
+    page.keyboard.press("Enter")  # needed since you don't have a button
+
+
+def assert_password_complexity(page: Page, expected_complexity: str):
+    complexity_text = page.get_by_text("Password Complexity:")
+    expect(complexity_text).to_have_text(f"Password Complexity: {expected_complexity}")
+    
+
 
 
 def test_ns_lookup(page: Page):
