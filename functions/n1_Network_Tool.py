@@ -646,25 +646,28 @@ def http_header_tool():
         except requests.exceptions.RequestException:
             st.error("Site doesn't exist or connection cannot be made at this time.")
             
-def online_wget_tool():
-    st.markdown("# Online WGET Tool")
-    
-    # Input field for the user to enter a URL
-    url = st.text_input("Enter URL:", "")
+def online_curl_tool():
+    st.markdown("# Online Curl Tool")
 
-    # Button to send the WGET request
-    if st.button("Send WGET Request"):
+    # Input field for the user to enter a URL
+    url = st.text_input("Enter URL: https://www.example.com", "")
+
+    # Button to send the curl request
+    if st.button("Send Curl Request"):
         if url:
             try:
-                # Use subprocess to run a WGET command and capture the output
-                result = subprocess.check_output(["wget", url], stderr=subprocess.STDOUT, text=True)
-                st.write("WGET Response:")
-                st.text(result)
+                # Use subprocess to run a curl command and capture the output
+                result = subprocess.check_output(
+                    ["curl", url], stderr=subprocess.STDOUT, text=True # use curl instad of wget
+                )
+                st.write("Curl Response:")
+                st.code(result, "cshtml") # display a code block with cshtml syntax-highlighting
             except subprocess.CalledProcessError as e:
-                st.error("Error:", e.output)
-
-    # Display a sample URL for testing
-    st.write("Sample URL: https://www.example.com")           
+                # we receive all stdout and it looks bad, so just check if we couldn't resolve it
+                if "Could not resolve host" in e.output: 
+                    st.error("Could not resolve host. Please try again.")
+                else: # we don't know what happened.
+                    st.error("An unknown error has occured. Please try again.")           
 
 def validate_ip_address(ip_string):
     try:
@@ -700,7 +703,7 @@ page1_funcs = {
     "Certificate Lookup": certificate_lookup,
     "NS Lookup": ns_lookup,
     "Subnet Scanner": subnet_scanner,
-    "Online WGET Tool": online_wget_tool,
+    "Online Curl Tool": online_curl_tool,
     "HTTP Header Tool": http_header_tool,
     "Whois Lookup": whois_lookup,
 }

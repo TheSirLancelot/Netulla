@@ -214,9 +214,25 @@ def test_subnet_scanner(page: Page):
         expect(row.locator("//td[@aria-colindex=4]")).not_to_be_empty()
 
 
-def test_wget(page: Page):
-    # TODO: empty test
-    pass
+# Test for the online_curl_tool function
+def test_curl(page: Page):
+    # Access the Online Curl Tool
+    page.frame_locator(
+        'iframe[title="streamlit_antd_components\\.utils\\.component_func\\.sac"]'
+    ).get_by_role("menuitem", name=" Online Curl Tool").click()
+
+    # Check page title
+    expect(
+        page.get_by_role("heading", name="Online Curl Tool").locator("span")
+    ).to_be_visible()
+
+    # Enter a valid URL and click the button
+    page.get_by_label("Enter URL: https://www.example.com").fill("https://www.google.com")
+    page.get_by_test_id("baseButton-secondary").click()
+
+    # Check for the absence of error message
+    error = page.get_by_test_id("stNotification")
+    expect(error).to_be_hidden()
 
 
 def test_password_complexity(page: Page):
