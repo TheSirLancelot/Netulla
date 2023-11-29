@@ -1,7 +1,7 @@
 # Specifies base image
 FROM python:3.11.6-slim-bookworm
 # Install nmap
-RUN apt-get update && apt-get install -y nmap mtr
+RUN apt-get update && apt-get install -y nmap mtr curl
 # Set working directory inside container to /app (subsequent commands are executed here)
 WORKDIR /app
 # Copies requirements.txt file from host system into current directory (./) in the image
