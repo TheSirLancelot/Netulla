@@ -57,9 +57,14 @@ This document is the User Guide for Netulla, A web-based suite of multi-function
 
 ## Subnet Scan
 
-- Author:
-- Description:
+- Author: [Tristan Young](https://github.com/tyoung-99)
+- Description: This tool scans a subnetwork to determine the location of each webserver on it. This involves breaking apart the IP into its network ID and host ID, then iterating through every possible host ID using the same network ID. This allows the tool to identify and locate every possible host on the subnet.
 - Usage:
+  1. From the Netulla home page, click the Subnet Scanner link in the sidebar.
+  2. Enter an IP address in the subnet you would like to scan and press `Enter`.
+  3. If the IP address entered is valid, the tool will scan the subnet and identify the location of each webserver, then display the results below.
+     - The results are displayed both on a navigable map of the world, and in a table listed by IP, city, and country.
+  4. To scan additional subnets, replace the data entered in the text box and press `Enter` again.
 
 ## IP Geolocation
 
@@ -91,9 +96,13 @@ This document is the User Guide for Netulla, A web-based suite of multi-function
 
 ## HTTP Header Tool
 
-- Author:
-- Description:
+- Author: [Tristan Young](https://github.com/tyoung-99)
+- Description: This tool retrieves and displays the HTTP response headers from a server, based on a URL or IP. HTTP response headers provide additional information about the response being sent back from the server. This can include the server type or location, policies related to the server or response, the date and time of the response, and a variety of other information.
 - Usage:
+  1. From the Netulla home page, click the Http Header Tool link in the sidebar.
+  2. Enter the URL or IP address you would like to get the headers from and click the "Send Request" button. (Make sure to include "http://" or "https://" when entering a URL.)
+  3. If the URL or IP address entered is valid, that site's headers will be displayed below.
+  4. To make additional requests, replace the data entered in the text box and click "Send Request" again.
 
 ## Online WGET Tool
 
@@ -101,11 +110,16 @@ This document is the User Guide for Netulla, A web-based suite of multi-function
 - Description:
 - Usage:
 
-## Ping
+## Website Ping
 
-- Author:
-- Description:
+- Author: [Tristan Young](https://github.com/tyoung-99)
+- Description: This tool attempts to ping a website to determine if it is up or down. If it is up, it can also determine if there may be difficulties accessing the site due to the level of success in pinging it. Pinging a website involves attempting to send data to it and waiting for a response to that data. If the server replies to all attempts, the test was successful and the website is up. If the server replies to no attempts, the test has failed and the website is down. If the server replied to some, but not all, attempts, there will likely be problems accessing the site.
 - Usage:
+  1. From the Netulla home page, click the Website Ping link in the sidebar.
+  2. Enter the domain name or IP address you would like to ping and press `Enter`. (Make sure to use just a domain, not a full URL, for example - google.com.)
+  3. If the domain or IP address entered is valid, the tool will attempt to ping it and will display the result below.
+     - The overall result is displayed primarily. To see the individual ping attempts, click the "See individual replies" box to expand it.
+  4. To ping additional websites, replace the data entered in the text box and press `Enter` again.
 
 ## What Is My IP
 
