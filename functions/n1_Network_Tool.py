@@ -20,7 +20,6 @@ from pythonping import ping
 import whois
 
 
-
 def ip_geolocation():
     # st.set_page_config(page_title="IP Geolocation", page_icon="🕸")
 
@@ -420,7 +419,6 @@ def subnet_scanner():
         st.error("Please enter an IP address.")
 
 
-
 def traceroute_visualizer():
     # Function to calculate initial zoom
     def calculate_initial_zoom(max_lat, min_lat, max_lon, min_lon):
@@ -646,7 +644,8 @@ def http_header_tool():
             st.error("Request timed out. Please try again later.")
         except requests.exceptions.RequestException:
             st.error("Site doesn't exist or connection cannot be made at this time.")
-            
+
+
 def online_curl_tool():
     st.markdown("# Online Curl Tool")
 
@@ -659,16 +658,25 @@ def online_curl_tool():
             try:
                 # Use subprocess to run a curl command and capture the output
                 result = subprocess.check_output(
-                    ["curl", url], stderr=subprocess.STDOUT, text=True # use curl instad of wget
+                    ["curl", url],
+                    stderr=subprocess.STDOUT,
+                    text=True,  # use curl instad of wget
                 )
+                if "<!" in result:
+                    result = result[
+                        result.find("<!") :
+                    ]  # getting send/recv stats out of there
                 st.write("Curl Response:")
-                st.code(result, "cshtml") # display a code block with cshtml syntax-highlighting
+                st.code(
+                    result, "cshtml"
+                )  # display a code block with cshtml syntax-highlighting
             except subprocess.CalledProcessError as e:
                 # we receive all stdout and it looks bad, so just check if we couldn't resolve it
-                if "Could not resolve host" in e.output: 
+                if "Could not resolve host" in e.output:
                     st.error("Could not resolve host. Please try again.")
-                else: # we don't know what happened.
-                    st.error("An unknown error has occured. Please try again.")           
+                else:  # we don't know what happened.
+                    st.error("An unknown error has occured. Please try again.")
+
 
 def validate_ip_address(ip_string):
     try:
@@ -694,6 +702,7 @@ def whois_lookup():
         else:
             st.error("Please enter a valid URL or IP address")
 
+
 def website_ping():
     st.markdown("# Website Ping")
     address = st.text_input("Enter domain name or IP address", "")
@@ -704,7 +713,9 @@ def website_ping():
             if response.success(option=3):
                 st.write(":heavy_check_mark: :green[Success. Website is up.]")
             elif response.success(option=1):
-                st.write(":heavy_exclamation_mark: :orange[Partial Success. Website is up but experiencing difficulties.]")
+                st.write(
+                    ":heavy_exclamation_mark: :orange[Partial Success. Website is up but experiencing difficulties.]"
+                )
             else:
                 st.write(":heavy_multiplication_x: :red[Failure. Website is down.]")
 
