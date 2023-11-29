@@ -646,6 +646,38 @@ def http_header_tool():
             st.error("Site doesn't exist or connection cannot be made at this time.")
 
 
+def online_curl_tool():
+    st.markdown("# Online Curl Tool")
+
+    # Input field for the user to enter a URL
+    url = st.text_input("Enter URL: https://www.example.com", "")
+
+    # Button to send the curl request
+    if st.button("Send Curl Request"):
+        if url:
+            try:
+                # Use subprocess to run a curl command and capture the output
+                result = subprocess.check_output(
+                    ["curl", url],
+                    stderr=subprocess.STDOUT,
+                    text=True,  # use curl instad of wget
+                )
+                if "<!" in result:
+                    result = result[
+                        result.find("<!") :
+                    ]  # getting send/recv stats out of there
+                st.write("Curl Response:")
+                st.code(
+                    result, "cshtml"
+                )  # display a code block with cshtml syntax-highlighting
+            except subprocess.CalledProcessError as e:
+                # we receive all stdout and it looks bad, so just check if we couldn't resolve it
+                if "Could not resolve host" in e.output:
+                    st.error("Could not resolve host. Please try again.")
+                else:  # we don't know what happened.
+                    st.error("An unknown error has occured. Please try again.")
+
+
 def validate_ip_address(ip_string):
     try:
         ip_object = ipaddress.ip_address(ip_string)
@@ -670,6 +702,7 @@ def whois_lookup():
         else:
             st.error("Please enter a valid URL or IP address")
 
+
 def website_ping():
     st.markdown("# Website Ping")
     address = st.text_input("Enter domain name or IP address", "")
@@ -680,7 +713,9 @@ def website_ping():
             if response.success(option=3):
                 st.write(":heavy_check_mark: :green[Success. Website is up.]")
             elif response.success(option=1):
-                st.write(":heavy_exclamation_mark: :orange[Partial Success. Website is up but experiencing difficulties.]")
+                st.write(
+                    ":heavy_exclamation_mark: :orange[Partial Success. Website is up but experiencing difficulties.]"
+                )
             else:
                 st.write(":heavy_multiplication_x: :red[Failure. Website is down.]")
 
@@ -704,6 +739,7 @@ page1_funcs = {
     "Certificate Lookup": certificate_lookup,
     "NS Lookup": ns_lookup,
     "Subnet Scanner": subnet_scanner,
+    "Online Curl Tool": online_curl_tool,
     "HTTP Header Tool": http_header_tool,
     "Whois Lookup": whois_lookup,
     "Website Ping": website_ping,

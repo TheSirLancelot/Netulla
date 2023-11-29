@@ -116,8 +116,36 @@ def test_regex_tester(page: Page):
 
 
 def test_certificate_lookup(page: Page):
-    # TODO: empty test
-    pass
+    def enter_domain_and_submit(domain):
+        # Enter the domain into the text input
+        page.get_by_label("Enter a URL (e.g., google.com)").fill(domain)
+        # Click the "Get Certificate" button
+        page.get_by_test_id("baseButton-secondary").click()
+
+    # Access the Certificate Lookup tool
+    page.frame_locator(
+        'iframe[title="streamlit_antd_components\\.utils\\.component_func\\.sac"]'
+    ).get_by_role("menuitem", name=" Certificate Lookup").click()
+
+    # Check page title
+    expect(
+        page.get_by_role("heading", name="Certificate Lookup").locator("span")
+    ).to_be_visible()
+
+    # Invalid input - empty domain
+    enter_domain_and_submit("")
+
+    # Check error message for empty domain
+    error = page.get_by_test_id("stNotification")
+    expect(error).to_be_visible()
+    expect(error).to_have_text("Please enter a URL before clicking the button.")
+
+    # Valid input - www.google.com
+    enter_domain_and_submit("www.google.com")
+
+    # Check to make sure there isn't an error
+    error = page.get_by_test_id("stNotification")
+    expect(error).to_be_hidden()
 
 
 def test_subnet_scanner(page: Page):
@@ -186,9 +214,25 @@ def test_subnet_scanner(page: Page):
         expect(row.locator("//td[@aria-colindex=4]")).not_to_be_empty()
 
 
+# Test for the online_curl_tool function
 def test_curl(page: Page):
-    # TODO: empty test
-    pass
+    # Access the Online Curl Tool
+    page.frame_locator(
+        'iframe[title="streamlit_antd_components\\.utils\\.component_func\\.sac"]'
+    ).get_by_role("menuitem", name=" Online Curl Tool").click()
+
+    # Check page title
+    expect(
+        page.get_by_role("heading", name="Online Curl Tool").locator("span")
+    ).to_be_visible()
+
+    # Enter a valid URL and click the button
+    page.get_by_label("Enter URL: https://www.example.com").fill("https://www.google.com")
+    page.get_by_test_id("baseButton-secondary").click()
+
+    # Check for the absence of error message
+    error = page.get_by_test_id("stNotification")
+    expect(error).to_be_hidden()
 
 
 def test_password_complexity(page: Page):
