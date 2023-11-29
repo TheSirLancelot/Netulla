@@ -277,8 +277,50 @@ def test_ns_lookup(page: Page):
 
 
 def test_ping(page: Page):
-    # TODO: empty test
-    pass
+    def enter_address(address):
+        page.get_by_label("Enter domain name or IP address").click()
+        page.get_by_label("Enter domain name or IP address").fill(address)
+        page.get_by_label("Enter domain name or IP address").press("Enter")
+
+    def assert_invalid(expected):
+        error = page.get_by_test_id("stNotification")
+        error.wait_for(state="visible")
+        expect(error).to_be_visible()
+        expect(error).to_have_text(expected)
+
+    def assert_valid():
+        # If summary exists, success/failure message also exists, but success/failure message can't be tested b/c website might be up or down and locator depends on text
+        summary = page.locator("summary")
+        summary.wait_for(state="visible")
+        expect(summary).to_be_visible()
+        summary.click()
+        expect(page.get_by_test_id("stExpanderDetails")).to_be_visible()
+
+    page.frame_locator(
+        'iframe[title="streamlit_antd_components\\.utils\\.component_func\\.sac"]'
+    ).get_by_role("menuitem", name="Website Ping").click()
+
+    # Check page title
+    expect(
+        page.get_by_role("heading", name="Website Ping").locator("span")
+    ).to_be_visible()
+
+    # Check invalid inputs
+    enter_address("http://www.google.com") # URL, not domain
+    assert_invalid("Invalid domain name or IP address.")
+
+    enter_address("notasite.com")
+    assert_invalid("Invalid domain name or IP address.")
+
+    enter_address("8.8.8.257")
+    assert_invalid("Invalid domain name or IP address.")
+
+    # Check valid inputs
+    enter_address("google.com")
+    assert_valid()
+
+    enter_address("8.8.8.8")
+    assert_valid()
 
 
 def test_whois_lookup(page: Page):

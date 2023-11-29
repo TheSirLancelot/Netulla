@@ -16,6 +16,7 @@ from ip2geotools.databases.noncommercial import (
     InvalidRequestError,
     LimitExceededError,
 )
+from pythonping import ping
 import whois
 
 
@@ -669,6 +670,30 @@ def whois_lookup():
         else:
             st.error("Please enter a valid URL or IP address")
 
+def website_ping():
+    st.markdown("# Website Ping")
+    address = st.text_input("Enter domain name or IP address", "")
+
+    if address:
+        try:
+            response = ping(address)
+            if response.success(option=3):
+                st.write(":heavy_check_mark: :green[Success. Website is up.]")
+            elif response.success(option=1):
+                st.write(":heavy_exclamation_mark: :orange[Partial Success. Website is up but experiencing difficulties.]")
+            else:
+                st.write(":heavy_multiplication_x: :red[Failure. Website is down.]")
+
+            with st.expander("See individual replies"):
+                for line in response:
+                    if line.success:
+                        st.write(f":green[{line}]")
+                    else:
+                        st.write(f":red[{line}]")
+
+        except RuntimeError:
+            st.error("Invalid domain name or IP address.")
+
 
 # Dictionary of subpage functions
 page1_funcs = {
@@ -681,4 +706,5 @@ page1_funcs = {
     "Subnet Scanner": subnet_scanner,
     "HTTP Header Tool": http_header_tool,
     "Whois Lookup": whois_lookup,
+    "Website Ping": website_ping,
 }
