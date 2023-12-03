@@ -183,8 +183,9 @@ def test_subnet_scanner(page: Page):
 
     # Check map
     # TODO: Make test work for checking map, currently hangs forever b/c map never appears in GitHub
-    # ip_map = page.locator("#view-default-view")
-    # expect(ip_map).to_be_visible()
+    ip_map = page.locator("#view-default-view")
+    ip_map.wait_for(state="visible")
+    expect(ip_map).to_be_visible()
 
     # Check table
     table = page.locator(".dvn-scroller")
