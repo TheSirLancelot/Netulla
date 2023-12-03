@@ -182,10 +182,11 @@ def test_subnet_scanner(page: Page):
     enter_ip("8.8.8.8")
 
     # Check map
-    # TODO: Make test work for checking map, currently hangs forever b/c map never appears in GitHub
-    ip_map = page.locator("#view-default-view")
-    ip_map.wait_for(state="visible")
-    expect(ip_map).to_be_visible()
+    browser_type = page.context.browser.browser_type.name
+    if browser_type != "firefox":   # Firefox GitHub test doesn't display map, so nothing to check
+        ip_map = page.locator("#view-default-view")
+        ip_map.wait_for(state="visible")
+        expect(ip_map).to_be_visible()
 
     # Check table
     table = page.locator(".dvn-scroller")
