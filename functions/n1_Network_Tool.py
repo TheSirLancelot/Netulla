@@ -11,6 +11,8 @@ import nmap
 import plotly.express as px
 import dns.resolver
 import dns.reversename
+
+
 from ip2geotools.databases.noncommercial import (
     DbIpCity,
     InvalidRequestError,
@@ -672,6 +674,30 @@ def whois_lookup():
             st.error("Please enter a valid URL or IP address")
 
 
+
+
+
+
+
+
+
+
+def regex_tester(regex_pattern="", input_data=""):
+    st.title("Regex Tester")
+
+    st.write("Enter a regex pattern and input data to test:")
+    regex_pattern = st.text_area("Regex Pattern", regex_pattern)
+    input_data = st.text_area("Input Data", input_data)
+
+    if st.button("Test Regex"):
+        try:
+            matches = re.finditer(regex_pattern, input_data)
+            match_list = [match.group() for match in matches]
+            st.write("Matches:", match_list)
+        except re.error as e:
+            st.error(f"Regex Error: {e}")
+
+
 # Dictionary of subpage functions
 page1_funcs = {
     "IP Geolocation": ip_geolocation,
@@ -683,4 +709,5 @@ page1_funcs = {
     "Subnet Scanner": subnet_scanner,
     "HTTP Header Tool": http_header_tool,
     "Whois Lookup": whois_lookup,
+    "Regex Tester": regex_tester,
 }
