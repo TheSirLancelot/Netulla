@@ -142,9 +142,11 @@ This document is the User Guide for Netulla, A web-based suite of multi-function
 
 ## Regex Tester
 
-- Author:
-- Description:
-- Usage:
+- Author: Reynaldo Veras
+- Description: In the script's main block, you can then test the regex_tester function. It prompts the user to enter a regex pattern and the data to match against. The script then prints the resulting matches or an error message if there was an issue with the regex pattern.
+
+
+- Usage: This simple command-line-based regex tester allows you to quickly test regex patterns against input data and view the matching results. You can run the script, input your regex pattern and data, and observe the matched portions.
 
 # Password Tools
 
