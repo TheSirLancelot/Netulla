@@ -18,34 +18,42 @@ from ip2geotools.databases.noncommercial import (
     InvalidRequestError,
     LimitExceededError,
 )
+from pythonping import ping
 import whois
 
 
 def ip_geolocation():
-    # st.set_page_config(page_title="IP Geolocation", page_icon="🕸")
+    # Function to get the public IP address using an external service
+    def get_public_ip():
+        try:
+            # Using curl to fetch the IP address from ipify API, suppressing output
+            result = subprocess.run(['curl', 'https://api.ipify.org'], 
+                                    stdout=subprocess.PIPE, 
+                                    stderr=subprocess.DEVNULL,
+                                    check=False)
+            return result.stdout.decode('utf-8').strip()
+        except subprocess.SubprocessError:
+            st.error("Failed to fetch the public IP address.")
+            return None
 
-    st.markdown("# IP Geolocation")
-    # st.sidebar.header("IP Geolocation")
-
-    # TODO: Move the input boxes to the main page and off the sidebar
-    ip_address = st.sidebar.text_input(
-        "Enter an IP Address", value="8.8.8.8", max_chars=None, key=None, type="default"
-    )
-
-    @st.cache_data
+    # Function to get the geolocation of an IP address
+    @st.cache_resource
     def get_geolocation(ip_address):
         response = requests.get(f"http://ip-api.com/json/{ip_address}", timeout=5)
         response.raise_for_status()  # Ensure we got a valid response
         return response.json()
 
+    st.markdown("# IP Geolocation")
+
+    ip_address = get_public_ip()
     if ip_address:
         location = get_geolocation(ip_address)
         latitude = location["lat"]
         longitude = location["lon"]
 
-        st.sidebar.markdown(f"### Geolocation of IP: {ip_address}")
-        st.sidebar.markdown(f"**Latitude:** {latitude}")
-        st.sidebar.markdown(f"**Longitude:** {longitude}")
+        st.markdown(f"### Geolocation of IP: {ip_address}")
+        st.markdown(f"**Latitude:** {latitude}")
+        st.markdown(f"**Longitude:** {longitude}")
 
         # Display IP location on a map
         map_data = pd.DataFrame({"lat": [latitude], "lon": [longitude]})
@@ -57,7 +65,7 @@ def ip_geolocation():
             get_radius=1000,
         )
 
-        # Set the initial view, https://deckgl.readthedocs.io/en/latest/view_state.html
+        # Set the initial view
         view_state = pdk.ViewState(
             latitude=latitude,
             longitude=longitude,
@@ -68,26 +76,25 @@ def ip_geolocation():
         # Render the deck.gl map in the Streamlit app as a PyDeck chart
         st.pydeck_chart(pdk.Deck(layers=[layer], initial_view_state=view_state))
     else:
-        st.error("Please enter an IP address.")
+        st.error("Failed to determine the IP address.")
 
 
 def network_analysis():
     st.markdown("# Network Analysis")
 
-    # TODO: Move the input boxes to the main page and off the sidebar
     # Add separator
-    st.sidebar.markdown("---")
+    st.markdown("---")
 
     # Move the ip_input to the sidebar
-    ip_input = st.sidebar.text_input("Enter IP address (e.g., 8.8.8.8, 45.33.32.156)")
+    ip_input = st.text_input("Enter IP address (e.g., 8.8.8.8, 45.33.32.156)")
 
-    well_known_ports = st.sidebar.checkbox("Scan only well-known ports")
+    well_known_ports = st.checkbox("Scan only well-known ports")
 
     # Add separator
-    st.sidebar.markdown("---")
+    st.markdown("---")
 
     # Add Execute button
-    execute = st.sidebar.button("Execute")
+    execute = st.button("Execute")
 
     # Set a boolean flag in the session state to indicate
     # whether the "Execute" button has been clicked
@@ -171,7 +178,7 @@ def network_analysis():
 
         # If scan has finished, allow user to filter ports
         if "ports_data" in st.session_state:
-            ports_filter = st.sidebar.checkbox("Show only open ports")
+            ports_filter = st.checkbox("Show only open ports")
 
             # Update the ports_data if filter is applied
             if ports_filter:
@@ -599,8 +606,8 @@ def traceroute_visualizer():
     target = st.text_input("Target IP or Domain", "")
 
     # Other UI elements
-    show_raw_output = st.sidebar.checkbox("Show Raw Output", True)
-    radius = st.sidebar.slider(
+    show_raw_output = st.checkbox("Show Raw Output", True)
+    radius = st.slider(
         "Adjust Scatter Radius", min_value=0, max_value=30000, value=30000, step=1000
     )
 
@@ -649,6 +656,38 @@ def http_header_tool():
             st.error("Site doesn't exist or connection cannot be made at this time.")
 
 
+def online_curl_tool():
+    st.markdown("# Online Curl Tool")
+
+    # Input field for the user to enter a URL
+    url = st.text_input("Enter URL: https://www.example.com", "")
+
+    # Button to send the curl request
+    if st.button("Send Curl Request"):
+        if url:
+            try:
+                # Use subprocess to run a curl command and capture the output
+                result = subprocess.check_output(
+                    ["curl", url],
+                    stderr=subprocess.STDOUT,
+                    text=True,  # use curl instad of wget
+                )
+                if "<!" in result:
+                    result = result[
+                        result.find("<!") :
+                    ]  # getting send/recv stats out of there
+                st.write("Curl Response:")
+                st.code(
+                    result, "cshtml"
+                )  # display a code block with cshtml syntax-highlighting
+            except subprocess.CalledProcessError as e:
+                # we receive all stdout and it looks bad, so just check if we couldn't resolve it
+                if "Could not resolve host" in e.output:
+                    st.error("Could not resolve host. Please try again.")
+                else:  # we don't know what happened.
+                    st.error("An unknown error has occured. Please try again.")
+
+
 def validate_ip_address(ip_string):
     try:
         ip_object = ipaddress.ip_address(ip_string)
@@ -672,6 +711,33 @@ def whois_lookup():
                 st.markdown(f"```{key}: {whois_result[key]}```")
         else:
             st.error("Please enter a valid URL or IP address")
+
+
+def website_ping():
+    st.markdown("# Website Ping")
+    address = st.text_input("Enter domain name or IP address", "")
+
+    if address:
+        try:
+            response = ping(address)
+            if response.success(option=3):
+                st.write(":heavy_check_mark: :green[Success. Website is up.]")
+            elif response.success(option=1):
+                st.write(
+                    ":heavy_exclamation_mark: :orange[Partial Success. Website is up but experiencing difficulties.]"
+                )
+            else:
+                st.write(":heavy_multiplication_x: :red[Failure. Website is down.]")
+
+            with st.expander("See individual replies"):
+                for line in response:
+                    if line.success:
+                        st.write(f":green[{line}]")
+                    else:
+                        st.write(f":red[{line}]")
+
+        except RuntimeError:
+            st.error("Invalid domain name or IP address.")
 
 
 
@@ -707,7 +773,9 @@ page1_funcs = {
     "Certificate Lookup": certificate_lookup,
     "NS Lookup": ns_lookup,
     "Subnet Scanner": subnet_scanner,
+    "Online Curl Tool": online_curl_tool,
     "HTTP Header Tool": http_header_tool,
     "Whois Lookup": whois_lookup,
+    "Website Ping": website_ping,
     "Regex Tester": regex_tester,
 }

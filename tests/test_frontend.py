@@ -49,7 +49,7 @@ def test_http_header_tool(page: Page):
 
     page.frame_locator(
         'iframe[title="streamlit_antd_components\\.utils\\.component_func\\.sac"]'
-    ).get_by_role("menuitem", name=" HTTP Header Tool").click()
+    ).get_by_role("menuitem", name="HTTP Header Tool").click()
 
     # Check page title
     expect(
@@ -110,14 +110,42 @@ def test_http_header_tool(page: Page):
     expect(headers).to_be_visible()
 
 
-def test_reverse_ip(page: Page):
+def test_regex_tester(page: Page):
     # TODO: empty test
     pass
 
 
 def test_certificate_lookup(page: Page):
-    # TODO: empty test
-    pass
+    def enter_domain_and_submit(domain):
+        # Enter the domain into the text input
+        page.get_by_label("Enter a URL (e.g., google.com)").fill(domain)
+        # Click the "Get Certificate" button
+        page.get_by_test_id("baseButton-secondary").click()
+
+    # Access the Certificate Lookup tool
+    page.frame_locator(
+        'iframe[title="streamlit_antd_components\\.utils\\.component_func\\.sac"]'
+    ).get_by_role("menuitem", name=" Certificate Lookup").click()
+
+    # Check page title
+    expect(
+        page.get_by_role("heading", name="Certificate Lookup").locator("span")
+    ).to_be_visible()
+
+    # Invalid input - empty domain
+    enter_domain_and_submit("")
+
+    # Check error message for empty domain
+    error = page.get_by_test_id("stNotification")
+    expect(error).to_be_visible()
+    expect(error).to_have_text("Please enter a URL before clicking the button.")
+
+    # Valid input - www.google.com
+    enter_domain_and_submit("www.google.com")
+
+    # Check to make sure there isn't an error
+    error = page.get_by_test_id("stNotification")
+    expect(error).to_be_hidden()
 
 
 def test_subnet_scanner(page: Page):
@@ -128,7 +156,7 @@ def test_subnet_scanner(page: Page):
 
     page.frame_locator(
         'iframe[title="streamlit_antd_components\\.utils\\.component_func\\.sac"]'
-    ).get_by_role("menuitem", name=" Subnet Scanner").click()
+    ).get_by_role("menuitem", name="Subnet Scanner").click()
 
     # Invalid input - not IP
     enter_ip("1.2.3")
@@ -154,9 +182,11 @@ def test_subnet_scanner(page: Page):
     enter_ip("8.8.8.8")
 
     # Check map
-    # TODO: Make test work for checking map, currently hangs forever b/c map never appears in GitHub
-    # ip_map = page.locator("#view-default-view")
-    # expect(ip_map).to_be_visible()
+    browser_type = page.context.browser.browser_type.name
+    if browser_type != "firefox":   # Firefox GitHub test doesn't display map, so nothing to check
+        ip_map = page.locator("#view-default-view")
+        ip_map.wait_for(state="visible")
+        expect(ip_map).to_be_visible()
 
     # Check table
     table = page.locator(".dvn-scroller")
@@ -186,16 +216,32 @@ def test_subnet_scanner(page: Page):
         expect(row.locator("//td[@aria-colindex=4]")).not_to_be_empty()
 
 
-def test_wget(page: Page):
-    # TODO: empty test
-    pass
+# Test for the online_curl_tool function
+def test_curl(page: Page):
+    # Access the Online Curl Tool
+    page.frame_locator(
+        'iframe[title="streamlit_antd_components\\.utils\\.component_func\\.sac"]'
+    ).get_by_role("menuitem", name=" Online Curl Tool").click()
+
+    # Check page title
+    expect(
+        page.get_by_role("heading", name="Online Curl Tool").locator("span")
+    ).to_be_visible()
+
+    # Enter a valid URL and click the button
+    page.get_by_label("Enter URL: https://www.example.com").fill("https://www.google.com")
+    page.get_by_test_id("baseButton-secondary").click()
+
+    # Check for the absence of error message
+    error = page.get_by_test_id("stNotification")
+    expect(error).to_be_hidden()
 
 
 def test_password_complexity(page: Page):
     # Go to Password Complexity function
     page.frame_locator(
         'iframe[title="streamlit_antd_components\\.utils\\.component_func\\.sac"]'
-    ).get_by_role("menuitem", name=" Password Complexity").click()
+    ).get_by_role("menuitem", name="Password Complexity").click()
 
     # Check page title
     expect(
@@ -218,8 +264,6 @@ def test_password_complexity(page: Page):
     enter_password(page, "Strong@Password123")
     assert_password_complexity(page, "Strong")
 
-  
-
 
 def enter_password(page: Page, password: str):
     password_input = page.get_by_label("Password:")
@@ -230,8 +274,6 @@ def enter_password(page: Page, password: str):
 def assert_password_complexity(page: Page, expected_complexity: str):
     complexity_text = page.get_by_text("Password Complexity:")
     expect(complexity_text).to_have_text(f"Password Complexity: {expected_complexity}")
-    
-
 
 
 def test_ns_lookup(page: Page):
@@ -242,7 +284,7 @@ def test_ns_lookup(page: Page):
         # Go to NS Lookup function
         page.frame_locator(
             'iframe[title="streamlit_antd_components\\.utils\\.component_func\\.sac"]'
-        ).get_by_role("menuitem", name=" Ns Lookup").click()
+        ).get_by_role("menuitem", name="Ns Lookup").click()
 
         # Wait for the page to load
         page.wait_for_selector(
@@ -281,8 +323,50 @@ def test_ns_lookup(page: Page):
 
 
 def test_ping(page: Page):
-    # TODO: empty test
-    pass
+    def enter_address(address):
+        page.get_by_label("Enter domain name or IP address").click()
+        page.get_by_label("Enter domain name or IP address").fill(address)
+        page.get_by_label("Enter domain name or IP address").press("Enter")
+
+    def assert_invalid(expected):
+        error = page.get_by_test_id("stNotification")
+        error.wait_for(state="visible")
+        expect(error).to_be_visible()
+        expect(error).to_have_text(expected)
+
+    def assert_valid():
+        # If summary exists, success/failure message also exists, but success/failure message can't be tested b/c website might be up or down and locator depends on text
+        summary = page.locator("summary")
+        summary.wait_for(state="visible")
+        expect(summary).to_be_visible()
+        summary.click()
+        expect(page.get_by_test_id("stExpanderDetails")).to_be_visible()
+
+    page.frame_locator(
+        'iframe[title="streamlit_antd_components\\.utils\\.component_func\\.sac"]'
+    ).get_by_role("menuitem", name="Website Ping").click()
+
+    # Check page title
+    expect(
+        page.get_by_role("heading", name="Website Ping").locator("span")
+    ).to_be_visible()
+
+    # Check invalid inputs
+    enter_address("http://www.google.com") # URL, not domain
+    assert_invalid("Invalid domain name or IP address.")
+
+    enter_address("notasite.com")
+    assert_invalid("Invalid domain name or IP address.")
+
+    enter_address("8.8.8.257")
+    assert_invalid("Invalid domain name or IP address.")
+
+    # Check valid inputs
+    enter_address("google.com")
+    assert_valid()
+
+    enter_address("8.8.8.8")
+    assert_valid()
 
 
 def test_whois_lookup(page: Page):
@@ -294,7 +378,7 @@ def test_whois_lookup(page: Page):
     # Go to Whois Lookup function
     page.frame_locator(
         'iframe[title="streamlit_antd_components\\.utils\\.component_func\\.sac"]'
-    ).get_by_role("menuitem", name=" Whois Lookup").click()
+    ).get_by_role("menuitem", name="Whois Lookup").click()
 
     # Check page title
     expect(
