@@ -255,7 +255,7 @@ def certificate_lookup():
         "in the format 'example.com' and click 'Get Certificate'."
     )
 
-    url = st.text_input("Enter a URL (e.g., google.com)", "example.com")
+    url = st.text_input("Enter a Domain Name (e.g., google.com)", "example.com")
     if st.button("Get Certificate"):
         if url:
             try:
@@ -660,7 +660,7 @@ def online_curl_tool():
     st.markdown("# Online Curl Tool")
 
     # Input field for the user to enter a URL
-    url = st.text_input("Enter URL: https://www.example.com", "")
+    url = st.text_input("Enter a URL (e.g., https://www.google.com)", "https://www.example.com")
 
     # Button to send the curl request
     if st.button("Send Curl Request"):
