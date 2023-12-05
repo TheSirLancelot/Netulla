@@ -27,8 +27,8 @@ def ip_geolocation():
     def get_public_ip():
         try:
             # Using curl to fetch the IP address from ipify API, suppressing output
-            result = subprocess.run(['curl', 'https://api.ipify.org'], 
-                                    stdout=subprocess.PIPE, 
+            result = subprocess.run(['curl', 'https://api.ipify.org'],
+                                    stdout=subprocess.PIPE,
                                     stderr=subprocess.DEVNULL,
                                     check=False)
             return result.stdout.decode('utf-8').strip()
@@ -738,14 +738,6 @@ def website_ping():
 
         except RuntimeError:
             st.error("Invalid domain name or IP address.")
-
-
-
-
-
-
-
-
 
 
 def regex_tester(regex_pattern="", input_data=""):

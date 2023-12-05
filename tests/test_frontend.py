@@ -414,8 +414,6 @@ def test_password_generator(page: Page):
     pass
 
 
-
-
 # Test for Regex Tester
 @pytest.fixture(scope="function", autouse=True)
 def before_test(page):
