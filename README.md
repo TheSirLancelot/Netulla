@@ -62,9 +62,14 @@ This document is the User Guide for Netulla, A web-based suite of multi-function
 
 ## Certificate Lookup
 
-- Author:
-- Description:
+- Author: [Tyree Maeser](https://github.com/Tymaze3)
+- Description: The Certificate Lookup tool provides a user-friendly interface to retrieve detailed information about SSL certificates for a given URL. SSL certificates play a critical role in securing online communication by encrypting data and ensuring the authenticity of websites. This tool empowers users to inspect the specifics of a website's SSL certificate, offering transparency and security awareness.
 - Usage:
+  1. From the Netulla home page, click the Certificate Lookup link in the sidebar.
+  2. Enter the Domain name in the format of  ‘example.com’, and hit “Get Certificate.”
+  3. Upon successful execution, the SSL certificate information for the entered domain will be displayed. Information includes details about the SSL certificate, such as its validity period and issuer.
+  4. If an issue occurs during the certificate lookup, error messages will be displayed.
+  5. To lookup another certificate you will need to erase your original URL, then add a new one and hit "Get Certificate."
 
 ## Subnet Scan
 
@@ -113,11 +118,16 @@ This document is the User Guide for Netulla, A web-based suite of multi-function
   3. If the URL or IP address entered is valid, that site's headers will be displayed below.
   4. To make additional requests, replace the data entered in the text box and click "Send Request" again.
 
-## Online WGET Tool
+## Online cURL Tool
 
-- Author:
-- Description:
+- Author:[Tyree Maeser](https://github.com/Tymaze3)
+- Description: The Online Curl Tool provides users with a convenient interface to execute cURL requests directly within the Streamlit app. cURL is a command-line tool widely used for making HTTP requests and retrieving data from the web. This tool allows users to effortlessly interact with cURL without needing to navigate the command line.
 - Usage:
+  1. From the Netulla home page, click the Online Curl Tool link in the sidebar.
+  2. Enter the URL in the format of https://www.example.com, http:// is also an acceptable way to start your URL. Click the "Send Curl Request" button to initiate the cURL request to the specified URL
+  3. Upon successful execution, the cURL response will be displayed below the input field. The response is presented in a code block with syntax highlighting for improved readability.
+  4. If an issue occurs during the cURL request, error messages will be displayed.
+  5. To make another Curl request simply erase the URL you entered and add a new one and hit "Send Curl Request."
 
 ## Website Ping
 
