@@ -269,7 +269,7 @@ def test_curl(page: Page):
     ).to_be_visible()
 
     # Enter a valid URL and click the button
-    page.get_by_label("Enter URL: https://www.example.com").fill(
+    page.get_by_label("Enter a URL (e.g., https://www.google.com)").fill(
         "https://www.google.com"
     )
     page.get_by_test_id("baseButton-secondary").click()
