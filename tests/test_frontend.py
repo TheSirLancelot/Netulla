@@ -156,7 +156,7 @@ def test_regex_tester(page: Page):
 def test_certificate_lookup(page: Page):
     def enter_domain_and_submit(domain):
         # Enter the domain into the text input
-        page.get_by_label("Enter a URL (e.g., google.com)").fill(domain)
+        page.get_by_label("Enter a Domain Name (e.g., google.com)").fill(domain)
         # Click the "Get Certificate" button
         page.get_by_test_id("baseButton-secondary").click()
 
