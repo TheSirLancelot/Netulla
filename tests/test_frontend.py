@@ -37,8 +37,46 @@ def test_page_name(page: Page):
 
 
 def test_url_encoder_decoder(page: Page):
-    # TODO: empty test
-    pass
+    def enter_string(string):
+        page.get_by_label("Enter the string you would like to encode/decode:").click()
+        page.get_by_label("Enter the string you would like to encode/decode:").fill(
+            string
+        )
+
+    page.frame_locator(
+        'iframe[title="streamlit_antd_components\\.utils\\.component_func\\.sac"]'
+    ).get_by_role("menuitem", name="URL Encoder and Decoder").click()
+
+    # Check page title
+    expect(
+        page.get_by_role("heading", name="URL Encoder/Decoder").locator("span")
+    ).to_be_visible()
+
+    # Test encode
+    enter_string("This is a test string")
+    page.get_by_role("button", name="Encode").click()
+    results = page.get_by_text("Results:")
+    results.wait_for(state="visible")
+    expect(results).to_be_visible()
+    output = page.get_by_text("This%20is%20a%20test%20string")
+    expect(output).to_be_visible()
+
+    # Clear input (so results go away)
+    enter_string(" ")
+    page.get_by_label("Enter the string you would like to encode/decode:").press(
+        "Enter"
+    )
+    results = page.get_by_text("Results:")
+    expect(results).to_be_hidden()
+
+    # Test decode
+    enter_string("This%20is%20a%20test%20string")
+    page.get_by_role("button", name="Decode").click()
+    results = page.get_by_text("Results:")
+    results.wait_for(state="visible")
+    expect(results).to_be_visible()
+    output = page.get_by_text("This is a test string")
+    expect(output).to_be_visible()
 
 
 def test_http_header_tool(page: Page):
@@ -183,7 +221,9 @@ def test_subnet_scanner(page: Page):
 
     # Check map
     browser_type = page.context.browser.browser_type.name
-    if browser_type != "firefox":   # Firefox GitHub test doesn't display map, so nothing to check
+    if (
+        browser_type != "firefox"
+    ):  # Firefox GitHub test doesn't display map, so nothing to check
         ip_map = page.locator("#view-default-view")
         ip_map.wait_for(state="visible")
         expect(ip_map).to_be_visible()
@@ -229,7 +269,9 @@ def test_curl(page: Page):
     ).to_be_visible()
 
     # Enter a valid URL and click the button
-    page.get_by_label("Enter URL: https://www.example.com").fill("https://www.google.com")
+    page.get_by_label("Enter URL: https://www.example.com").fill(
+        "https://www.google.com"
+    )
     page.get_by_test_id("baseButton-secondary").click()
 
     # Check for the absence of error message
@@ -352,7 +394,7 @@ def test_ping(page: Page):
     ).to_be_visible()
 
     # Check invalid inputs
-    enter_address("http://www.google.com") # URL, not domain
+    enter_address("http://www.google.com")  # URL, not domain
     assert_invalid("Invalid domain name or IP address.")
 
     enter_address("notasite.com")
