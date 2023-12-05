@@ -46,6 +46,7 @@ This document is the User Guide for Netulla, A web-based suite of multi-function
   2. When on the tools page, enter an IP or domain name (8.8.8.8, google.com, etc.) in the text bar.
   3. If you don't want to see the raw output of the MTR command, click on the check-box off as it defaults to showing it.
   4. Press enter after entering in the domain or IP, and adjust the slide bar if you'd like more granular circles.
+  5. If you'd like to perform another or different traceroute, replace the domain or IP in the search field and press enter again.
 
 ## NS lookup
 
@@ -97,6 +98,7 @@ This document is the User Guide for Netulla, A web-based suite of multi-function
   2. Enter in the desired IPv4 address into the text field.
   3. Select the CIDR range (/24 is default).
   4. Press enter, scroll as needed to view the information for the subnet.
+  5. If you'd like to calculate for a different subnet, replace the IPv4 address in the text area and press enter again. (ensure you change the CIDR if needed)
 
 ## Whois Lookup
 
