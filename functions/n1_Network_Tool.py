@@ -21,21 +21,29 @@ import whois
 
 
 def ip_geolocation():
-    # st.set_page_config(page_title="IP Geolocation", page_icon="🕸")
+    # Function to get the public IP address using an external service
+    def get_public_ip():
+        try:
+            # Using curl to fetch the IP address from ipify API, suppressing output
+            result = subprocess.run(['curl', 'https://api.ipify.org'], 
+                                    stdout=subprocess.PIPE, 
+                                    stderr=subprocess.DEVNULL,
+                                    check=False)
+            return result.stdout.decode('utf-8').strip()
+        except subprocess.SubprocessError:
+            st.error("Failed to fetch the public IP address.")
+            return None
 
-    st.markdown("# IP Geolocation")
-    # st.sidebar.header("IP Geolocation")
-
-    ip_address = st.text_input(
-        "Enter an IP Address", value="8.8.8.8", max_chars=None, key=None, type="default"
-    )
-
-    @st.cache_data
+    # Function to get the geolocation of an IP address
+    @st.cache_resource
     def get_geolocation(ip_address):
         response = requests.get(f"http://ip-api.com/json/{ip_address}", timeout=5)
         response.raise_for_status()  # Ensure we got a valid response
         return response.json()
 
+    st.markdown("# IP Geolocation")
+
+    ip_address = get_public_ip()
     if ip_address:
         location = get_geolocation(ip_address)
         latitude = location["lat"]
@@ -55,7 +63,7 @@ def ip_geolocation():
             get_radius=1000,
         )
 
-        # Set the initial view, https://deckgl.readthedocs.io/en/latest/view_state.html
+        # Set the initial view
         view_state = pdk.ViewState(
             latitude=latitude,
             longitude=longitude,
@@ -66,7 +74,7 @@ def ip_geolocation():
         # Render the deck.gl map in the Streamlit app as a PyDeck chart
         st.pydeck_chart(pdk.Deck(layers=[layer], initial_view_state=view_state))
     else:
-        st.error("Please enter an IP address.")
+        st.error("Failed to determine the IP address.")
 
 
 def network_analysis():
