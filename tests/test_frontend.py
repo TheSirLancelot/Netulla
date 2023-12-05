@@ -328,3 +328,38 @@ def test_traceroute_visualizer(page: Page):
 def test_password_generator(page: Page):
     # TODO: empty test
     pass
+
+
+
+
+# Test for Regex Tester
+@pytest.fixture(scope="function", autouse=True)
+def before_test(page):
+    page.goto(f"http://localhost:{PORT}")
+    page.set_viewport_size({"width": 2000, "height": 2000})
+
+def test_regex_tester_valid_input(page):
+    with sync_playwright() as p:
+        browser = p.chromium.launch()
+        context = browser.new_context()
+        page = context.new_page()
+
+        page.evaluate('window.regex_tester("\\d{3}", "123456")')
+
+        console_output = page.get_console_messages()
+        assert console_output[-1].text == "Matches: ['123']\n"
+
+        browser.close()
+
+def test_regex_tester_invalid_input(page):
+    with sync_playwright() as p:
+        browser = p.chromium.launch()
+        context = browser.new_context()
+        page = context.new_page()
+
+        page.evaluate('window.regex_tester("[a-z]+", "123456")')
+
+        console_output = page.get_console_messages()
+        assert console_output[-1].text == "Regex Error: nothing to repeat at position 0\n"
+
+        browser.close()
