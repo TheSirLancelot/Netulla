@@ -45,9 +45,16 @@ This document is the User Guide for Netulla, A web-based suite of multi-function
 
 ## NS lookup
 
-- Author:
-- Description:
-- Usage:
+- Author: [Oscar Vasquez-Flores](https://github.com/oavf15)
+- Description: The NS Lookup tool allows you to perform Domain Name System (DNS) lookups to retrieve information about a specific domain. You can obtain details such as IP addresses associated with the domain and its corresponding hostname.
+- Usage: 
+  1. From the Netulla home page, click the NS Lookup link in the sidebar.
+  2. In the tool, find the text input labeled "Enter Domain (e.g., google.com)".
+  3. To perform a lookup, enter the domain name you want to query into this text field (e.g., "google.com").
+  4. After entering the domain, press Enter.
+  5. After performing the lookup, the tool will display validation status, IP addresses associated with the domain, and its hostname (reverse lookup).
+  6. The tool provides error messages for issues like no DNS records found, domain non-existence, timeouts, or other DNS-related errors.
+  7. To perform lookups for different domains, replace the domain name in the text input field and submit the query again.
 
 ## Certificate Lookup
 
