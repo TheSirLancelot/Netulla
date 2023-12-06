@@ -39,9 +39,14 @@ This document is the User Guide for Netulla, A web-based suite of multi-function
 
 ## Traceroute Visualizer
 
-- Author:
-- Description:
+- Author: [Tyler Wilson](https://github.com/nevermore23274)
+- Description: The Traceroute Visualizer tool is an advanced tool that combines the functionality of traceroute and visual mapping to display the path that internet data packets take from the user's device to a specified target IP address or domain. This tool leverages the capabilities of the mtr command (a network diagnostic tool that combines ping and traceroute) and visualizes the data path using an interactive map.
 - Usage:
+  1. From the Netulla home page, click the Traceroute Visualizer link in the sidebar.
+  2. When on the tools page, enter an IP or domain name (8.8.8.8, google.com, etc.) in the text bar.
+  3. If you don't want to see the raw output of the MTR command, click on the check-box off as it defaults to showing it.
+  4. Press enter after entering in the domain or IP, and adjust the slide bar if you'd like more granular circles.
+  5. If you'd like to perform another or different traceroute, replace the domain or IP in the search field and press enter again.
 
 ## NS lookup
 
@@ -78,12 +83,6 @@ This document is the User Guide for Netulla, A web-based suite of multi-function
      - The results are displayed both on a navigable map of the world, and in a table listed by IP, city, and country.
   4. To scan additional subnets, replace the data entered in the text box and press `Enter` again.
 
-## IP Geolocation
-
-- Author:
-- Description:
-- Usage:
-
 ## Network Analysis
 
 - Author:
@@ -92,9 +91,14 @@ This document is the User Guide for Netulla, A web-based suite of multi-function
 
 ## Subnet Calculator
 
-- Author:
-- Description:
+- Author: [Tyler Wilson](https://github.com/nevermore23274)
+- Description: This tool is an intuitive tool designed to assist in understanding and planning network subnets. It provides a detailed breakdown of subnet information based on an IP address and a CIDR (Classless Inter-Domain Routing) notation input.
 - Usage:
+  1. From the Netulla home page, click the Subnet Calculator link in the sidebar.
+  2. Enter in the desired IPv4 address into the text field.
+  3. Select the CIDR range (/24 is default).
+  4. Press enter, scroll as needed to view the information for the subnet.
+  5. If you'd like to calculate for a different subnet, replace the IPv4 address in the text area and press enter again. (ensure you change the CIDR if needed)
 
 ## Whois Lookup
 
@@ -140,9 +144,11 @@ This document is the User Guide for Netulla, A web-based suite of multi-function
 
 ## What Is My IP
 
-- Author:
-- Description:
+- Author: [Tyler Wilson](https://github.com/nevermore23274)
+- Description: This tool is designed to provide users with detailed information about their public IP address and its geolocation. The tool first fetches the user's public IP address using an external service. Once the IP address is acquired, the tool then retrieves the geolocation data associated with that IP, including latitude and longitude.
 - Usage:
+  1. From the Netulla home page, click on Ip Geolocation.
+  2. The information for your current location (including latitude and logitude) will be displayed as well as the location on a map.
 
 ## URL Encoder and Decoder
 
@@ -166,6 +172,12 @@ This document is the User Guide for Netulla, A web-based suite of multi-function
 
 ## Password Generator
 
-- Author:
-- Description:
+- Author: [Tyler Wilson](https://github.com/nevermore23274)
+- Description: This tool is a user-friendly application designed to create secure and customizable passwords. You can create up to 10 passwords per button press with varying levels of complexity.
 - Usage:
+  1. From the Netulla home page, click on Password Generator.
+  2. First, adjust the slider (values between 6 and 20) to the exact number of characters you'd like the password to have.
+  3. Check the different boxes for which values you'd like for the password to have.
+  4. Edit the number in the text entry field to decide how many passwords (up to 10) will be generated.
+  5. Click on "Generate Passwords" button.
+  6. If you'd like to have the passwords regenerated, click "Generate Passwords" as many times as needed until you're satisfied.
