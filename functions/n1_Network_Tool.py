@@ -3,6 +3,7 @@ import ipaddress
 import math
 import subprocess
 import re
+import urllib.parse
 import streamlit as st
 import pandas as pd
 import pydeck as pdk
@@ -25,11 +26,13 @@ def ip_geolocation():
     def get_public_ip():
         try:
             # Using curl to fetch the IP address from ipify API, suppressing output
-            result = subprocess.run(['curl', 'https://api.ipify.org'], 
-                                    stdout=subprocess.PIPE, 
-                                    stderr=subprocess.DEVNULL,
-                                    check=False)
-            return result.stdout.decode('utf-8').strip()
+            result = subprocess.run(
+                ["curl", "https://api.ipify.org"],
+                stdout=subprocess.PIPE,
+                stderr=subprocess.DEVNULL,
+                check=False,
+            )
+            return result.stdout.decode("utf-8").strip()
         except subprocess.SubprocessError:
             st.error("Failed to fetch the public IP address.")
             return None
@@ -738,6 +741,41 @@ def website_ping():
             st.error("Invalid domain name or IP address.")
 
 
+def url_encoder_decoder():
+    # This is to make the colums as wide as the buttons so they aren't spread far apart
+    st.markdown(
+        """
+            <style>
+                div[data-testid="column"] {
+                    width: fit-content !important;
+                    flex: unset;
+                }
+                div[data-testid="column"] * {
+                    width: fit-content !important;
+                }
+            </style>
+            """,
+        unsafe_allow_html=True,
+    )
+    st.markdown("# URL Encoder/Decoder")
+    user_input = st.text_input("Enter the string you would like to encode/decode:")
+    output = ""
+    col1, col2 = st.columns([1, 1])
+    with col1:
+        encode = st.button("Encode")
+    with col2:
+        decode = st.button("Decode")
+
+    if encode:
+        output = urllib.parse.quote(user_input)
+    elif decode:
+        output = urllib.parse.unquote(user_input)
+
+    if output != "":
+        st.subheader("Results:")
+        st.write(output)
+
+
 # Dictionary of subpage functions
 page1_funcs = {
     "IP Geolocation": ip_geolocation,
@@ -751,4 +789,5 @@ page1_funcs = {
     "HTTP Header Tool": http_header_tool,
     "Whois Lookup": whois_lookup,
     "Website Ping": website_ping,
+    "URL Encoder and Decoder": url_encoder_decoder,
 }
