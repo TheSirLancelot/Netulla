@@ -154,6 +154,7 @@ def test_regex_tester(page: Page):
 
 
 def test_certificate_lookup(page: Page):
+    
     def enter_domain_and_submit(domain):
         # Enter the domain into the text input
         page.get_by_label("Enter a Domain Name (e.g., google.com)").fill(domain)
@@ -163,7 +164,7 @@ def test_certificate_lookup(page: Page):
     # Access the Certificate Lookup tool
     page.frame_locator(
         'iframe[title="streamlit_antd_components\\.utils\\.component_func\\.sac"]'
-    ).get_by_role("menuitem", name=" Certificate Lookup").click()
+    ).get_by_role("menuitem", name="Certificate Lookup").click()
 
     # Check page title
     expect(
@@ -261,7 +262,7 @@ def test_curl(page: Page):
     # Access the Online Curl Tool
     page.frame_locator(
         'iframe[title="streamlit_antd_components\\.utils\\.component_func\\.sac"]'
-    ).get_by_role("menuitem", name=" Online Curl Tool").click()
+    ).get_by_role("menuitem", name="Online Curl Tool").click()
 
     # Check page title
     expect(
@@ -326,7 +327,7 @@ def test_ns_lookup(page: Page):
         # Go to NS Lookup function
         page.frame_locator(
             'iframe[title="streamlit_antd_components\\.utils\\.component_func\\.sac"]'
-        ).get_by_role("menuitem", name="Ns Lookup").click()
+        ).get_by_role("menuitem", name="NS Lookup").click()
 
         # Wait for the page to load
         page.wait_for_selector(
