@@ -48,7 +48,7 @@ menu_items = [
 with st.sidebar:
     # Size options are small, middle, largex
     selected_item = sac.menu(
-        menu_items, format_func="title", size="small", open_all=True
+        menu_items, format_func=lambda x: x, size="small", open_all=True
     )
 
 
