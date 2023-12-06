@@ -6,6 +6,22 @@ from functions.n2_Password_Tools import page2_funcs
 
 st.set_page_config(page_title="Netulla", page_icon="./images/favicon.png")
 
+# Link icon to function name.
+icons = {
+    "IP Geolocation": "globe2",
+    "Traceroute Visualizer": "graph-up",
+    "Network Analysis": "diagram-3",
+    "Subnet Calculator": "calculator-fill",
+    "Certificate Lookup": "certificate-fill",
+    "NS Lookup": "search",
+    "Subnet Scanner": "broadcast",
+    "Online Curl Tool": "cloud-arrow-down",
+    "HTTP Header Tool": "file-earmark-text",
+    "Whois Lookup": "question-square",
+    "Website Ping": "wifi",
+    "URL Encoder and Decoder": "file-earmark-code",
+}
+
 # Define the menu
 menu_items = [
     # Icons are from: https://icons.getbootstrap.com/
