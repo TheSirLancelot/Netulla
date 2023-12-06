@@ -12,8 +12,8 @@ icons = {
     "IP Geolocation": "globe2",
     "Traceroute Visualizer": "graph-up",
     "Network Analysis": "diagram-3",
-    "Subnet Calculator": "calculator-fill",
-    "Certificate Lookup": "certificate-fill",
+    "Subnet Calculator": "calculator",
+    "Certificate Lookup": "file-check",
     "NS Lookup": "search",
     "Subnet Scanner": "broadcast",
     "Online Curl Tool": "cloud-arrow-down",
@@ -21,8 +21,8 @@ icons = {
     "Whois Lookup": "question-square",
     "Website Ping": "wifi",
     "URL Encoder and Decoder": "file-earmark-code",
-    "Password Complexity": "shield-lock-fill",  # Example icon for Password Complexity
-    "Password Generator": "key-fill" 
+    "Password Complexity": "shield-lock",  # Example icon for Password Complexity
+    "Password Generator": "person-lock" 
     
 }
 
@@ -31,7 +31,7 @@ menu_items = [
     sac.MenuItem("Home", icon="house-fill"),
     sac.MenuItem(
         "Network Tool",
-        icon="binoculars",
+        icon="binoculars-fill",
         children=[
             # Icon is the default for the children
             sac.MenuItem(subpage, icon=icons.get(subpage, "default-icon"))
@@ -40,7 +40,7 @@ menu_items = [
     ),
     sac.MenuItem(
         "Password Tools",
-        icon="key",
+        icon="key-fill",
         children=[
             sac.MenuItem(subpage, icon=icons.get(subpage, "default-icon")) for subpage in page2_funcs.keys()
         ],
