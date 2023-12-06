@@ -416,32 +416,64 @@ def test_password_generator(page: Page):
 
 # Test for Regex Tester
 @pytest.fixture(scope="function", autouse=True)
-def before_test(page):
-    page.goto(f"http://localhost:{PORT}")
+def before_test(page: Page):
+    page.goto(f"localhost:{PORT}")
     page.set_viewport_size({"width": 2000, "height": 2000})
 
-def test_regex_tester_valid_input(page):
-    with sync_playwright() as p:
-        browser = p.chromium.launch()
-        context = browser.new_context()
-        page = context.new_page()
 
-        page.evaluate('window.regex_tester("\\d{3}", "123456")')
 
-        console_output = page.get_console_messages()
-        assert console_output[-1].text == "Matches: ['123']\n"
+@pytest.fixture(scope="function", autouse=True)
+def after_test(page: Page, request):
+    yield
+    if request.node.rep_call.failed:
+        page.screenshot(path=f"screenshot-{request.node.name}.png", full_page=True)
 
-        browser.close()
 
-def test_regex_tester_invalid_input(page):
-    with sync_playwright() as p:
-        browser = p.chromium.launch()
-        context = browser.new_context()
-        page = context.new_page()
+def test_regex_tester_valid_input(page: Page):
+    page.goto(f"http://localhost:{PORT}")
 
-        page.evaluate('window.regex_tester("[a-z]+", "123456")')
+    # Go to Regex Tester function
+    page.frame_locator(
+        'iframe[title="streamlit_antd_components\\.utils\\.component_func\\.sac"]'
+    ).get_by_role("menuitem", name="Regex Tester").click()
 
-        console_output = page.get_console_messages()
-        assert console_output[-1].text == "Regex Error: nothing to repeat at position 0\n"
+    # Check page title
+    expect(
+        page.get_by_role("heading", name="Regex Tester").locator("span")
+    ).to_be_visible()
 
-        browser.close()
+    # Enter a valid regex pattern and input data
+    page.get_by_label("Regex Pattern").fill(r"\d{3}")
+    page.get_by_label("Input Data").fill("123456")
+    page.get_by_text("Test Regex").click()
+
+    # Check for the expected result in the output
+    matches = page.get_by_text("Matches:")
+    expect(matches).to_be_visible()
+    expect(matches.locator("xpath=./following-sibling::div")).to_have_text("['123']")
+
+
+def test_regex_tester_invalid_input(page: Page):
+    page.goto(f"http://localhost:{PORT}")
+
+    # Go to Regex Tester function
+    page.frame_locator(
+        'iframe[title="streamlit_antd_components\\.utils\\.component_func\\.sac"]'
+    ).get_by_role("menuitem", name="Regex Tester").click()
+
+    # Check page title
+    expect(
+        page.get_by_role("heading", name="Regex Tester").locator("span")
+    ).to_be_visible()
+
+    # Enter an invalid regex pattern
+    page.get_by_label("Regex Pattern").fill("[a-z]+")
+    page.get_by_label("Input Data").fill("123456")
+    page.get_by_text("Test Regex").click()
+
+    # Check for the expected error message in the output
+    error = page.get_by_text("Regex Error:")
+    expect(error).to_be_visible()
+    expect(error.locator("xpath=./following-sibling::div")).to_have_text(
+        "nothing to repeat at position 0"
+    )
