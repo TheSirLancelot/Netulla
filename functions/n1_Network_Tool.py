@@ -3,6 +3,7 @@ import ipaddress
 import math
 import subprocess
 import re
+import urllib.parse
 import streamlit as st
 import pandas as pd
 import pydeck as pdk
@@ -21,21 +22,31 @@ import whois
 
 
 def ip_geolocation():
-    # st.set_page_config(page_title="IP Geolocation", page_icon="🕸")
+    # Function to get the public IP address using an external service
+    def get_public_ip():
+        try:
+            # Using curl to fetch the IP address from ipify API, suppressing output
+            result = subprocess.run(
+                ["curl", "https://api.ipify.org"],
+                stdout=subprocess.PIPE,
+                stderr=subprocess.DEVNULL,
+                check=False,
+            )
+            return result.stdout.decode("utf-8").strip()
+        except subprocess.SubprocessError:
+            st.error("Failed to fetch the public IP address.")
+            return None
 
-    st.markdown("# IP Geolocation")
-    # st.sidebar.header("IP Geolocation")
-
-    ip_address = st.text_input(
-        "Enter an IP Address", value="8.8.8.8", max_chars=None, key=None, type="default"
-    )
-
-    @st.cache_data
+    # Function to get the geolocation of an IP address
+    @st.cache_resource
     def get_geolocation(ip_address):
         response = requests.get(f"http://ip-api.com/json/{ip_address}", timeout=5)
         response.raise_for_status()  # Ensure we got a valid response
         return response.json()
 
+    st.markdown("# IP Geolocation")
+
+    ip_address = get_public_ip()
     if ip_address:
         location = get_geolocation(ip_address)
         latitude = location["lat"]
@@ -55,7 +66,7 @@ def ip_geolocation():
             get_radius=1000,
         )
 
-        # Set the initial view, https://deckgl.readthedocs.io/en/latest/view_state.html
+        # Set the initial view
         view_state = pdk.ViewState(
             latitude=latitude,
             longitude=longitude,
@@ -66,7 +77,7 @@ def ip_geolocation():
         # Render the deck.gl map in the Streamlit app as a PyDeck chart
         st.pydeck_chart(pdk.Deck(layers=[layer], initial_view_state=view_state))
     else:
-        st.error("Please enter an IP address.")
+        st.error("Failed to determine the IP address.")
 
 
 def network_analysis():
@@ -245,7 +256,7 @@ def certificate_lookup():
         "in the format 'example.com' and click 'Get Certificate'."
     )
 
-    url = st.text_input("Enter a URL (e.g., google.com)", "example.com")
+    url = st.text_input("Enter a Domain Name (e.g., google.com)", "example.com")
     if st.button("Get Certificate"):
         if url:
             try:
@@ -650,7 +661,7 @@ def online_curl_tool():
     st.markdown("# Online Curl Tool")
 
     # Input field for the user to enter a URL
-    url = st.text_input("Enter URL: https://www.example.com", "")
+    url = st.text_input("Enter a URL (e.g., https://www.google.com)", "https://www.example.com")
 
     # Button to send the curl request
     if st.button("Send Curl Request"):
@@ -730,6 +741,41 @@ def website_ping():
             st.error("Invalid domain name or IP address.")
 
 
+def url_encoder_decoder():
+    # This is to make the colums as wide as the buttons so they aren't spread far apart
+    st.markdown(
+        """
+            <style>
+                div[data-testid="column"] {
+                    width: fit-content !important;
+                    flex: unset;
+                }
+                div[data-testid="column"] * {
+                    width: fit-content !important;
+                }
+            </style>
+            """,
+        unsafe_allow_html=True,
+    )
+    st.markdown("# URL Encoder/Decoder")
+    user_input = st.text_input("Enter the string you would like to encode/decode:")
+    output = ""
+    col1, col2 = st.columns([1, 1])
+    with col1:
+        encode = st.button("Encode")
+    with col2:
+        decode = st.button("Decode")
+
+    if encode:
+        output = urllib.parse.quote(user_input)
+    elif decode:
+        output = urllib.parse.unquote(user_input)
+
+    if output != "":
+        st.subheader("Results:")
+        st.write(output)
+
+
 # Dictionary of subpage functions
 page1_funcs = {
     "IP Geolocation": ip_geolocation,
@@ -743,4 +789,5 @@ page1_funcs = {
     "HTTP Header Tool": http_header_tool,
     "Whois Lookup": whois_lookup,
     "Website Ping": website_ping,
+    "URL Encoder and Decoder": url_encoder_decoder,
 }
