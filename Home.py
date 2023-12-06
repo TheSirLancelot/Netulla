@@ -3,6 +3,7 @@ import streamlit as st
 from functions.n1_Network_Tool import page1_funcs
 from functions.n2_Password_Tools import page2_funcs
 
+
 st.set_page_config(page_title="Netulla", page_icon="./images/favicon.png")
 
 # Define the menu
@@ -14,7 +15,7 @@ menu_items = [
         icon="binoculars",
         children=[
             # Icon is the default for the children
-            sac.MenuItem(subpage, icon="arrow-right")
+            sac.MenuItem(subpage, icon=icons.get(subpage, "default-icon"))
             for subpage in page1_funcs.keys()
         ],
     ),
@@ -22,7 +23,7 @@ menu_items = [
         "Password Tools",
         icon="key",
         children=[
-            sac.MenuItem(subpage, icon="arrow-right") for subpage in page2_funcs.keys()
+            sac.MenuItem(subpage, icon=icons.get(subpage, "default-icon")) for subpage in page2_funcs.keys()
         ],
     ),
 ]
