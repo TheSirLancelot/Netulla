@@ -448,37 +448,54 @@ def test_what_is_my_ip(page: Page):
 
 
 def test_traceroute_visualizer(page: Page):
-    # Navigate to the Traceroute Visualizer section using the application's UI
-    page.get_by_role("img", name="open").click()
-    page.get_by_text("Network Tool").click()
-    page.get_by_role("img", name="open").nth(1).click()
-    page.get_by_text("Traceroute Visualizer").click()
-    running_icon = page.get_by_text("Running...")
+    def enter_target(target):
+        page.get_by_label("Target IP or Domain").click()
+        page.get_by_label("Target IP or Domain").fill(target)
+        page.get_by_test_id("baseButton-primary").click()
 
-    # --- Test Initialization ---
-    expect(page.locator("input[placeholder='Target IP or Domain']")).to_be_visible()
-    expect(page.locator("text='Show Raw Output'")).to_be_visible()
-    expect(page.locator("text='Adjust Scatter Radius'")).to_be_visible()
-    expect(page.locator("input[type='checkbox']").with_text("Show Raw Output")).to_be_checked()
-    expect(page.locator("input[type='range']").with_text("Adjust \
-                                                         Scatter Radius")).to_have_value("30000")
+    page.frame_locator(
+        'iframe[title="streamlit_antd_components\\.utils\\.component_func\\.sac"]'
+    ).get_by_role("menuitem", name="Traceroute Visualizer").click()
 
-    # --- Test Traceroute with Valid Input ---
-    page.locator("input[placeholder='Target IP or Domain']").fill("example.com")
-    # Replace with your actual button text or selector
-    page.locator("button:has-text('Run Traceroute')").click()
-    running_icon.wait_for(state="hidden")
-    expect(page.locator("text='Raw MTR Output'")).to_be_visible()
-    # Replace with your actual map visualization locator
-    expect(page.locator("#map-visualization")).to_be_visible()
+    # Check page title
+    expect(
+        page.get_by_role("heading", name="Traceroute Map").locator("span")
+    ).to_be_visible()
 
-    # --- Test Traceroute with Invalid Input ---
-    page.locator("input[placeholder='Target IP or Domain']").fill("invalid_domain")
-    # Adjust the button selector as needed
-    page.locator("button:has-text('Run Traceroute')").click()
-    running_icon.wait_for(state="hidden")
-    expect(page.locator("text='No hops found'")).to_be_visible()
-    expect(page.locator("text='Please try again with a different IP or domain'")).to_be_visible()
+    # Check invalid inputs
+    enter_target("invalid_domain.com")  # Invalid domain
+    error = page.get_by_test_id("stNotification")
+    error.wait_for(state="visible")
+    expect(error).to_be_visible()
+    expect(error).to_have_text(
+        "An error occurred while executing the traceroute command."
+    )
+
+    enter_target("192.168.0.1")  # Non-routable IP
+    error = page.get_by_test_id("stNotification")
+    error.wait_for(state="visible")
+    expect(error).to_be_visible()
+    expect(error).to_have_text(
+        "No hops found. Please try again with a different IP or domain."
+    )
+
+    # Check valid IP
+    enter_target("8.8.8.8")
+    map_visualization = page.get_by_test_id("mapVisualization")
+    map_visualization.wait_for(state="visible")
+    expect(map_visualization).to_be_visible()
+
+    # Check valid domain
+    enter_target("www.google.com")
+    map_visualization = page.get_by_test_id("mapVisualization")
+    map_visualization.wait_for(state="visible")
+    expect(map_visualization).to_be_visible()
+
+    # Optional: Test for raw output visibility if checkbox is ticked
+    if page.get_by_test_id("rawOutputCheckbox").is_checked():
+        raw_output = page.get_by_test_id("rawMtrOutput")
+        raw_output.wait_for(state="visible")
+        expect(raw_output).to_be_visible()
 
 
 def test_password_generator(page: Page):
