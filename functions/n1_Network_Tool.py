@@ -468,7 +468,7 @@ def traceroute_visualizer():
         pretty_output += "</table>"
         return pretty_output
 
-    def perform_traceroute(target, show_raw_output, radius):
+    def perform_traceroute(target, radius):
         if target:
             try:
                 user_ip = requests.get("https://httpbin.org/ip", timeout=5).json()[
@@ -480,9 +480,9 @@ def traceroute_visualizer():
                     check=True,
                 ).stdout.decode()
 
-                if show_raw_output:
-                    st.markdown("## Raw MTR Output")
-                    st.markdown(mtr_data_table(output), unsafe_allow_html=True)
+                # Always display the MTR table
+                st.markdown("## Raw MTR Output")
+                st.markdown(mtr_data_table(output), unsafe_allow_html=True)
 
                 regex_pattern = r"\d+\.\|\-\- ([\w\.\-]+)"
                 hops = re.findall(regex_pattern, output)
@@ -490,6 +490,9 @@ def traceroute_visualizer():
                     st.error(
                         "No hops found. Please try again with a different IP or domain."
                     )
+                    # Indicate failure in the traceroute operation
+                    st.markdown('<p id="traceroute-status">Traceroute failed</p>',\
+                                unsafe_allow_html=True)
                     return
 
                 hops.insert(0, user_ip)
@@ -592,14 +595,20 @@ def traceroute_visualizer():
                 )
             except requests.exceptions.RequestException as req_err:
                 st.error(f"An error occurred while fetching the user IP: {req_err}")
+                st.markdown('<p id="traceroute-status">Traceroute failed</p>',\
+                            unsafe_allow_html=True)
             except subprocess.CalledProcessError as subp_err:
                 st.error(
                     f"An error occurred while executing the traceroute command: {subp_err}"
                 )
+                st.markdown('<p id="traceroute-status">Traceroute failed</p>',\
+                            unsafe_allow_html=True)
             except (InvalidRequestError, LimitExceededError) as ip2geo_err:
                 st.error(
                     f"An error occurred while fetching geolocation data: {ip2geo_err}"
                 )
+                st.markdown('<p id="traceroute-status">Traceroute failed</p>',\
+                            unsafe_allow_html=True)
 
     st.markdown("# Traceroute Map")
 
@@ -607,13 +616,13 @@ def traceroute_visualizer():
     target = st.text_input("Target IP or Domain", "")
 
     # Other UI elements
-    show_raw_output = st.checkbox("Show Raw Output", True)
+    #show_raw_output = st.checkbox("Show Raw Output", True)
     radius = st.slider(
         "Adjust Scatter Radius", min_value=0, max_value=30000, value=30000, step=1000
     )
 
     if target:
-        perform_traceroute(target, show_raw_output, radius)
+        perform_traceroute(target, radius)
 
 
 # Expect IPs to be 4 ints separated by periods
@@ -647,7 +656,8 @@ def http_header_tool():
 
         except requests.exceptions.MissingSchema:
             st.error(
-                "Incomplete URL or invalid IP. Please include http:// or https:// for URLs, and enter IPs in the form x.x.x.x using only numbers."
+                "Incomplete URL or invalid IP. Please include http:// or https:// for URLs, \
+                    and enter IPs in the form x.x.x.x using only numbers."
             )
         except requests.exceptions.InvalidSchema:
             st.error("Invalid URL. Please use http:// or https://")
@@ -725,7 +735,8 @@ def website_ping():
                 st.write(":heavy_check_mark: :green[Success. Website is up.]")
             elif response.success(option=1):
                 st.write(
-                    ":heavy_exclamation_mark: :orange[Partial Success. Website is up but experiencing difficulties.]"
+                    ":heavy_exclamation_mark: :orange[Partial Success. Website is up but \
+                        experiencing difficulties.]"
                 )
             else:
                 st.write(":heavy_multiplication_x: :red[Failure. Website is down.]")

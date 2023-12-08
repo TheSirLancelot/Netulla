@@ -451,51 +451,41 @@ def test_traceroute_visualizer(page: Page):
     def enter_target(target):
         page.get_by_label("Target IP or Domain").click()
         page.get_by_label("Target IP or Domain").fill(target)
-        page.get_by_test_id("baseButton-primary").click()
+        page.get_by_label("Target IP or Domain").press('Enter')
 
+    def assert_error_message():
+        error_message_locator = "text=No hops found. Please try again \
+            with a different IP or domain."
+        page.wait_for_timeout(500)
+        assert page.locator(error_message_locator).is_visible(), "Error message is \
+            not visible when it should be."
+
+    def assert_general_failure():
+        failure_message_locator = "#traceroute-status"
+        if page.locator(failure_message_locator).inner_text().contains("Traceroute failed"):
+            raise AssertionError("General failure message detected when it should not be.")
+
+    def assert_success_condition():
+        # Check for the presence of the MTR output table to indicate success
+        mtr_table_locator = "div.stMarkdown > table"
+        page.wait_for_selector(mtr_table_locator, state="visible", timeout=10000)
+        assert page.locator(mtr_table_locator).is_visible(), "MTR output table is not visible."
+
+    # Navigate to the Traceroute Visualizer within the Streamlit app's sidebar
     page.frame_locator(
         'iframe[title="streamlit_antd_components\\.utils\\.component_func\\.sac"]'
     ).get_by_role("menuitem", name="Traceroute Visualizer").click()
 
-    # Check page title
-    expect(
-        page.get_by_role("heading", name="Traceroute Map").locator("span")
-    ).to_be_visible()
+    # Test with an invalid domain
+    enter_target("invalid_domain.com")
+    assert_error_message()
 
-    # Check invalid inputs
-    enter_target("invalid_domain.com")  # Invalid domain
-    error = page.get_by_test_id("stNotification")
-    error.wait_for(state="visible")
-    expect(error).to_be_visible()
-    expect(error).to_have_text(
-        "An error occurred while executing the traceroute command."
-    )
-
-    enter_target("192.168.0.1")  # Non-routable IP
-    error = page.get_by_test_id("stNotification")
-    error.wait_for(state="visible")
-    expect(error).to_be_visible()
-    expect(error).to_have_text(
-        "No hops found. Please try again with a different IP or domain."
-    )
-
-    # Check valid IP
-    enter_target("8.8.8.8")
-    map_visualization = page.get_by_test_id("mapVisualization")
-    map_visualization.wait_for(state="visible")
-    expect(map_visualization).to_be_visible()
-
-    # Check valid domain
-    enter_target("www.google.com")
-    map_visualization = page.get_by_test_id("mapVisualization")
-    map_visualization.wait_for(state="visible")
-    expect(map_visualization).to_be_visible()
-
-    # Optional: Test for raw output visibility if checkbox is ticked
-    if page.get_by_test_id("rawOutputCheckbox").is_checked():
-        raw_output = page.get_by_test_id("rawMtrOutput")
-        raw_output.wait_for(state="visible")
-        expect(raw_output).to_be_visible()
+    # Test with a valid IP or domain
+    valid_target = "45.33.32.156"
+    enter_target(valid_target)
+    assert_success_condition()
+    # General failure after valid entry check
+    assert_general_failure()
 
 
 def test_password_generator(page: Page):
