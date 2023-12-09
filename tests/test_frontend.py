@@ -100,7 +100,8 @@ def test_http_header_tool(page: Page):
     error.wait_for(state="visible")
     expect(error).to_be_visible()
     expect(error).to_have_text(
-        "Incomplete URL or invalid IP. Please include http:// or https:// for URLs, and enter IPs in the form x.x.x.x using only numbers."
+        "Incomplete URL or invalid IP. Please include http:// or https:// for \
+            URLs, and enter IPs in the form x.x.x.x using only numbers."
     )
 
     enter_address("htt://www.google.com")  # Invalid schema
@@ -124,7 +125,8 @@ def test_http_header_tool(page: Page):
     error.wait_for(state="visible")
     expect(error).to_be_visible()
     expect(error).to_have_text(
-        "Incomplete URL or invalid IP. Please include http:// or https:// for URLs, and enter IPs in the form x.x.x.x using only numbers."
+        "Incomplete URL or invalid IP. Please include http:// or https:// for URLs, \
+            and enter IPs in the form x.x.x.x using only numbers."
     )
 
     enter_address("8.8.8.8s")  # Invalid IP - invalid characters
@@ -132,7 +134,8 @@ def test_http_header_tool(page: Page):
     error.wait_for(state="visible")
     expect(error).to_be_visible()
     expect(error).to_have_text(
-        "Incomplete URL or invalid IP. Please include http:// or https:// for URLs, and enter IPs in the form x.x.x.x using only numbers."
+        "Incomplete URL or invalid IP. Please include http:// or https:// for URLs, \
+            and enter IPs in the form x.x.x.x using only numbers."
     )
 
     # Check entering URL
@@ -154,7 +157,6 @@ def test_regex_tester(page: Page):
 
 
 def test_certificate_lookup(page: Page):
-    
     def enter_domain_and_submit(domain):
         # Enter the domain into the text input
         page.get_by_label("Enter a Domain Name (e.g., google.com)").fill(domain)
@@ -238,8 +240,8 @@ def test_subnet_scanner(page: Page):
     )  # Switch to subcomponent to check cells
 
     # Headers
-    EXPECTED_HEADERS = ["", "IP", "City", "Country"]
-    for col, expected in enumerate(EXPECTED_HEADERS, 1):
+    expected_headers = ["", "IP", "City", "Country"]
+    for col, expected in enumerate(expected_headers, 1):
         expect(table.locator(f"//thead/tr/th[@aria-colindex={col}]")).to_have_text(
             expected
         )
@@ -378,7 +380,8 @@ def test_ping(page: Page):
         expect(error).to_have_text(expected)
 
     def assert_valid():
-        # If summary exists, success/failure message also exists, but success/failure message can't be tested b/c website might be up or down and locator depends on text
+        # If summary exists, success/failure message also exists, but success/failure 
+        # message can't be tested b/c website might be up or down and locator depends on text
         summary = page.locator("summary")
         summary.wait_for(state="visible")
         expect(summary).to_be_visible()
@@ -448,44 +451,52 @@ def test_what_is_my_ip(page: Page):
 
 
 def test_traceroute_visualizer(page: Page):
-    def enter_target(target):
+    # Test functions
+    def enter_ip(ip):
         page.get_by_label("Target IP or Domain").click()
-        page.get_by_label("Target IP or Domain").fill(target)
-        page.get_by_label("Target IP or Domain").press('Enter')
+        page.get_by_label("Target IP or Domain").fill(ip)
+        page.get_by_label("Target IP or Domain").press("Enter")
 
-    def assert_error_message():
-        error_message_locator = "text=No hops found. Please try again \
-            with a different IP or domain."
-        page.wait_for_timeout(500)
-        assert page.locator(error_message_locator).is_visible(), "Error message is \
-            not visible when it should be."
+    def error_traceroute(input_string: str):
+        # Test with a valid IP or domain
+        enter_ip(input_string)
 
-    def assert_general_failure():
-        failure_message_locator = "#traceroute-status"
-        if page.locator(failure_message_locator).inner_text().contains("Traceroute failed"):
-            raise AssertionError("General failure message detected when it should not be.")
+        # Check error message
+        error = page.get_by_test_id("stAlert")
+        error.wait_for(state="visible")
+        expect(error).to_be_visible()
+        expect(error).to_have_text("No hops found. Please try again with a different IP or domain.")
 
-    def assert_success_condition():
-        # Check for the presence of the MTR output table to indicate success
-        mtr_table_locator = "div.stMarkdown > table"
-        page.wait_for_selector(mtr_table_locator, state="visible", timeout=10000)
-        assert page.locator(mtr_table_locator).is_visible(), "MTR output table is not visible."
+    def valid_inputs(input_string: str, output_string: str):
+        enter_ip(input_string)
 
-    # Navigate to the Traceroute Visualizer within the Streamlit app's sidebar
+        # Check map
+        browser_type = page.context.browser.browser_type.name
+        # Firefox GitHub test doesn't display map, so nothing to check
+        if browser_type != "firefox":
+            ip_map = page.get_by_test_id("stStyledFullScreenFrame")
+            ip_map.wait_for(state="visible")
+            expect(ip_map).to_be_visible()
+        else:
+            ip_table = page.get_by_test_id("stMarkdownContainer")
+            table_contents = ip_table.get_by_text(output_string)
+            table_contents.wait_for(state="visible")
+            expect(table_contents).to_have_text(output_string)
+
+    # Test calls
+    # Make sure the sidebar item is visible before clicking
     page.frame_locator(
         'iframe[title="streamlit_antd_components\\.utils\\.component_func\\.sac"]'
     ).get_by_role("menuitem", name="Traceroute Visualizer").click()
 
-    # Test with an invalid domain
-    enter_target("invalid_domain.com")
-    assert_error_message()
+    # Test with an invalid input
+    error_traceroute("invalid_input")
 
-    # Test with a valid IP or domain
-    valid_target = "45.33.32.156"
-    enter_target(valid_target)
-    assert_success_condition()
-    # General failure after valid entry check
-    assert_general_failure()
+    # Test with a valid IP
+    valid_inputs("8.8.8.8", "dns.google")
+
+    # Test with a valid domain
+    valid_inputs("scanme.nmap.org", "scanme.nmap.org")
 
 
 def test_password_generator(page: Page):
