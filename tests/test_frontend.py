@@ -170,23 +170,29 @@ def test_regex_tester(page: Page):
         page.get_by_text("Test Regex").click()
 
         # Check for the expected result in the output
-        matches = page.get_by_text("Matches:")
-        expect(matches).to_be_visible()
-        expect(matches.locator("xpath=./following-sibling::div")).to_have_text("['123']")
+        matches_label = page.get_by_text("Matches:")
+        expect(matches_label).to_be_visible()
+
+        matches_output = page.get_by_text("[0:\"123\"1:\"456\"]")
+        expect(matches_output).to_be_visible()
 
     # Nested function for invalid input
     def test_regex_tester_invalid_input():
         # Enter an invalid regex pattern
-        page.get_by_label("Regex Pattern").fill("[a-z]+")
+        page.get_by_label("Regex Pattern").fill("[a-z]+++")
         page.get_by_label("Input Data").fill("123456")
         page.get_by_text("Test Regex").click()
 
         # Check for the expected error message in the output
-        error = page.get_by_text("Regex Error:")
-        expect(error).to_be_visible()
-        expect(error.locator("xpath=./following-sibling::div")).to_have_text(
-            "nothing to repeat at position 0"
-        )
+        error_label = page.get_by_text("Regex Error:")
+        expect(error_label).to_be_visible()
+
+        error_output = page.get_by_text("multiple repeat at position 7")
+        expect(error_output).to_be_visible()
+
+        # Check for the notification element
+        notification = page.get_by_test_id("stNotification")
+        expect(notification).to_be_visible()
 
     # Execute the nested functions
     test_regex_tester_valid_input()
