@@ -754,9 +754,14 @@ def regex_tester(regex_pattern="", input_data=""):
         try:
             matches = re.finditer(regex_pattern, input_data)
             match_list = [match.group() for match in matches]
-            st.write("Matches:", match_list)
+            if match_list:
+                st.write("Matches:", match_list)
+            else:
+                st.error("No matches found.")
         except re.error as e:
             st.error(f"Regex Error: {e}")
+            
+            
 def url_encoder_decoder():
     # This is to make the colums as wide as the buttons so they aren't spread far apart
     st.markdown(

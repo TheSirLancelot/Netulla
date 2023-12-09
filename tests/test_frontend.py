@@ -193,10 +193,26 @@ def test_regex_tester(page: Page):
         # Check for the notification element
         notification = page.get_by_test_id("stNotification")
         expect(notification).to_be_visible()
+        
+    # Nested function no matches
+    def test_regex_tester_no_matches():
+        # Enter an invalid regex pattern
+        page.get_by_label("Regex Pattern").fill("[a-z]+")
+        page.get_by_label("Input Data").fill("123456")
+        page.get_by_text("Test Regex").click()
+
+        # Check for the expected error message in the output
+        no_match_label = page.get_by_text("No matches found.")
+        expect(no_match_label).to_be_visible()
+
+        # Check for the notification element
+        notification = page.get_by_test_id("stNotification")
+        expect(notification).to_be_visible()
 
     # Execute the nested functions
     test_regex_tester_valid_input()
     test_regex_tester_invalid_input()
+    test_regex_tester_no_matches()
 
 
 def test_certificate_lookup(page: Page):
