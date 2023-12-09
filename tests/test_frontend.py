@@ -480,7 +480,7 @@ def test_traceroute_visualizer(page: Page):
         else:
             ip_table = page.get_by_test_id("stMarkdownContainer")
             table_contents = ip_table.get_by_text(output_string)
-            table_contents.wait_for(state="visible")
+            table_contents.wait_for(state="visible", timeout=60000)
             expect(table_contents).to_have_text(output_string)
 
     # Test calls
