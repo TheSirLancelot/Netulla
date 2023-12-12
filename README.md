@@ -52,7 +52,7 @@ This document is the User Guide for Netulla, A web-based suite of multi-function
 
 - Author: [Oscar Vasquez-Flores](https://github.com/oavf15)
 - Description: The NS Lookup tool allows you to perform Domain Name System (DNS) lookups to retrieve information about a specific domain. You can obtain details such as IP addresses associated with the domain and its corresponding hostname.
-- Usage: 
+- Usage:
   1. From the Netulla home page, click the NS Lookup link in the sidebar.
   2. In the tool, find the text input labeled "Enter Domain (e.g., google.com)".
   3. To perform a lookup, enter the domain name you want to query into this text field (e.g., "google.com").
@@ -67,7 +67,7 @@ This document is the User Guide for Netulla, A web-based suite of multi-function
 - Description: The Certificate Lookup tool provides a user-friendly interface to retrieve detailed information about SSL certificates for a given URL. SSL certificates play a critical role in securing online communication by encrypting data and ensuring the authenticity of websites. This tool empowers users to inspect the specifics of a website's SSL certificate, offering transparency and security awareness.
 - Usage:
   1. From the Netulla home page, click the Certificate Lookup link in the sidebar.
-  2. Enter the Domain name in the format of  ‘example.com’, and hit “Get Certificate.”
+  2. Enter the Domain name in the format of ‘example.com’, and hit “Get Certificate.”
   3. Upon successful execution, the SSL certificate information for the entered domain will be displayed. Information includes details about the SSL certificate, such as its validity period and issuer.
   4. If an issue occurs during the certificate lookup, error messages will be displayed.
   5. To lookup another certificate you will need to erase your original URL, then add a new one and hit "Get Certificate."
@@ -158,17 +158,27 @@ This document is the User Guide for Netulla, A web-based suite of multi-function
 
 ## Regex Tester
 
-- Author:
-- Description:
+- Author: Reynaldo Veras
+- Description: This app is designed to assist users in testing regular expressions (regex) against input data. It provides a straightforward interface where users can input a regex pattern and test it against specific data. The app then displays the matched portions of the input data based on the provided regex pattern, aiding users in validating and refining their regex expressions.
 - Usage:
+- 1. From the Netulla home page, click the Regex Tester link in the sidebar.
+  2. Users are then prompted to input a regex pattern and the corresponding data they want to test.
+  3. Users can initiate the testing process by clicking the "Test Regex" button after entering the required information.
+  4. The app will then execute the regex pattern against the input data and present the matched portions, providing a helpful tool for users working with regular expressions.
+  5. To execute with another regex pattern, input data, or both, edit the text in the appropriate box and click "Test Regex" again.
 
 # Password Tools
 
 ## Password Complexity Checker
 
-- Author:
-- Description:
+- Author: Reynaldo Veras
+- Description: This feature is designed to assess the strength of a given password. It employs a set of criteria to categorize passwords into different levels, such as "Unacceptable," "Weak," "Meh," and "Strong," based on their complexity. This functionality aids users in creating secure and robust passwords by providing instant feedback on the strength of their input.
 - Usage:
+- 1. From the Netulla home page, click on Password Complexity.
+  2. Input a password in the provided text field and press the "Enter" key.
+  3. The app will then analyze the password and display its complexity level.
+  4. This feature is beneficial for individuals seeking to enhance the security of their accounts by generating passwords that meet higher complexity standards.
+  5. To analyze a new password, enter a new one and press the "Enter" key again.
 
 ## Password Generator
 
