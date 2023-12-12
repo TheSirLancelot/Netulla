@@ -67,7 +67,7 @@
 | <li>- [x] What is my IP</li>           | Tyler Wilson         | Identify the user's current IP and geolocation info       |
 | <li>- [x] URL Encoder/Decoder</li>     | William Weir         | URL encode/decode a string                                |
 | <li>- [x] Regex Tester</li>            | Reynaldo Veras       | Perform matching with user-given regex on user-given data |
-| <li>- [ ] Accessibility Assurance</li> | Oscar Vasquez FLores | Ensures we are meeting the WCAG guidelines                |
+| <li>- [x] Accessibility Assurance</li> | Oscar Vasquez FLores | Ensures we are meeting the WCAG guidelines                |
 
 ## Closing Checklist (Due Date)
 
@@ -79,8 +79,8 @@
 -   [x] Peer Review 2 (24 Nov 2023)
 -   [x] Phase 2 Source (28 Nov 2023)
 -   [x] Phase 3 Source (05 Dec 2023)
--   [ ] Peer Review 3 (08 Dec 2023)
--   [ ] Final Submission (12 Dec 2023)
+-   [x] Peer Review 3 (08 Dec 2023)
+-   [x] Final Submission (12 Dec 2023)
 
 ## A Note on Team Participation
 
