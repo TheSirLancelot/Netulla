@@ -20,6 +20,7 @@ icons = {
     "HTTP Header Tool": "file-earmark-text",
     "Whois Lookup": "question-square",
     "Website Ping": "wifi",
+    "Regex Tester": "list-check",
     "URL Encoder and Decoder": "file-earmark-code",
     "Password Complexity": "shield-lock",  # Example icon for Password Complexity
     "Password Generator": "person-lock" 
