@@ -57,7 +57,7 @@ We utilize a docker container for our application, which alleviates the need for
 | 9   | test_http_header_tool      | Test functionality of HTTP header tool            | Walks through each of the steps needed to get a server's HTTP response header              |
 | 10  | test_curl                  | Test functionality of online Curl tool            | Walks through each of the steps needed to retrieve a webpage with cURL                     |
 | 11  | test_ping                  | Test functionality of ping tool                   | Walks through each of the steps needed to see if a website is currently up                 |
-| 12  | test_ip_geolocation        | Test functionality of "IP Geolocation" tool       | Walks through each of the steps needed to get the geolocation of the user's IP address     |
+| 12  | test_ip_geolocation        | Test functionality of IP geolocation tool         | Walks through each of the steps needed to get the geolocation of the user's IP address     |
 | 13  | test_url_encoder_decoder   | Test functionality of URL encoder/decoder         | Walks through each of the steps needed to encode or decode a string for URL purposes       |
 | 14  | test_regex_tester          | Test functionality of regex tester                | Walks through each of the steps needed to test a regular expression against test input     |
 
