@@ -151,9 +151,71 @@ def test_http_header_tool(page: Page):
     expect(headers).to_be_visible()
 
 
+
+
+
 def test_regex_tester(page: Page):
-    # TODO: empty test
-    pass
+    # Go to Regex Tester function
+    page.frame_locator(
+        'iframe[title="streamlit_antd_components\\.utils\\.component_func\\.sac"]'
+    ).get_by_role("menuitem", name="Regex Tester").click()
+
+    # Check page title
+    expect(
+        page.get_by_role("heading", name="Regex Tester").locator("span")
+    ).to_be_visible()
+
+    # Nested function for valid input
+    def test_regex_tester_valid_input():
+        # Enter a valid regex pattern and input data
+        page.get_by_label("Regex Pattern").fill(r"\d{3}")
+        page.get_by_label("Input Data").fill("123456")
+        page.get_by_text("Test Regex").click()
+
+        # Check for the expected result in the output
+        matches_label = page.get_by_text("Matches:")
+        expect(matches_label).to_be_visible()
+
+        matches_output = page.get_by_text("[0:\"123\"1:\"456\"]")
+        expect(matches_output).to_be_visible()
+
+    # Nested function for invalid input
+    def test_regex_tester_invalid_input():
+        # Enter an invalid regex pattern
+        page.get_by_label("Regex Pattern").fill("[a-z]+++")
+        page.get_by_label("Input Data").fill("123456")
+        page.get_by_text("Test Regex").click()
+
+        # Check for the expected error message in the output
+        error_label = page.get_by_text("Regex Error:")
+        expect(error_label).to_be_visible()
+
+        error_output = page.get_by_text("multiple repeat at position 7")
+        expect(error_output).to_be_visible()
+
+        # Check for the notification element
+        notification = page.get_by_test_id("stNotification")
+        expect(notification).to_be_visible()
+        
+    # Nested function no matches
+    def test_regex_tester_no_matches():
+        # Enter an invalid regex pattern
+        page.get_by_label("Regex Pattern").fill("[a-z]+")
+        page.get_by_label("Input Data").fill("123456")
+        page.get_by_text("Test Regex").click()
+
+        # Check for the expected error message in the output
+        no_match_label = page.get_by_text("No matches found.")
+        expect(no_match_label).to_be_visible()
+
+        # Check for the notification element
+        notification = page.get_by_test_id("stNotification")
+        expect(notification).to_be_visible()
+
+    # Execute the nested functions
+    test_regex_tester_valid_input()
+    test_regex_tester_invalid_input()
+    test_regex_tester_no_matches()
 
 
 def test_certificate_lookup(page: Page):
@@ -502,3 +564,5 @@ def test_traceroute_visualizer(page: Page):
 def test_password_generator(page: Page):
     # TODO: empty test
     pass
+
+

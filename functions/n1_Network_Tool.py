@@ -12,6 +12,8 @@ import nmap
 import plotly.express as px
 import dns.resolver
 import dns.reversename
+
+
 from ip2geotools.databases.noncommercial import (
     DbIpCity,
     InvalidRequestError,
@@ -752,6 +754,25 @@ def website_ping():
             st.error("Invalid domain name or IP address.")
 
 
+def regex_tester(regex_pattern="", input_data=""):
+    st.title("Regex Tester")
+
+    st.write("Enter a regex pattern and input data to test:")
+    regex_pattern = st.text_area("Regex Pattern", regex_pattern)
+    input_data = st.text_area("Input Data", input_data)
+
+    if st.button("Test Regex"):
+        try:
+            matches = re.finditer(regex_pattern, input_data)
+            match_list = [match.group() for match in matches]
+            if match_list:
+                st.write("Matches:", match_list)
+            else:
+                st.error("No matches found.")
+        except re.error as e:
+            st.error(f"Regex Error: {e}")
+            
+            
 def url_encoder_decoder():
     # This is to make the colums as wide as the buttons so they aren't spread far apart
     st.markdown(
@@ -800,5 +821,6 @@ page1_funcs = {
     "HTTP Header Tool": http_header_tool,
     "Whois Lookup": whois_lookup,
     "Website Ping": website_ping,
+    "Regex Tester": regex_tester,
     "URL Encoder and Decoder": url_encoder_decoder,
 }
