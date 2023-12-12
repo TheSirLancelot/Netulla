@@ -550,19 +550,29 @@ def test_traceroute_visualizer(page: Page):
             ip_map.wait_for(state="visible")
             expect(ip_map).to_be_visible()
 
+    # Table doesn't disappear until new traceroute completes, meaning tests grab old table
+    # This forces table to disappear
+    def refresh_page():
+        page.frame_locator(
+            'iframe[title="streamlit_antd_components\\.utils\\.component_func\\.sac"]'
+        ).get_by_role("menuitem", name="Home").click()
+        page.frame_locator(
+            'iframe[title="streamlit_antd_components\\.utils\\.component_func\\.sac"]'
+        ).get_by_role("menuitem", name="Traceroute Visualizer").click()
+
     # Test calls
     # Make sure the sidebar item is visible before clicking
-    page.frame_locator(
-        'iframe[title="streamlit_antd_components\\.utils\\.component_func\\.sac"]'
-    ).get_by_role("menuitem", name="Traceroute Visualizer").click()
+    refresh_page()
 
     # Test with an invalid input
     error_traceroute("invalid_input")
 
     # Test with a valid IP
+    refresh_page()
     valid_inputs("8.8.8.8", "dns.google")
 
     # Test with a valid domain
+    refresh_page()
     valid_inputs("scanme.nmap.org", "scanme.nmap.org")
 
 
