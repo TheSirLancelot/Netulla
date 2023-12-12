@@ -69,6 +69,9 @@ The web-application has a main "splash screen" with a dropdown box that displays
 
 ![image](https://github.com/TheSirLancelot/Netulla/assets/22830818/552adb78-105c-4dc3-9e93-a41bc62ae90c)
 
+## User Guide
+- Our full user guide can be found [here](https://github.com/TheSirLancelot/Netulla/blob/dev/README.md).
+
 ## Test Plan
 - Our full test plan can be found [here](https://github.com/TheSirLancelot/Netulla/blob/dev/TestPlan.md).
 
