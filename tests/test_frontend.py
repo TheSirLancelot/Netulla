@@ -532,18 +532,23 @@ def test_traceroute_visualizer(page: Page):
     def valid_inputs(input_string: str, output_string: str):
         enter_ip(input_string)
 
-        # Check map
         browser_type = page.context.browser.browser_type.name
+        # Check table
+        ip_table = page.get_by_role("table")
+        ip_table.wait_for(state="visible")
+        # Firefox GitHub test - traceroute won't actually complete, just check for table's existence
+        if browser_type == "firefox":
+            expect(ip_table).to_be_visible()
+        else:
+            table_contents = ip_table.get_by_text(output_string)
+            expect(table_contents).to_have_text(output_string, timeout=0)
+
+        # Check map
         # Firefox GitHub test doesn't display map, so nothing to check
         if browser_type != "firefox":
             ip_map = page.get_by_test_id("stStyledFullScreenFrame")
             ip_map.wait_for(state="visible")
             expect(ip_map).to_be_visible()
-        else:
-            ip_table = page.get_by_test_id("stMarkdownContainer")
-            table_contents = ip_table.get_by_text(output_string)
-            table_contents.wait_for(state="visible", timeout=120000)
-            expect(table_contents).to_have_text(output_string)
 
     # Test calls
     # Make sure the sidebar item is visible before clicking
