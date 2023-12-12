@@ -541,7 +541,7 @@ def test_traceroute_visualizer(page: Page):
             expect(ip_table).to_be_visible()
         else:
             table_contents = ip_table.get_by_text(output_string)
-            expect(table_contents).to_have_text(output_string, timeout=0)
+            expect(table_contents).to_have_text(output_string)
 
         # Check map
         # Firefox GitHub test doesn't display map, so nothing to check
