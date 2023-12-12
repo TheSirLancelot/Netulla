@@ -57,9 +57,13 @@ This document is the User Guide for Netulla, A web-based suite of multi-function
 
 ## Network Analysis
 
-- Author:
-- Description:
+- Author: [Tyler Wilson](https://github.com/nevermore23274)
+- Description: This tool provides information about the network related to the provided IP address. It scans for open ports, the corresponding service for well-known ports, and geographical information related to the IP.
 - Usage:
+  1. From the Netulla home page, click the Network Analysis link in the sidebar.
+  2. Enter the desired IP address, check the checkbox if you only want to scan for well-known ports, then click the "Execute" button.
+  3. If the IP address entered is valid, the tool will display the results below.
+  4. To analyze a different network, or to change the setting for scanning only well-known ports, enter a new IP address and/or check or uncheck the box, then click "Execute" again.
 
 ## Subnet Calculator
 
