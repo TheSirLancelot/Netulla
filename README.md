@@ -155,12 +155,6 @@ This document is the User Guide for Netulla, A web-based suite of multi-function
 
 ## Regex Tester
 
-- Author:
-- Description:
-- Usage:
-
-## URL Encoder and Decoder
-
 - Author: Reynaldo Veras
 - Description: This app is designed to assist users in testing regular expressions (regex) against input data. It provides a straightforward interface where users can input a regex pattern and test it against specific data. The app then displays the matched portions of the input data based on the provided regex pattern, aiding users in validating and refining their regex expressions.
 - Usage:
@@ -169,6 +163,12 @@ This document is the User Guide for Netulla, A web-based suite of multi-function
   3. Users can initiate the testing process by clicking the "Test Regex" button after entering the required information.
   4. The app will then execute the regex pattern against the input data and present the matched portions, providing a helpful tool for users working with regular expressions.
   5. To execute with another regex pattern, input data, or both, edit the text in the appropriate box and click "Test Regex" again.
+
+## URL Encoder and Decoder
+
+- Author:
+- Description:
+- Usage:
 
 # Password Tools
 
