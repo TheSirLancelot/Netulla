@@ -504,7 +504,7 @@ def test_whois_lookup(page: Page):
     expect(results).to_be_visible()
 
 
-def test_what_is_my_ip(page: Page):
+def test_ip_geolocation(page: Page):
     # TODO: empty test
     pass
 
