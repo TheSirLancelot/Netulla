@@ -193,7 +193,7 @@ def test_regex_tester(page: Page):
         # Check for the notification element
         notification = page.get_by_test_id("stNotification")
         expect(notification).to_be_visible()
-        
+ 
     # Nested function no matches
     def test_regex_tester_no_matches():
         # Enter an invalid regex pattern
@@ -216,7 +216,7 @@ def test_regex_tester(page: Page):
 
 
 def test_certificate_lookup(page: Page):
-    
+ 
     def enter_domain_and_submit(domain):
         # Enter the domain into the text input
         page.get_by_label("Enter a Domain Name (e.g., google.com)").fill(domain)
@@ -505,8 +505,26 @@ def test_whois_lookup(page: Page):
 
 
 def test_what_is_my_ip(page: Page):
-    # TODO: empty test
-    pass
+    page.frame_locator(
+        'iframe[title="streamlit_antd_components\\.utils\\.component_func\\.sac"]'
+    ).get_by_role("menuitem", name="IP Geolocation").click()
+
+    # Check headers/other text
+    expect(page.get_by_text("IP Geolocation")).to_be_visible()
+    ip = page.get_by_text("Geolocation of IP:")
+    ip.wait_for(state="visible")
+    expect(ip).to_be_visible()
+    expect(page.get_by_text("Latitude:")).to_be_visible()
+    expect(page.get_by_text("Longitude:")).to_be_visible()
+
+    # Check map
+    browser_type = page.context.browser.browser_type.name
+    if (
+        browser_type != "firefox"
+    ):  # Firefox GitHub test doesn't display map, so nothing to check
+        map = page.locator("#view-default-view")
+        map.wait_for(state="visible")
+        expect(map).to_be_visible()
 
 
 def test_traceroute_visualizer(page: Page):
