@@ -155,10 +155,10 @@ This document is the User Guide for Netulla, A web-based suite of multi-function
 
 ## Regex Tester
 
-- Author: Reynaldo Veras
+- Author: [Reynaldo Veras](https://github.com/Rey41888)
 - Description: This app is designed to assist users in testing regular expressions (regex) against input data. It provides a straightforward interface where users can input a regex pattern and test it against specific data. The app then displays the matched portions of the input data based on the provided regex pattern, aiding users in validating and refining their regex expressions.
 - Usage:
-- 1. From the Netulla home page, click the Regex Tester link in the sidebar.
+  1. From the Netulla home page, click the Regex Tester link in the sidebar.
   2. Users are then prompted to input a regex pattern and the corresponding data they want to test.
   3. Users can initiate the testing process by clicking the "Test Regex" button after entering the required information.
   4. The app will then execute the regex pattern against the input data and present the matched portions, providing a helpful tool for users working with regular expressions.
@@ -166,18 +166,22 @@ This document is the User Guide for Netulla, A web-based suite of multi-function
 
 ## URL Encoder and Decoder
 
-- Author:
-- Description:
+- Author: [William Weir](https://github.com/TheSirLancelot)
+- Description: This feature is designed to take a string and either encode or decode the string using the URL encoding rules. URL encoding is a process that converts special characters in a URL to a format that can be understood by web browsers and servers. This allows browsers to interpret invalid or special characters in a URL.
 - Usage:
+  1. From the Netulla home page, click the URL Encoder and Decoder link in the sidebar.
+  2. Enter the string that you would like to either encode or decode.
+  3. Click either the Encode or Decode buttons, depening on which action you would like to perform.
+  4. To enter a new string, simply delete your old string and repeat steps 2 and 3.
 
 # Password Tools
 
 ## Password Complexity
 
-- Author: Reynaldo Veras
+- Author: [Reynaldo Veras](https://github.com/Rey41888)
 - Description: This feature is designed to assess the strength of a given password. It employs a set of criteria to categorize passwords into different levels, such as "Unacceptable," "Weak," "Meh," and "Strong," based on their complexity. This functionality aids users in creating secure and robust passwords by providing instant feedback on the strength of their input.
 - Usage:
-- 1. From the Netulla home page, click on Password Complexity.
+  1. From the Netulla home page, click on Password Complexity.
   2. Input a password in the provided text field and press the "Enter" key.
   3. The app will then analyze the password and display its complexity level.
   4. This feature is beneficial for individuals seeking to enhance the security of their accounts by generating passwords that meet higher complexity standards.
