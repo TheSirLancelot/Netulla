@@ -3,6 +3,7 @@ import ipaddress
 import math
 import subprocess
 import re
+import urllib.parse
 import streamlit as st
 import pandas as pd
 import pydeck as pdk
@@ -11,6 +12,8 @@ import nmap
 import plotly.express as px
 import dns.resolver
 import dns.reversename
+
+
 from ip2geotools.databases.noncommercial import (
     DbIpCity,
     InvalidRequestError,
@@ -21,21 +24,31 @@ import whois
 
 
 def ip_geolocation():
-    # st.set_page_config(page_title="IP Geolocation", page_icon="🕸")
+    # Function to get the public IP address using an external service
+    def get_public_ip():
+        try:
+            # Using curl to fetch the IP address from ipify API, suppressing output
+            result = subprocess.run(
+                ["curl", "https://api.ipify.org"],
+                stdout=subprocess.PIPE,
+                stderr=subprocess.DEVNULL,
+                check=False,
+            )
+            return result.stdout.decode("utf-8").strip()
+        except subprocess.SubprocessError:
+            st.error("Failed to fetch the public IP address.")
+            return None
 
-    st.markdown("# IP Geolocation")
-    # st.sidebar.header("IP Geolocation")
-
-    ip_address = st.text_input(
-        "Enter an IP Address", value="8.8.8.8", max_chars=None, key=None, type="default"
-    )
-
-    @st.cache_data
+    # Function to get the geolocation of an IP address
+    @st.cache_resource
     def get_geolocation(ip_address):
         response = requests.get(f"http://ip-api.com/json/{ip_address}", timeout=5)
         response.raise_for_status()  # Ensure we got a valid response
         return response.json()
 
+    st.markdown("# IP Geolocation")
+
+    ip_address = get_public_ip()
     if ip_address:
         location = get_geolocation(ip_address)
         latitude = location["lat"]
@@ -55,7 +68,7 @@ def ip_geolocation():
             get_radius=1000,
         )
 
-        # Set the initial view, https://deckgl.readthedocs.io/en/latest/view_state.html
+        # Set the initial view
         view_state = pdk.ViewState(
             latitude=latitude,
             longitude=longitude,
@@ -66,7 +79,7 @@ def ip_geolocation():
         # Render the deck.gl map in the Streamlit app as a PyDeck chart
         st.pydeck_chart(pdk.Deck(layers=[layer], initial_view_state=view_state))
     else:
-        st.error("Please enter an IP address.")
+        st.error("Failed to determine the IP address.")
 
 
 def network_analysis():
@@ -245,7 +258,7 @@ def certificate_lookup():
         "in the format 'example.com' and click 'Get Certificate'."
     )
 
-    url = st.text_input("Enter a URL (e.g., google.com)", "example.com")
+    url = st.text_input("Enter a Domain Name (e.g., google.com)", "example.com")
     if st.button("Get Certificate"):
         if url:
             try:
@@ -457,7 +470,7 @@ def traceroute_visualizer():
         pretty_output += "</table>"
         return pretty_output
 
-    def perform_traceroute(target, show_raw_output, radius):
+    def perform_traceroute(target, radius):
         if target:
             try:
                 user_ip = requests.get("https://httpbin.org/ip", timeout=5).json()[
@@ -469,9 +482,9 @@ def traceroute_visualizer():
                     check=True,
                 ).stdout.decode()
 
-                if show_raw_output:
-                    st.markdown("## Raw MTR Output")
-                    st.markdown(mtr_data_table(output), unsafe_allow_html=True)
+                # Always display the MTR table
+                st.markdown("## Raw MTR Output")
+                st.markdown(mtr_data_table(output), unsafe_allow_html=True)
 
                 regex_pattern = r"\d+\.\|\-\- ([\w\.\-]+)"
                 hops = re.findall(regex_pattern, output)
@@ -479,6 +492,9 @@ def traceroute_visualizer():
                     st.error(
                         "No hops found. Please try again with a different IP or domain."
                     )
+                    # Indicate failure in the traceroute operation
+                    st.markdown('<p id="traceroute-status">Traceroute failed</p>',\
+                                unsafe_allow_html=True)
                     return
 
                 hops.insert(0, user_ip)
@@ -581,14 +597,20 @@ def traceroute_visualizer():
                 )
             except requests.exceptions.RequestException as req_err:
                 st.error(f"An error occurred while fetching the user IP: {req_err}")
+                st.markdown('<p id="traceroute-status">Traceroute failed</p>',\
+                            unsafe_allow_html=True)
             except subprocess.CalledProcessError as subp_err:
                 st.error(
                     f"An error occurred while executing the traceroute command: {subp_err}"
                 )
+                st.markdown('<p id="traceroute-status">Traceroute failed</p>',\
+                            unsafe_allow_html=True)
             except (InvalidRequestError, LimitExceededError) as ip2geo_err:
                 st.error(
                     f"An error occurred while fetching geolocation data: {ip2geo_err}"
                 )
+                st.markdown('<p id="traceroute-status">Traceroute failed</p>',\
+                            unsafe_allow_html=True)
 
     st.markdown("# Traceroute Map")
 
@@ -596,13 +618,13 @@ def traceroute_visualizer():
     target = st.text_input("Target IP or Domain", "")
 
     # Other UI elements
-    show_raw_output = st.checkbox("Show Raw Output", True)
+    #show_raw_output = st.checkbox("Show Raw Output", True)
     radius = st.slider(
         "Adjust Scatter Radius", min_value=0, max_value=30000, value=30000, step=1000
     )
 
     if target:
-        perform_traceroute(target, show_raw_output, radius)
+        perform_traceroute(target, radius)
 
 
 # Expect IPs to be 4 ints separated by periods
@@ -636,7 +658,8 @@ def http_header_tool():
 
         except requests.exceptions.MissingSchema:
             st.error(
-                "Incomplete URL or invalid IP. Please include http:// or https:// for URLs, and enter IPs in the form x.x.x.x using only numbers."
+                "Incomplete URL or invalid IP. Please include http:// or https:// for URLs, \
+                    and enter IPs in the form x.x.x.x using only numbers."
             )
         except requests.exceptions.InvalidSchema:
             st.error("Invalid URL. Please use http:// or https://")
@@ -650,7 +673,7 @@ def online_curl_tool():
     st.markdown("# Online Curl Tool")
 
     # Input field for the user to enter a URL
-    url = st.text_input("Enter URL: https://www.example.com", "")
+    url = st.text_input("Enter a URL (e.g., https://www.google.com)", "https://www.example.com")
 
     # Button to send the curl request
     if st.button("Send Curl Request"):
@@ -714,7 +737,8 @@ def website_ping():
                 st.write(":heavy_check_mark: :green[Success. Website is up.]")
             elif response.success(option=1):
                 st.write(
-                    ":heavy_exclamation_mark: :orange[Partial Success. Website is up but experiencing difficulties.]"
+                    ":heavy_exclamation_mark: :orange[Partial Success. Website is up but \
+                        experiencing difficulties.]"
                 )
             else:
                 st.write(":heavy_multiplication_x: :red[Failure. Website is down.]")
@@ -730,6 +754,60 @@ def website_ping():
             st.error("Invalid domain name or IP address.")
 
 
+def regex_tester(regex_pattern="", input_data=""):
+    st.title("Regex Tester")
+
+    st.write("Enter a regex pattern and input data to test:")
+    regex_pattern = st.text_area("Regex Pattern", regex_pattern)
+    input_data = st.text_area("Input Data", input_data)
+
+    if st.button("Test Regex"):
+        try:
+            matches = re.finditer(regex_pattern, input_data)
+            match_list = [match.group() for match in matches]
+            if match_list:
+                st.write("Matches:", match_list)
+            else:
+                st.error("No matches found.")
+        except re.error as e:
+            st.error(f"Regex Error: {e}")
+            
+            
+def url_encoder_decoder():
+    # This is to make the colums as wide as the buttons so they aren't spread far apart
+    st.markdown(
+        """
+            <style>
+                div[data-testid="column"] {
+                    width: fit-content !important;
+                    flex: unset;
+                }
+                div[data-testid="column"] * {
+                    width: fit-content !important;
+                }
+            </style>
+            """,
+        unsafe_allow_html=True,
+    )
+    st.markdown("# URL Encoder/Decoder")
+    user_input = st.text_input("Enter the string you would like to encode/decode:")
+    output = ""
+    col1, col2 = st.columns([1, 1])
+    with col1:
+        encode = st.button("Encode")
+    with col2:
+        decode = st.button("Decode")
+
+    if encode:
+        output = urllib.parse.quote(user_input)
+    elif decode:
+        output = urllib.parse.unquote(user_input)
+
+    if output != "":
+        st.subheader("Results:")
+        st.write(output)
+
+
 # Dictionary of subpage functions
 page1_funcs = {
     "IP Geolocation": ip_geolocation,
@@ -743,4 +821,6 @@ page1_funcs = {
     "HTTP Header Tool": http_header_tool,
     "Whois Lookup": whois_lookup,
     "Website Ping": website_ping,
+    "Regex Tester": regex_tester,
+    "URL Encoder and Decoder": url_encoder_decoder,
 }
