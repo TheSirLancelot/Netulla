@@ -527,6 +527,7 @@ def test_what_is_my_ip(page: Page):
         expect(map).to_be_visible()
 
 
+
 def test_traceroute_visualizer(page: Page):
     # TODO: empty test
     pass
