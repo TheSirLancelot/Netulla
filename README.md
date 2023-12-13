@@ -17,25 +17,32 @@ This document is the User Guide for Netulla, A web-based suite of multi-function
 # Table of Contents
 
 - [Network Tools](#network-tools)
-  - [Traceroute Visualizer](#traceroute-visualizer)
-  - [NS Lookup](#ns-lookup)
-  - [Certificate Lookup](#certificate-lookup)
-  - [Subnet Scan](#subnet-scan)
   - [IP Geolocation](#ip-geolocation)
+  - [Traceroute Visualizer](#traceroute-visualizer)
   - [Network Analysis](#network-analysis)
   - [Subnet Calculator](#subnet-calculator)
-  - [Whois Lookup](#whois-lookup)
+  - [Certificate Lookup](#certificate-lookup)
+  - [NS Lookup](#ns-lookup)
+  - [Subnet Scanner](#subnet-scanner)
+  - [Online Curl Tool](#online-curl-tool)
   - [HTTP Header Tool](#http-header-tool)
-  - [Online WGET Tool](#online-wget-tool)
-  - [Ping](#ping)
-  - [What is my IP?](#what-is-my-ip)
+  - [Whois Lookup](#whois-lookup)
+  - [Website Ping](#website-ping)
+  - [Regex Tester](#regex-tester)
   - [URL Encoder and Decoder](#url-encoder-and-decoder)
-  - [Regex tester](#regex-tester)
 - [Password Tools](#password-tools)
-  - [Password Complexity Checker](#password-complexity-checker)
+  - [Password Complexity](#password-complexity)
   - [Password Generator](#password-generator)
 
 # Network Tools
+
+## IP Geolocation
+
+- Author: [Tyler Wilson](https://github.com/nevermore23274)
+- Description: This tool is designed to provide users with detailed information about their public IP address and its geolocation. The tool first fetches the user's public IP address using an external service. Once the IP address is acquired, the tool then retrieves the geolocation data associated with that IP, including latitude and longitude.
+- Usage:
+  1. From the Netulla home page, click on Ip Geolocation.
+  2. The information for your current location (including latitude and logitude) will be displayed as well as the location on a map.
 
 ## Traceroute Visualizer
 
@@ -47,6 +54,38 @@ This document is the User Guide for Netulla, A web-based suite of multi-function
   3. If you don't want to see the raw output of the MTR command, click on the check-box off as it defaults to showing it.
   4. Press enter after entering in the domain or IP, and adjust the slide bar if you'd like more granular circles.
   5. If you'd like to perform another or different traceroute, replace the domain or IP in the search field and press enter again.
+
+## Network Analysis
+
+- Author: [Tyler Wilson](https://github.com/nevermore23274)
+- Description: This tool provides information about the network related to the provided IP address. It scans for open ports, the corresponding service for well-known ports, and geographical information related to the IP.
+- Usage:
+  1. From the Netulla home page, click the Network Analysis link in the sidebar.
+  2. Enter the desired IP address, check the checkbox if you only want to scan for well-known ports, then click the "Execute" button.
+  3. If the IP address entered is valid, the tool will display the results below.
+  4. To analyze a different network, or to change the setting for scanning only well-known ports, enter a new IP address and/or check or uncheck the box, then click "Execute" again.
+
+## Subnet Calculator
+
+- Author: [Tyler Wilson](https://github.com/nevermore23274)
+- Description: This tool is an intuitive tool designed to assist in understanding and planning network subnets. It provides a detailed breakdown of subnet information based on an IP address and a CIDR (Classless Inter-Domain Routing) notation input.
+- Usage:
+  1. From the Netulla home page, click the Subnet Calculator link in the sidebar.
+  2. Enter in the desired IPv4 address into the text field.
+  3. Select the CIDR range (/24 is default).
+  4. Press enter, scroll as needed to view the information for the subnet.
+  5. If you'd like to calculate for a different subnet, replace the IPv4 address in the text area and press enter again. (ensure you change the CIDR if needed)
+
+## Certificate Lookup
+
+- Author: [Tyree Maeser](https://github.com/Tymaze3)
+- Description: The Certificate Lookup tool provides a user-friendly interface to retrieve detailed information about SSL certificates for a given URL. SSL certificates play a critical role in securing online communication by encrypting data and ensuring the authenticity of websites. This tool empowers users to inspect the specifics of a website's SSL certificate, offering transparency and security awareness.
+- Usage:
+  1. From the Netulla home page, click the Certificate Lookup link in the sidebar.
+  2. Enter the Domain name in the format of ‘example.com’, and hit “Get Certificate.”
+  3. Upon successful execution, the SSL certificate information for the entered domain will be displayed. Information includes details about the SSL certificate, such as its validity period and issuer.
+  4. If an issue occurs during the certificate lookup, error messages will be displayed.
+  5. To lookup another certificate you will need to erase your original URL, then add a new one and hit "Get Certificate."
 
 ## NS lookup
 
@@ -61,18 +100,7 @@ This document is the User Guide for Netulla, A web-based suite of multi-function
   6. The tool provides error messages for issues like no DNS records found, domain non-existence, timeouts, or other DNS-related errors.
   7. To perform lookups for different domains, replace the domain name in the text input field and submit the query again.
 
-## Certificate Lookup
-
-- Author: [Tyree Maeser](https://github.com/Tymaze3)
-- Description: The Certificate Lookup tool provides a user-friendly interface to retrieve detailed information about SSL certificates for a given URL. SSL certificates play a critical role in securing online communication by encrypting data and ensuring the authenticity of websites. This tool empowers users to inspect the specifics of a website's SSL certificate, offering transparency and security awareness.
-- Usage:
-  1. From the Netulla home page, click the Certificate Lookup link in the sidebar.
-  2. Enter the Domain name in the format of ‘example.com’, and hit “Get Certificate.”
-  3. Upon successful execution, the SSL certificate information for the entered domain will be displayed. Information includes details about the SSL certificate, such as its validity period and issuer.
-  4. If an issue occurs during the certificate lookup, error messages will be displayed.
-  5. To lookup another certificate you will need to erase your original URL, then add a new one and hit "Get Certificate."
-
-## Subnet Scan
+## Subnet Scanner
 
 - Author: [Tristan Young](https://github.com/tyoung-99)
 - Description: This tool scans a subnetwork to determine the location of each webserver on it. This involves breaking apart the IP into its network ID and host ID, then iterating through every possible host ID using the same network ID. This allows the tool to identify and locate every possible host on the subnet.
@@ -82,43 +110,6 @@ This document is the User Guide for Netulla, A web-based suite of multi-function
   3. If the IP address entered is valid, the tool will scan the subnet and identify the location of each webserver, then display the results below.
      - The results are displayed both on a navigable map of the world, and in a table listed by IP, city, and country.
   4. To scan additional subnets, replace the data entered in the text box and press `Enter` again.
-
-## Network Analysis
-
-- Author:
-- Description:
-- Usage:
-
-## Subnet Calculator
-
-- Author: [Tyler Wilson](https://github.com/nevermore23274)
-- Description: This tool is an intuitive tool designed to assist in understanding and planning network subnets. It provides a detailed breakdown of subnet information based on an IP address and a CIDR (Classless Inter-Domain Routing) notation input.
-- Usage:
-  1. From the Netulla home page, click the Subnet Calculator link in the sidebar.
-  2. Enter in the desired IPv4 address into the text field.
-  3. Select the CIDR range (/24 is default).
-  4. Press enter, scroll as needed to view the information for the subnet.
-  5. If you'd like to calculate for a different subnet, replace the IPv4 address in the text area and press enter again. (ensure you change the CIDR if needed)
-
-## Whois Lookup
-
-- Author: [William Weir](https://github.com/TheSirLancelot)
-- Description: Whois is a widely used Internet record listing that identifies who owns a domain and how to get in contact with them. The Internet Corporation for Assigned Names and Numbers (ICANN) regulates domain name registration and ownership. Whois records have proven to be extremely useful and have developed into an essential resource for maintaining the integrity of the domain name registration and website ownership process. A Whois record contains all of the contact information associated with the person, group, or company that registers a particular domain name. Typically, each Whois record will contain information such as the name and contact information of the Registrant (who owns the domain), the name and contact information of the Registrar (the organization or commercial entity that registered the domain name), the registration dates, the name servers, the most recent update, and the expiration date. Whois records may also provide the administrative and technical contact information (which is often, but not always, the registrant).
-- Usage:
-  1. From the Netulla home page, click the Whois Lookup Tool link in the sidebar.
-  2. Enter the IP address or domain name you would like to get the whois information for and hit `Enter`.
-  3. Your results should be displayed if you entered a legitimate IP address. If the domain you entered has whois information, it will be displayed. If no whois information can be found for your domain, a blank whois entry will be displayed.
-  4. To receive information for additional IP addresses or domains, simply erase your previous entry and type a new one, then hit `Enter`.
-
-## HTTP Header Tool
-
-- Author: [Tristan Young](https://github.com/tyoung-99)
-- Description: This tool retrieves and displays the HTTP response headers from a server, based on a URL or IP. HTTP response headers provide additional information about the response being sent back from the server. This can include the server type or location, policies related to the server or response, the date and time of the response, and a variety of other information.
-- Usage:
-  1. From the Netulla home page, click the Http Header Tool link in the sidebar.
-  2. Enter the URL or IP address you would like to get the headers from and click the "Send Request" button. (Make sure to include "http://" or "https://" when entering a URL.)
-  3. If the URL or IP address entered is valid, that site's headers will be displayed below.
-  4. To make additional requests, replace the data entered in the text box and click "Send Request" again.
 
 ## Online cURL Tool
 
@@ -131,6 +122,26 @@ This document is the User Guide for Netulla, A web-based suite of multi-function
   4. If an issue occurs during the cURL request, error messages will be displayed.
   5. To make another Curl request simply erase the URL you entered and add a new one and hit "Send Curl Request."
 
+## HTTP Header Tool
+
+- Author: [Tristan Young](https://github.com/tyoung-99)
+- Description: This tool retrieves and displays the HTTP response headers from a server, based on a URL or IP. HTTP response headers provide additional information about the response being sent back from the server. This can include the server type or location, policies related to the server or response, the date and time of the response, and a variety of other information.
+- Usage:
+  1. From the Netulla home page, click the Http Header Tool link in the sidebar.
+  2. Enter the URL or IP address you would like to get the headers from and click the "Send Request" button. (Make sure to include "http://" or "https://" when entering a URL.)
+  3. If the URL or IP address entered is valid, that site's headers will be displayed below.
+  4. To make additional requests, replace the data entered in the text box and click "Send Request" again.
+
+## Whois Lookup
+
+- Author: [William Weir](https://github.com/TheSirLancelot)
+- Description: Whois is a widely used Internet record listing that identifies who owns a domain and how to get in contact with them. The Internet Corporation for Assigned Names and Numbers (ICANN) regulates domain name registration and ownership. Whois records have proven to be extremely useful and have developed into an essential resource for maintaining the integrity of the domain name registration and website ownership process. A Whois record contains all of the contact information associated with the person, group, or company that registers a particular domain name. Typically, each Whois record will contain information such as the name and contact information of the Registrant (who owns the domain), the name and contact information of the Registrar (the organization or commercial entity that registered the domain name), the registration dates, the name servers, the most recent update, and the expiration date. Whois records may also provide the administrative and technical contact information (which is often, but not always, the registrant).
+- Usage:
+  1. From the Netulla home page, click the Whois Lookup Tool link in the sidebar.
+  2. Enter the IP address or domain name you would like to get the whois information for and hit `Enter`.
+  3. Your results should be displayed if you entered a legitimate IP address. If the domain you entered has whois information, it will be displayed. If no whois information can be found for your domain, a blank whois entry will be displayed.
+  4. To receive information for additional IP addresses or domains, simply erase your previous entry and type a new one, then hit `Enter`.
+
 ## Website Ping
 
 - Author: [Tristan Young](https://github.com/tyoung-99)
@@ -141,20 +152,6 @@ This document is the User Guide for Netulla, A web-based suite of multi-function
   3. If the domain or IP address entered is valid, the tool will attempt to ping it and will display the result below.
      - The overall result is displayed primarily. To see the individual ping attempts, click the "See individual replies" box to expand it.
   4. To ping additional websites, replace the data entered in the text box and press `Enter` again.
-
-## What Is My IP
-
-- Author: [Tyler Wilson](https://github.com/nevermore23274)
-- Description: This tool is designed to provide users with detailed information about their public IP address and its geolocation. The tool first fetches the user's public IP address using an external service. Once the IP address is acquired, the tool then retrieves the geolocation data associated with that IP, including latitude and longitude.
-- Usage:
-  1. From the Netulla home page, click on Ip Geolocation.
-  2. The information for your current location (including latitude and logitude) will be displayed as well as the location on a map.
-
-## URL Encoder and Decoder
-
-- Author:
-- Description:
-- Usage:
 
 ## Regex Tester
 
@@ -167,9 +164,15 @@ This document is the User Guide for Netulla, A web-based suite of multi-function
   4. The app will then execute the regex pattern against the input data and present the matched portions, providing a helpful tool for users working with regular expressions.
   5. To execute with another regex pattern, input data, or both, edit the text in the appropriate box and click "Test Regex" again.
 
+## URL Encoder and Decoder
+
+- Author:
+- Description:
+- Usage:
+
 # Password Tools
 
-## Password Complexity Checker
+## Password Complexity
 
 - Author: Reynaldo Veras
 - Description: This feature is designed to assess the strength of a given password. It employs a set of criteria to categorize passwords into different levels, such as "Unacceptable," "Weak," "Meh," and "Strong," based on their complexity. This functionality aids users in creating secure and robust passwords by providing instant feedback on the strength of their input.

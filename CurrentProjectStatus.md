@@ -43,6 +43,6 @@
 | <li>- [x] Traceroute Visualizer</li>       | <li>- [x] WHOIS</li>              | <li>- [x] Ping</li>                    | <li>- [x] Project Plan</li>   |
 | <li>- [x] NS lookup</li>                   | <li>- [x] Password Generator</li> | <li>- [x] What is my IP</li>           | <li>- [x] Project Design</li> |
 | <li>- [x] Password complexity checker</li> | <li>- [x] HTTP Header Tool</li>   | <li>- [x] URL Encoder/Decoder</li>     | <li>- [x] Test Plan </li>     |
-| <li>- [x] Certificate Lookup</li>          | <li>- [x] Online Curl Tool</li>   | <li>- [x] Regex Tester</li>            | <li>- [ ] User's Guide</li>   |
-| <li>- [x] Subnet Scan</li>                 | <li>- [x] Peer Review 2</li>      | <li>- [ ] Accessability Assurance</li> | <li>- [ ] Peer Review 3</li>  |
+| <li>- [x] Certificate Lookup</li>          | <li>- [x] Online Curl Tool</li>   | <li>- [x] Regex Tester</li>            | <li>- [x] User's Guide</li>   |
+| <li>- [x] Subnet Scan</li>                 | <li>- [x] Peer Review 2</li>      | <li>- [x] Accessability Assurance</li> | <li>- [x] Peer Review 3</li>  |
 | <li>- [x] Peer Review 1</li>               |                                   |                                        |                               |
