@@ -1,3 +1,4 @@
+import string
 import pytest
 from playwright.sync_api import Page, expect
 
@@ -592,7 +593,65 @@ def test_traceroute_visualizer(page: Page):
 
 
 def test_password_generator(page: Page):
-    # TODO: empty test
-    pass
+    def check_results(length: int, num_generated: int, upper: bool, lower: bool, nums: bool, special: bool):
+        page.get_by_test_id("baseButton-secondary").click()
+        passwords = page.get_by_label("Generated Passwords:")
+        passwords.wait_for(state="visible")
+        passwords = passwords.input_value().split()
 
+        for password in passwords:
+            assert len(password) == length
 
+            if upper:
+                assert any(char in string.ascii_uppercase for char in password)
+            else:
+                assert not any(char in string.ascii_uppercase for char in password)
+            if lower:
+                assert any(char in string.ascii_lowercase for char in password)
+            else:
+                assert not any(char in string.ascii_lowercase for char in password)
+            if nums:
+                assert any(char in string.digits for char in password)
+            else:
+                assert not any(char in string.digits for char in password)
+            if special:
+                assert any(char in string.punctuation for char in password)
+            else:
+                assert not any(char in string.punctuation for char in password)
+
+        assert len(passwords) == num_generated
+
+    def set_length(length: int):
+        page.get_by_label("Select password length").click()
+        slider_val = page.get_by_test_id("stThumbValue")
+        while int(slider_val.inner_text()) != length:
+            if int(slider_val.inner_text()) > length:
+                page.keyboard.press("ArrowLeft")
+            else:
+                page.keyboard.press("ArrowRight")
+
+    def set_chars(upper: bool, lower: bool, nums: bool, special: bool):
+        page.locator("label").filter(has_text="Include Uppercase Letters").locator("span").set_checked(upper)
+        page.locator("label").filter(has_text="Include Lowercase Letters").locator("span").set_checked(lower)
+        page.locator("label").filter(has_text="Include Numbers").locator("span").set_checked(nums)
+        page.locator("label").filter(has_text="Include Special").locator("span").set_checked(special)
+
+    def set_num_generated(num: int):
+        page.get_by_label("How many passwords? (No more than 10)").click()
+        page.get_by_label("How many passwords? (No more than 10)").fill(str(num))
+
+    page.frame_locator(
+        'iframe[title="streamlit_antd_components\\.utils\\.component_func\\.sac"]'
+    ).get_by_role("menuitem", name="Password Generator").click()
+
+    # Min length, min generated, upper/lowercase chars
+    set_length(6)
+    set_num_generated(1)
+    set_chars(True, True, False, False)
+    check_results(6, 1, True, True, False, False)
+
+    # Max length, max generated, nums/special chars
+    set_length(20)
+    set_num_generated(10)
+    set_chars(False, False, True, True)
+    check_results(20, 10, False, False, True, True)
