@@ -100,7 +100,8 @@ def test_http_header_tool(page: Page):
     error.wait_for(state="visible")
     expect(error).to_be_visible()
     expect(error).to_have_text(
-        "Incomplete URL or invalid IP. Please include http:// or https:// for URLs, and enter IPs in the form x.x.x.x using only numbers."
+        "Incomplete URL or invalid IP. Please include http:// or https:// for \
+            URLs, and enter IPs in the form x.x.x.x using only numbers."
     )
 
     enter_address("htt://www.google.com")  # Invalid schema
@@ -124,7 +125,8 @@ def test_http_header_tool(page: Page):
     error.wait_for(state="visible")
     expect(error).to_be_visible()
     expect(error).to_have_text(
-        "Incomplete URL or invalid IP. Please include http:// or https:// for URLs, and enter IPs in the form x.x.x.x using only numbers."
+        "Incomplete URL or invalid IP. Please include http:// or https:// for URLs, \
+            and enter IPs in the form x.x.x.x using only numbers."
     )
 
     enter_address("8.8.8.8s")  # Invalid IP - invalid characters
@@ -132,7 +134,8 @@ def test_http_header_tool(page: Page):
     error.wait_for(state="visible")
     expect(error).to_be_visible()
     expect(error).to_have_text(
-        "Incomplete URL or invalid IP. Please include http:// or https:// for URLs, and enter IPs in the form x.x.x.x using only numbers."
+        "Incomplete URL or invalid IP. Please include http:// or https:// for URLs, \
+            and enter IPs in the form x.x.x.x using only numbers."
     )
 
     # Check entering URL
@@ -216,7 +219,6 @@ def test_regex_tester(page: Page):
 
 
 def test_certificate_lookup(page: Page):
-    
     def enter_domain_and_submit(domain):
         # Enter the domain into the text input
         page.get_by_label("Enter a Domain Name (e.g., google.com)").fill(domain)
@@ -300,8 +302,8 @@ def test_subnet_scanner(page: Page):
     )  # Switch to subcomponent to check cells
 
     # Headers
-    EXPECTED_HEADERS = ["", "IP", "City", "Country"]
-    for col, expected in enumerate(EXPECTED_HEADERS, 1):
+    expected_headers = ["", "IP", "City", "Country"]
+    for col, expected in enumerate(expected_headers, 1):
         expect(table.locator(f"//thead/tr/th[@aria-colindex={col}]")).to_have_text(
             expected
         )
@@ -440,7 +442,8 @@ def test_ping(page: Page):
         expect(error).to_have_text(expected)
 
     def assert_valid():
-        # If summary exists, success/failure message also exists, but success/failure message can't be tested b/c website might be up or down and locator depends on text
+        # If summary exists, success/failure message also exists, but success/failure 
+        # message can't be tested b/c website might be up or down and locator depends on text
         summary = page.locator("summary")
         summary.wait_for(state="visible")
         expect(summary).to_be_visible()
@@ -510,8 +513,63 @@ def test_ip_geolocation(page: Page):
 
 
 def test_traceroute_visualizer(page: Page):
-    # TODO: empty test
-    pass
+    # Test functions
+    def enter_ip(ip):
+        page.get_by_label("Target IP or Domain").click()
+        page.get_by_label("Target IP or Domain").fill(ip)
+        page.get_by_label("Target IP or Domain").press("Enter")
+
+    def error_traceroute(input_string: str):
+        # Test with a valid IP or domain
+        enter_ip(input_string)
+
+        # Check error message
+        error = page.get_by_test_id("stAlert")
+        error.wait_for(state="visible")
+        expect(error).to_be_visible()
+        expect(error).to_have_text("No hops found. Please try again with a different IP or domain.")
+
+    def valid_inputs(input_string: str):
+        enter_ip(input_string)
+
+        browser_type = page.context.browser.browser_type.name
+        # Check table
+        # Traceroute doesn't actually work in GitHub tests, just check for table's existence
+        ip_table = page.get_by_role("table")
+        ip_table.wait_for(state="visible")
+        expect(ip_table).to_be_visible()
+
+        # Check map
+        # Firefox GitHub test doesn't display map, so nothing to check
+        if browser_type != "firefox":
+            ip_map = page.get_by_test_id("stStyledFullScreenFrame")
+            ip_map.wait_for(state="visible")
+            expect(ip_map).to_be_visible()
+
+    # Table doesn't disappear until new traceroute completes, meaning tests grab old table
+    # This forces table to disappear
+    def refresh_page():
+        page.frame_locator(
+            'iframe[title="streamlit_antd_components\\.utils\\.component_func\\.sac"]'
+        ).get_by_role("menuitem", name="Home").click()
+        page.frame_locator(
+            'iframe[title="streamlit_antd_components\\.utils\\.component_func\\.sac"]'
+        ).get_by_role("menuitem", name="Traceroute Visualizer").click()
+
+    # Test calls
+    # Make sure the sidebar item is visible before clicking
+    refresh_page()
+
+    # Test with an invalid input
+    error_traceroute("invalid_input")
+
+    # Test with a valid IP
+    refresh_page()
+    valid_inputs("8.8.8.8")
+
+    # Test with a valid domain
+    refresh_page()
+    valid_inputs("scanme.nmap.org")
 
 
 def test_password_generator(page: Page):
